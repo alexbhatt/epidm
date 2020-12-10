@@ -6,7 +6,7 @@
 #' @return a data frame with 4 new variables: indx, a grouping flag; and new start and end dates
 #'
 #' @import dplyr
-#' @import rlang .data
+#' @importFrom rlang .data
 #' @param data data frame, this can be piped in
 #' @param date_start the start dates for the grouping
 #' @param date_end the end dates for the grouping
