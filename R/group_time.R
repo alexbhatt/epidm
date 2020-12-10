@@ -72,7 +72,11 @@
 #'   )
 #' )
 #'
-#' spell_test %>% group_time(date_start=spell_start,date_end=spell_end,group_vars=c(id,org))
+#' spell_test %>% group_time(date_start=spell_start,
+#'                           date_end=spell_end,
+#'                           min_name="spell_min_date",
+#'                           max_name="spell_max_date",
+#'                           group_vars=c(id,org))
 #'
 #' @export
 
@@ -81,6 +85,8 @@ group_time <- function(.data,
                        date_start,
                        date_end,
                        window,
+                       min_varname="window_min",
+                       max_varname="window_max",
                        group_vars){
 
   ## check date start
@@ -91,7 +97,7 @@ group_time <- function(.data,
     .data <- .data %>%
       dplyr::mutate(
         date=as.numeric({{date_start}})
-        )
+      )
   } else {
     stop("input date required for start_date")
   }
@@ -107,14 +113,14 @@ group_time <- function(.data,
     .data <- .data %>%
       dplyr::mutate(
         window_end=as.numeric({{date_end}})
-        )
+      )
 
   } else {
     print(paste(window,"day rolling window applied"))
     .data <- .data %>%
       dplyr::mutate(
         window_end = date + {{window}}
-        )
+      )
   }
 
   .data <- .data %>%
@@ -124,14 +130,14 @@ group_time <- function(.data,
       window_start = dplyr::lead(date,default = max(date)),
       window_cmax = cummax(window_end),
       indx = paste0(
-          dplyr::cur_group_id(),".",
-          c(0,cumsum(window_start > window_cmax))[-dplyr::n()]
+        dplyr::cur_group_id(),".",
+        c(0,cumsum(window_start > window_cmax))[-dplyr::n()]
       )
     ) %>%
     dplyr::group_by(indx,.add=TRUE) %>%
     dplyr::mutate(
-      window_min = min({{date_start}},na.rm=TRUE),
-      window_max = max(as.Date(window_cmax,origin="1970-01-01"))
+      {{min_varname}} := min({{date_start}},na.rm=TRUE),
+      {{max_varname}} := max(as.Date(window_cmax,origin="1970-01-01"))
     ) %>%
     dplyr::ungroup() %>%
     dplyr::select(-c(date,window_start,window_end,window_cmax))
@@ -139,7 +145,3 @@ group_time <- function(.data,
   return(.data)
 
 }
-
-episode_test %>% group_time(date_start=specimen_date,window=14,group_vars=c(id,org))
-spell_test %>% group_time(date_start = spell_start, date_end = spell_end, group_vars=c(id,provider))
-
