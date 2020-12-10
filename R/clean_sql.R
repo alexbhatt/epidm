@@ -7,7 +7,7 @@
 #' @param sql a SQL file or text string
 #' @importFrom readr read_lines
 #'
-#' @example
+#' @examples
 #' testSQL <- c(
 #' "/*********",
 #' "INTRO HEADER COMMENTS",
