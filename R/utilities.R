@@ -28,7 +28,7 @@ read_sql <- function(x) {
   }
 }
 
-read_sql("../covid/sgss-sus-linkage/sql/ho_covid_extract.sql")
+clean_sql("C:/Users/alex.bhattacharya/Documents/covid/sgss-sus-linkage/sql/ho_covid_extract.sql")
 
 ## reading a csv/xlsx from zip
 ## requires read_csv or read_xlsx to be used with output.
