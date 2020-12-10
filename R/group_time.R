@@ -11,6 +11,8 @@
 #' @param date_start the start dates for the grouping
 #' @param date_end the end dates for the grouping
 #' @param window if there is no end date, a time window which will be applied to the start date
+#' @param min_varname set variable name for the time period minimum
+#' @param max_varname set variable name for the time period maximum
 #' @param group_vars in a vector, the all vars used to group records
 #'
 #' @examples
@@ -74,8 +76,8 @@
 #'
 #' spell_test %>% group_time(date_start=spell_start,
 #'                           date_end=spell_end,
-#'                           min_name="spell_min_date",
-#'                           max_name="spell_max_date",
+#'                           min_varname="spell_min_date",
+#'                           max_varname="spell_max_date",
 #'                           group_vars=c(id,org))
 #'
 #' @export
