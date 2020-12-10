@@ -11,6 +11,8 @@
 #' @param date_start the start dates for the grouping
 #' @param date_end the end dates for the grouping
 #' @param window if there is no end date, a time window which will be applied to the start date
+#' @param min_varname set variable name for the time period minimum
+#' @param max_varname set variable name for the time period maximum
 #' @param group_vars in a vector, the all vars used to group records
 #'
 #' @examples
