@@ -11,9 +11,10 @@ group_time(
   date_start,
   date_end,
   window,
-  min_varname = "window_min",
-  max_varname = "window_max",
-  group_vars
+  group_vars,
+  min_varname = "date_min",
+  max_varname = "date_max",
+  drop_original = TRUE
 )
 }
 \arguments{
@@ -21,13 +22,13 @@ group_time(
 
 \item{date_end}{the end dates for the grouping}
 
-\item{window}{if there is no end date, a time window which will be applied to the start date}
+\item{window}{if there is no end dateNum, a time window which will be applied to the start dateNum}
+
+\item{group_vars}{in a vector, the all vars used to group records}
 
 \item{min_varname}{set variable name for the time period minimum}
 
 \item{max_varname}{set variable name for the time period maximum}
-
-\item{group_vars}{in a vector, the all vars used to group records}
 
 \item{data}{data frame, this can be piped in}
 }
@@ -45,7 +46,7 @@ episode_test <- data.frame(
   org = c(rep("E. coli",7),
           rep("K. pneumoniae",6)
           ),
-  specimen_date = as.Date(
+  specimen_date = as.dateNum(
     c(
       "2020-03-01",
       "2020-03-11",
@@ -66,8 +67,8 @@ episode_test <- data.frame(
 episode_test \%>\% group_time(date_start=specimen_date,window=14,group_vars=c(id,org))
 
 spell_test <- data.frame(
-  id = c(rep(99,6),rep(88,4)),
-  provider = c("YXZ",rep("ZXY",5),rep("XYZ",4)),
+  id = c(rep(99,6),rep(88,4),rep(3,3)),
+  provider = c("YXZ",rep("ZXY",5),rep("XYZ",4),rep("YZX",3)),
   spell_start = as.Date(
     c(
       "2020-03-01",
@@ -79,7 +80,9 @@ spell_test <- data.frame(
       "2020-01-01",
       "2020-01-12",
       "2019-12-25",
-      "2020-03-28"
+      "2020-03-28",
+      "2020-01-01",
+      rep(NA,2)
     )
   ),
   spell_end = as.Date(
@@ -93,15 +96,18 @@ spell_test <- data.frame(
       "2020-01-23",
       "2020-03-30",
       "2020-01-02",
-      "2020-04-20"
+      "2020-04-20",
+      "2020-01-01",
+      rep(NA,2)
     )
   )
 )
 
 spell_test \%>\% group_time(date_start=spell_start,
                           date_end=spell_end,
+                          group_vars=c(id,provider),
                           min_varname="spell_min_date",
                           max_varname="spell_max_date",
-                          group_vars=c(id,org))
+                          drop_original = FALSE)
 
 }

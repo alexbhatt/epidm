@@ -10,7 +10,7 @@
 #' @param data data frame, this can be piped in
 #' @param date_start the start dates for the grouping
 #' @param date_end the end dates for the grouping
-#' @param window if there is no end date, a time window which will be applied to the start date
+#' @param window if there is no end dateNum, a time window which will be applied to the start dateNum
 #' @param min_varname set variable name for the time period minimum
 #' @param max_varname set variable name for the time period maximum
 #' @param group_vars in a vector, the all vars used to group records
@@ -21,7 +21,7 @@
 #'   org = c(rep("E. coli",7),
 #'           rep("K. pneumoniae",6)
 #'           ),
-#'   specimen_date = as.Date(
+#'   specimen_date = as.dateNum(
 #'     c(
 #'       "2020-03-01",
 #'       "2020-03-11",
@@ -42,8 +42,8 @@
 #' episode_test %>% group_time(date_start=specimen_date,window=14,group_vars=c(id,org))
 #'
 #' spell_test <- data.frame(
-#'   id = c(rep(99,6),rep(88,4)),
-#'   provider = c("YXZ",rep("ZXY",5),rep("XYZ",4)),
+#'   id = c(rep(99,6),rep(88,4),rep(3,3)),
+#'   provider = c("YXZ",rep("ZXY",5),rep("XYZ",4),rep("YZX",3)),
 #'   spell_start = as.Date(
 #'     c(
 #'       "2020-03-01",
@@ -55,7 +55,9 @@
 #'       "2020-01-01",
 #'       "2020-01-12",
 #'       "2019-12-25",
-#'       "2020-03-28"
+#'       "2020-03-28",
+#'       "2020-01-01",
+#'       rep(NA,2)
 #'     )
 #'   ),
 #'   spell_end = as.Date(
@@ -69,16 +71,19 @@
 #'       "2020-01-23",
 #'       "2020-03-30",
 #'       "2020-01-02",
-#'       "2020-04-20"
+#'       "2020-04-20",
+#'       "2020-01-01",
+#'       rep(NA,2)
 #'     )
 #'   )
 #' )
 #'
 #' spell_test %>% group_time(date_start=spell_start,
 #'                           date_end=spell_end,
+#'                           group_vars=c(id,provider),
 #'                           min_varname="spell_min_date",
 #'                           max_varname="spell_max_date",
-#'                           group_vars=c(id,org))
+#'                           drop_original = FALSE)
 #'
 #' @export
 
@@ -87,9 +92,13 @@ group_time <- function(.data,
                        date_start,
                        date_end,
                        window,
-                       min_varname="window_min",
-                       max_varname="window_max",
-                       group_vars){
+                       group_vars,
+                       min_varname="date_min",
+                       max_varname="date_max",
+                       drop_original = TRUE
+){
+
+
 
   ## check date start
   if(!missing(date_start)){
@@ -98,7 +107,7 @@ group_time <- function(.data,
 
     .data <- .data %>%
       dplyr::mutate(
-        date=as.numeric({{date_start}})
+        dateNum=as.numeric({{date_start}})
       )
   } else {
     stop("input date required for start_date")
@@ -121,28 +130,70 @@ group_time <- function(.data,
     print(paste(window,"day rolling window applied"))
     .data <- .data %>%
       dplyr::mutate(
-        window_end = date + {{window}}
+        window_end = dateNum + {{window}}
       )
   }
 
+  ## retain or rename original window varnames if they match the rewrites
+  if(min_varname %in% names(.data)) {
+    if(drop_original == TRUE) {
+      .data <- .data %>% select(-{{min_varname}})
+    } else {
+      .data <- .data %>% rename("{min_varname}_original" := {{min_varname}})
+    }
+  }
+  if(max_varname %in% names(.data)) {
+    if(drop_original == TRUE) {
+      .data <- .data %>% select(-{{max_varname}})
+    } else {
+      .data <- .data %>% rename("{max_varname}_original" := {{max_varname}})
+    }
+  }
+
+  ## group time
   .data <- .data %>%
     dplyr::group_by(dplyr::across({{group_vars}})) %>%
-    dplyr::arrange({{date_start}},.by_group=T)  %>%
+    dplyr::mutate(N=dplyr::n())
+
+  ## remove these from the group analysis
+  ## groups with 1 observation by definition cannot join with others
+  ## missing start dates are null entries as well
+  chunkOut <- .data %>%
+    dplyr::filter(is.na(dateNum) | N==1)
+
+  .data <- .data %>%
+    dplyr::filter(
+      N>1,
+      !is.na(dateNum)
+    ) %>%
+    dplyr::arrange(dateNum,.by_group=T) %>%
     dplyr::mutate(
-      window_start = dplyr::lead(date,default = max(date)),
+      window_start = dplyr::lead(dateNum,
+                                 default = dplyr::last(dateNum)),
       window_cmax = cummax(window_end),
       indx = paste0(
-        dplyr::cur_group_id(),".",
+        dplyr::cur_group_id(),
+        ".",
+        N,
+        ".",
         c(0,cumsum(window_start > window_cmax))[-dplyr::n()]
       )
     ) %>%
     dplyr::group_by(indx,.add=TRUE) %>%
     dplyr::mutate(
-      {{min_varname}} := min({{date_start}},na.rm=TRUE),
-      {{max_varname}} := max(as.Date(window_cmax,origin="1970-01-01"))
+      {{min_varname}} := min(as.Date(dateNum, origin="1970-01-01")),
+      {{max_varname}} := max(as.Date(window_cmax, origin="1970-01-01"))
+    )
+
+  ## bring back in the removed records
+  ## cleanup variable names and remove the temp columns created
+  .data <-
+    dplyr::bind_rows(
+      .data,
+      chunkOut
     ) %>%
     dplyr::ungroup() %>%
-    dplyr::select(-c(date,window_start,window_end,window_cmax))
+    dplyr::select(-c(dateNum,window_start,window_end,window_cmax,N))
 
   return(.data)
 
