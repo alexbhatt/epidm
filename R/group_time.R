@@ -137,23 +137,23 @@ group_time <- function(.data,
   ## retain or rename original window varnames if they match the rewrites
   if(min_varname %in% names(.data)) {
     if(drop_original == TRUE) {
-      .data <- .data %>% select(-{{min_varname}})
+      .data <- .data %>% dplyr::select(-{{min_varname}})
     } else {
-      .data <- .data %>% rename("{min_varname}_original" := {{min_varname}})
+      .data <- .data %>% dplyr::rename("{min_varname}_original" := {{min_varname}})
     }
   }
   if(max_varname %in% names(.data)) {
     if(drop_original == TRUE) {
-      .data <- .data %>% select(-{{max_varname}})
+      .data <- .data %>% dplyr::select(-{{max_varname}})
     } else {
-      .data <- .data %>% rename("{max_varname}_original" := {{max_varname}})
+      .data <- .data %>% dplyr::rename("{max_varname}_original" := {{max_varname}})
     }
   }
 
   ## group time
   .data <- .data %>%
     dplyr::group_by(dplyr::across({{group_vars}})) %>%
-    dplyr::mutate(N=dplyr::n())
+    dplyr::mutate(N = dplyr::n())
 
   ## remove these from the group analysis
   ## groups with 1 observation by definition cannot join with others
