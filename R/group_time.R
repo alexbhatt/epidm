@@ -10,7 +10,7 @@
 #' @param data data frame, this can be piped in
 #' @param date_start the start dates for the grouping
 #' @param date_end the end dates for the grouping
-#' @param window if there is no end dateNum, a time window which will be applied to the start dateNum
+#' @param window if there is no end date, a time window which will be applied to the start date
 #' @param min_varname set variable name for the time period minimum
 #' @param max_varname set variable name for the time period maximum
 #' @param group_vars in a vector, the all vars used to group records
@@ -21,7 +21,7 @@
 #'   org = c(rep("E. coli",7),
 #'           rep("K. pneumoniae",6)
 #'           ),
-#'   specimen_date = as.dateNum(
+#'   specimen_date = as.Date(
 #'     c(
 #'       "2020-03-01",
 #'       "2020-03-11",
