@@ -25,7 +25,7 @@
 #' @importFrom stringi stri_trans_general stri_trans_toupper
 #' @importFrom rlang .data
 #'
-#' @param data a data.frame or tibble containing the cleaned line list
+#' @param .data a data.frame or tibble containing the cleaned line list
 #' @param nhs_number a column as a character containing the patient NHS numbers
 #' @param hospital_number a column as a character containing the patient Hospital numbers
 #' @param date_of_birth a column as a date variable containing the patient date of birth in date format
@@ -77,7 +77,7 @@ uk_patient_id <- function(.data,
                           sort_by) {
 
   ## apply valid_nhs flag
-  .data$tmp.valid.nhs <- epidm:::valid_nhs(.data[[nhs_number]])
+  .data$tmp.valid.nhs <- epidm::valid_nhs(.data[[nhs_number]])
 
   # apply other validity features
   .data <- .data %>%

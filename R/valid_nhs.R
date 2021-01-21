@@ -7,7 +7,8 @@
 #' Where the remainder is 11, it is replaced with 0
 #' The result is a data frame with the NHS number and a column for the validity in logical format
 #'
-#' @param nhs a vector
+#' @param nhs_number a vector
+#'
 #' @examples
 #' test <- floor(runif(1000,1000000000,9999999999))
 #' valid_nhs(test)

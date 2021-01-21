@@ -18,7 +18,8 @@ Imports:
     readr,
     rlang,
     stringi,
-    stringr
+    stringr,
+    utils
 Suggests: 
     testthat
 Encoding: UTF-8

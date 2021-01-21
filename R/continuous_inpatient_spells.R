@@ -5,6 +5,9 @@
 #'
 #' @seealso http://content.digital.nhs.uk/media/11859/Provider-Spells-Methodology/pdf/Spells_Methodology.pdf
 #'
+#' @import dplyr
+#' @importFrom rlang .data :=
+#'
 #' @param .data a data frame, tibble; direct or piped (%>%)
 #' @param patient_group_vars a vector containing any variables to be used for record grouping, minimum is a patient identifier
 #' @param spell_start_date Inpatient provider spell or episode admission date
@@ -77,7 +80,7 @@
 #'   78915,  "ABX",  "2020-04-24", "2020-05-13", "11", "51", "1","54",1,
 #'   78915,  "ABX",  "2020-05-13", "2020-06-11", "81", "51", "2","19",1
 #' ) %>%
-#'   dplyr::mutate_at(vars(dplyr::contains("spell")),~as.Date(.))
+#'   dplyr::mutate_at(dplyr::vars(dplyr::contains("spell")),~as.Date(.))
 #'
 #' ex %>% cip_spells(
 #'   patient_group_vars = c(id,provider),

@@ -6,14 +6,16 @@
 #' @return a data frame with 4 new variables: indx, a grouping flag; and new start and end dates
 #'
 #' @import dplyr
-#' @importFrom rlang .data
-#' @param data data frame, this can be piped in
+#' @importFrom rlang .data :=
+#'
+#' @param .data data frame, this can be piped in
 #' @param date_start the start dates for the grouping
 #' @param date_end the end dates for the grouping
 #' @param window if there is no end date, a time window which will be applied to the start date
+#' @param group_vars in a vector, the all vars used to group records
 #' @param min_varname set variable name for the time period minimum
 #' @param max_varname set variable name for the time period maximum
-#' @param group_vars in a vector, the all vars used to group records
+#' @param drop_original a logical to determine if you want to retain the original variables or write over with the max and min varname
 #'
 #' @examples
 #' episode_test <- data.frame(
