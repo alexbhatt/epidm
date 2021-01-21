@@ -10,8 +10,8 @@
 #' @param nhs a vector
 #' @examples
 #' test <- floor(runif(1000,1000000000,9999999999))
-#' valid_nhs_2(test)
-#' valid_nhs_2(9434765919)
+#' valid_nhs(test)
+#' valid_nhs(9434765919)
 #' @return a vector, 1 if NHS number is valid, 0 if not valid
 #' @export
 
@@ -57,9 +57,10 @@ valid_nhs <- function(nhs_number){
 
   Modulus <- (11 - (Modulus %% 11))
 
-  ReturnValue <- ifelse(
-    ((Modulus == n10) & (UniformNumberCheck != 1) & (NHSlength == 10)) |
-      ((Modulus == 11) & (n10 == 0) & (UniformNumberCheck != 1) & (NHSlength == 10)),
+  ReturnValue <-
+    ifelse(
+      NHSlength == 10 & UniformNumberCheck != 1 &
+        (Modulus == n10 | (Modulus == 11 & n10 == 0)),
     1, 0)
 
   ReturnValue <- ifelse(is.na(nhs_number),0,ReturnValue)
