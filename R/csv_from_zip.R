@@ -1,4 +1,4 @@
-#' Download a csv from a zip
+#' @title Download a csv from a zip
 #' @param x a zip file from the web
 #'
 #' @return a zip file for ingestion into your chosen readr
@@ -13,8 +13,9 @@ csv_from_zip <- function(x) {
   td <- tempdir()
   tf <- tempfile(tmpdir=td, fileext=".zip")
   utils::download.file(loc.url, tf)
-  fname <- unzip(tf, list=TRUE)$Name[1]
+  fname <- unzip(tf, list=TRUE)$Name[grep("csv|xls",unzip(tf,list=T)$Name)]
   utils::unzip(tf, files=fname, exdir=td,overwrite=TRUE)
   fpath <- file.path(td, fname)
   return(fpath)
 }
+
