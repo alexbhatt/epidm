@@ -98,17 +98,15 @@ group_time <- function(.data,
                        drop_original = TRUE
 ){
 
-
-
   ## check date start
   if(!missing(date_start)){
     t1 <- .data %>% dplyr::pull({{date_start}}) %>% class()
     if(!t1 %in% c("Date","POSIXct","POSIXt")) stop("date_start must be in date format")
 
-    .data <- .data %>%
-      dplyr::mutate(
-        dateNum=as.numeric({{date_start}})
-      )
+    .data$dateNum <- as.numeric(
+      .data[[sym(gsub("~", "", rlang::expr_text(expr({{date_start}}))))]]
+    )
+
   } else {
     stop("input date required for start_date")
   }
@@ -116,22 +114,19 @@ group_time <- function(.data,
   ## check end points (date_end or window)
   if(!missing(date_end) & !missing(window)){
     stop("window or date_end argument required")
+
   } else if (!missing(date_end)) {
     t2 <- .data %>% dplyr::pull({{date_end}}) %>% class()
     if(!t2 %in% c("Date","POSIXct","POSIXt")) stop("date_start must be in date format")
 
     print("end date specified")
-    .data <- .data %>%
-      dplyr::mutate(
-        window_end=as.numeric({{date_end}})
-      )
+    .data$window_end <- as.numeric(
+      .data[[sym(gsub("~", "", rlang::expr_text(expr({{date_end}}))))]]
+    )
 
   } else {
     print(paste(window,"day rolling window applied"))
-    .data <- .data %>%
-      dplyr::mutate(
-        window_end = dateNum + {{window}}
-      )
+    .data$window_end <- .data$dateNum + {{window}}
   }
 
   ## retain or rename original window varnames if they match the rewrites
@@ -153,15 +148,7 @@ group_time <- function(.data,
   ## group time
   .data <- .data %>%
     dplyr::group_by(dplyr::across({{group_vars}})) %>%
-    dplyr::mutate(N = dplyr::n())
-
-  ## remove these from the group analysis
-  ## groups with 1 observation by definition cannot join with others
-  ## missing start dates are null entries as well
-  chunkOut <- .data %>%
-    dplyr::filter(is.na(dateNum) | N==1)
-
-  .data <- .data %>%
+    dplyr::mutate(N = dplyr::n())%>%
     dplyr::filter(
       N>1,
       !is.na(dateNum)
@@ -179,19 +166,26 @@ group_time <- function(.data,
         c(0,cumsum(window_start > window_cmax))[-dplyr::n()]
       )
     ) %>%
-    dplyr::group_by(indx,.add=TRUE) %>%
+    dplyr::group_by(indx,.add=TRUE)
+
+  ## how to determine which max date to display
+  if(missing(window)) {
+  .data <- .data %>%
     dplyr::mutate(
       {{min_varname}} := min(as.Date(dateNum, origin="1970-01-01")),
       {{max_varname}} := max(as.Date(window_cmax, origin="1970-01-01"))
     )
+  } else {
+    .data <- .data %>%
+      dplyr::mutate(
+        {{min_varname}} := min(as.Date(dateNum, origin="1970-01-01")),
+        {{max_varname}} := max(as.Date(dateNum, origin="1970-01-01"))
+      )
+  }
 
   ## bring back in the removed records
   ## cleanup variable names and remove the temp columns created
-  .data <-
-    dplyr::bind_rows(
-      .data,
-      chunkOut
-    ) %>%
+  .data <- .data %>%
     dplyr::ungroup() %>%
     dplyr::select(-c(dateNum,window_start,window_end,window_cmax,N))
 
