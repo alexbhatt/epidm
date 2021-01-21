@@ -7,212 +7,194 @@
 #' generates a unique sequential number from 1-X for each record
 #' then based on grouping, reassigns records to same number
 #' group by different combos of patient identifiers, also dont include invalid nhs_numbers
-#' 
-#' Grouping is based on four stages: 
+#'
+#' Grouping is based on five stages:
 #' \enumerate{
 #' \item matching nhs number and date of birth
-#' \item Hospital number &  Date of Birth &  Surname
+#' \item Hospital number &  Date of Birth
 #' \item NHS number & Hospital Number
 #' \item Sex & Date of Birth & Surname IF nhs unknown
 #' \item Sex & Date of Birth & Fuzzy Name
 #' }
-#' 
 #'
 #' @return patientID grouping variable
 #'
-#'
 #' @import dplyr
-#' @import tidyselect
-#' @import phonics
-#' @import stringr
+#' @importFrom phonics soundex
+#' @importFrom stringr word
+#' @importFrom stringi stri_trans_general stri_trans_toupper
+#' @importFrom rlang .data
+#'
 #' @param data a data.frame or tibble containing the cleaned line list
 #' @param nhs_number a column as a character containing the patient NHS numbers
 #' @param hospital_number a column as a character containing the patient Hospital numbers
-#' @param forename a column as a character containing the patient forename
-#' @param surname a column as a character containing the patient surname
-#' @param sex a column as a character containing the patient sex
 #' @param date_of_birth a column as a date variable containing the patient date of birth in date format
-#' @param sort_date a column as a date variable containing a date by which patients should be sorted, often the specimen date
-#' @param flags logical if you want to keep the calculation data
+#' @param sex a column as a character containing the patient sex
+#' @param forename a column as a character containing the patient forename; leave as NONAME if unavailable
+#' @param surname a column as a character containing the patient surname; leave as NONAME if unavailable
+#' @param sort_by a column to give a priority sort order if required
 #'
-#' @return A dataframe with two new variables: id a unique patient id, and n_in_id an integer variable with the number of rows in the id.
-#' 
-#' @examples 
-#' dat <- structure(list(nhs_n = c(9434765919, 5185293519, 3367170666), 
-#' hosp_n = c(1L, 1L, 2L), forenm = c("Danger", "Danger", "Danger"), 
-#' surnm = c("Mouse", "Mouse", "Mouse"), s = c("M", "M", "M"), 
-#' dob = structure(c(-25567, -25567, -25567), class = "Date"), 
-#' spec_date = structure(c(18262, 18294, 18324), class = "Date")), 
-#' class = "data.frame", row.names = c(NA, -3L))
-#' 
-#' patient_id(data = dat, nhs_number = "nhs_n", hospital_number = "hosp_n", 
-#'   forename = "forenm", surname = "surnm", sex = "s", 
-#'   date_of_birth = "dob", sort_date = "spec_date", flags = TRUE)
+#' @return A dataframe with two new variables: id a unique patient id, and n_in_id an integer variable with the number of rows in the id
 #'
-#'@export
+#' @examples
+#' dat <- dplyr::tribble(
+#'   ~nhs_n, ~hosp_n, ~sex, ~dateofbirth, ~firstname, ~lastname,
+#'   9434765919, 13L, "M", "1988-10-06", "Danger", "Mouse",
+#'   9434765919, 13L, "M", "1988-06-10", "Danger", "MÔuse",
+#'   9434765919, 13L, "M", "1900-01-01", "Denger", "Mouse",
+#'   NA,         NA,  "M", "1988-10-06", "Danger", "Moose",
+#'   NA,         13L, "M", "1988-10-06", "Danger", "Moose",
+#'   3367170666, 13L, "M", "1988-10-06", "DANGER", "Mouse",
+#'   5185293519, 13L, "M", "1988-10-06", "Danger", "MOUSe",
+#'   5185293519, 31L, "M", "1988-10-06", "Danger", "Mouse",
+#'   5185293519, 31L, "M", "1988-10-06", "Danger", "Mouse",
+#'   8082318562, 96L, "F", "2020-01-28", "Crazy",  "Frog",
+#'   NA,         96L, "U", "2020-01-28", "Crazy",  "FROG",
+#'   NA,         96L, "U", "2020-01-28", "Krazy",  "Frug",
+#'   NA,         96L, "F", "2020-01-28", "C",      "Frog"
+#' ) %>% dplyr::mutate(dateofbirth=as.Date(dateofbirth))
+#'
+# uk_patient_id(.data = dat,
+#               nhs_number = "nhs_n",
+#               hospital_number = "hosp_n",
+#               forename = "forenm",
+#               surname = "surnm",
+#               sex = "s",
+#               date_of_birth = "date_of_birth",
+#               sort_by = "spec_date")
+#'
+#' @export
 
-patient_id <- function(data,
-                       nhs_number,
-                       hospital_number,
-                       forename="NONAME",
-                       surname="NONAME",
-                       sex,
-                       date_of_birth,
-                       sort_date,
-                       flags=FALSE) {
-  
 
-  ## grab NHS numbers for validation
-  # use the valid_nhs function to asses if NHS numbers are real
-  # nhs_data <- data[nhs_number]
-  # real_nhs <- valid_nhs(nhs_data)
 
-  ## quosures becuse they suck
-  if(forename!="NONAME" & surname!="NONAME"){
-    data <- data %>%
-      dplyr::ungroup() %>%
-      dplyr::rename(
-        nhs = nhs_number,
-        hos = hospital_number,
-        name1 = forename,
-        name2 = surname,
-        sex = sex,
-        dob = date_of_birth,
-        date = sort_date
-      ) 
-  }else{
-    data <- data %>%
-      dplyr::ungroup() %>%
-      dplyr::rename(
-        nhs = nhs_number,
-        hos = hospital_number,
-        sex = sex,
-        dob = date_of_birth,
-        date = sort_date
-      ) 
-  }
-  if(forename=="NONAME") {
-    data <- dplyr::mutate(data,name1=NA)
-  }
-  if(surname=="NONAME") {
-    data <- dplyr::mutate(data,name2=NA)
-  }
-  
-  ## to translate non UTF-8 characters in names in a uniform way
-  data <- dplyr::mutate_at(data,
-                           tidyselect::all_of(vars(contains("name",
-                                                            ignore.case = T))),
-                           ~stringi::stri_trans_general(.,"Latin-ASCII"))
-  data <- dplyr::mutate_at(data,
-                           tidyselect::all_of(vars(contains("name",
-                                                            ignore.case = T))),
-                           ~stringi::stri_trans_toupper(.))
-  
-  
-  if (class(data$dob) != "Date" | class(data$date) != "Date") {
-    stop("Date variables must be in date format")
-  }
-  
-  data$valid_nhs <- valid_nhs_2(data$nhs)
-  
-  # # join the NHS validation result to the data
-  # data <- dplyr::left_join(data,
-  #                          real_nhs,
-  #                          by = c("nhs" = "nhs_number")) 
-  
-  ## unknown data
-  data <- data %>%
-    dplyr::mutate(
-      # nhs_unknown = !valid_nhs,
-      nhs_unknown = valid_nhs == 0,
-      dob_unknown = dob %in% c("1900-01-01", NA),
-      hos_unknown = hos %in% c("UNKNOWN", "NO PATIENT ID", NA)
-    ) %>%
-    dplyr::mutate(id = as.numeric(1:nrow(data)),
-                  s_0 = id) %>%
-    dplyr::arrange(date) %>%
-    dplyr::ungroup()
-  
-  ## STAGE 1: NHS number & Date of Birth
-  data <- data %>%
-    dplyr::group_by(nhs, dob, nhs_unknown) %>%
-    dplyr::mutate(id = if_else(nhs_unknown | dob_unknown,
-                               id, id[1]),
-                  s_1 = id) %>%
-    dplyr::ungroup()
+uk_patient_id <- function(.data,
+                          nhs_number,
+                          hospital_number,
+                          date_of_birth,
+                          sex,
+                          forename="NONAME",
+                          surname="NONAME",
+                          sort_by) {
 
-  ## STAGE 2: Hospital number &  Date of Birth &  Surname
-  data <- data %>%
-    dplyr::group_by(hos, dob, name2, dob_unknown) %>%
-    dplyr::mutate(id = ifelse(hos_unknown | dob_unknown | is.na(name2),
-                              id, id[1]),
-                  s_2 = id) %>%
-    dplyr::ungroup()
+  ## apply valid_nhs flag
+  .data$tmp.valid.nhs <- epidm:::valid_nhs(.data[[nhs_number]])
 
-  ## STAGE 3: NHS number & Hospital Number
-  data <- data %>%
-    dplyr::group_by(nhs, hos, nhs_unknown) %>%
-    dplyr::mutate(id = ifelse(nhs_unknown & hos_unknown,
-                              id, id[1]),
-                  s_3 = id) %>%
-    dplyr::ungroup()
-
-  ## ONLY IF CONTAINS SURNAME
-  ## STAGE 4: Sex & Date of Birth & Surname
-  if(surname!="NONAME") {
-    
-    data <- data %>%
-      dplyr::group_by(sex, dob, name2, name1) %>%
-      dplyr::mutate(id=ifelse(is.na(sex) | dob_unknown | is.na(name2),
-                       id,id[1]
-                       ),
-             s_4=id) %>%
-      dplyr::ungroup()
-  
-  ## STAGE 5: Sex & Date of Birth & Fuzzy Name
-    
-    data <- data %>%
-      dplyr::mutate(fuzz_name1=stringr::str_sub(name1,1,1),
-                    fuzz_name2=phonics::soundex(stringr::word(name2,1))) %>% 
-      dplyr::group_by(sex, dob, fuzz_name2, fuzz_name1) %>%
-      dplyr::mutate(id=ifelse(dob_unknown | (is.na(name1)  & is.na(name2)) | is.na(sex),
-                              id,id[1]),
-                    s_5=id) %>%
-      dplyr::ungroup()
-    
-  }
-
-  ## count records/id
-  data <- data %>%
-    dplyr::group_by(id) %>%
-    dplyr::mutate(n_id = n()) %>%
-    dplyr::select(id, contains("^s_[0-9]"), everything()) %>%
+  # apply other validity features
+  .data <- .data %>%
     dplyr::ungroup() %>%
-    dplyr::arrange(id, date)
+    dplyr::mutate(
+      id = seq(1:dplyr::n()),
+      tmp.valid.nhs = tmp.valid.nhs == 1,
+      tmp.valid.dob = !{{date_of_birth}} %in% c("1900-01-01", NA),
+      tmp.valid.hos = !{{hospital_number}} %in% c("UNKNOWN", "NO PATIENT ID", NA),
+      tmp.valid.sex = grepl("^M|F",{{sex}},ignore.case=T)
+    ) %>%
+    dplyr::arrange({{sort_by}})  %>%
 
-  if (flags == FALSE) {
-    data <- select(data, -starts_with("s_"),-ends_with("_unknown"))
-  }
-  
-  if(forename=="NONAME") {
-    data <- select(data, -name1)
-  }else{
-    names(data)[names(data) == "name1"] <- quo_name(forename)
-  }
-  if(surname=="NONAME") {
-    data <- select(data, -name2)
-  }else{
-    names(data)[names(data) == "name2"] <- quo_name(surname)
-  }
-  
-  ## quosure fix
-  names(data)[names(data) == "date"] <- quo_name(sort_date)
-  names(data)[names(data) == "dob"] <- quo_name(date_of_birth)
-  names(data)[names(data) == "nhs"] <- quo_name(nhs_number)
-  names(data)[names(data) == "hos"] <- quo_name(hospital_number)
-  names(data)[names(data) == "sex"] <- quo_name(sex)
+    ## S1: NHS + DOB ###########################################################
+  dplyr::group_by(
+    dplyr::across(c(
+      {{nhs_number}},
+      {{date_of_birth}})
+    )
+  ) %>%
+    dplyr::mutate(
+      id = ifelse(
+        tmp.valid.nhs & tmp.valid.dob,
+        id[1],
+        id)
+    ) %>%
+    dplyr::ungroup() %>%
 
-  return(data)
+    ## S2: HOS + DOB ###########################################################
+  dplyr::group_by(
+    dplyr::across(c(
+      {{hospital_number}},
+      {{date_of_birth}}
+    ))
+  ) %>%
+    dplyr::mutate(
+      id = ifelse(
+        tmp.valid.hos & tmp.valid.dob,
+        id[1],
+        id)
+    ) %>%
+    dplyr::ungroup() %>%
+
+    ## S3: NHS + HOS ###########################################################
+  dplyr::group_by(
+    dplyr::across(c(
+      {{nhs_number}},
+      {{hospital_number}}
+    ))
+  ) %>%
+    dplyr::mutate(
+      id = ifelse(
+        tmp.valid.nhs & tmp.valid.hos,
+        id[1],
+        id)
+    ) %>%
+    dplyr::ungroup()
+
+  if(surname!="NONAME"){
+    ## S4: SEX + DOB + NAME ####################################################
+    .data <- .data %>%
+      dplyr::mutate(
+        dplyr::across(
+          .cols = dplyr::contains("name",ignore.case=T),
+          .fns = ~stringi::stri_trans_general(
+            stringi::stri_trans_toupper(.),
+            "Latin-ASCII")
+          )) %>%
+      dplyr::mutate(
+        tmp.valid.n2 = !{{surname}} %in% c("","NA",NA)
+      ) %>%
+      dplyr::group_by(
+        dplyr::across(c(
+          {{sex}},
+          {{date_of_birth}},
+          {{surname}},
+          {{forename}}
+        ))
+      ) %>%
+      dplyr::mutate(
+        id = ifelse(
+          tmp.valid.sex & tmp.valid.dob & tmp.valid.n2,
+          id[1],
+          id)
+      ) %>%
+      dplyr::ungroup() %>%
+
+    ## S5: SEX + DOB + FUZZY NAME ##############################################
+    dplyr::mutate(
+      tmp.fuzz.n1 = base::substr(.data[[forename]],1,1),
+      tmp.fuzz.n2 = phonics::soundex(stringr::word(.data[[surname]],1)),
+      tmp.fuzz.ym = substr(as.character(.data[[date_of_birth]]),1,7)
+    ) %>%
+      dplyr::group_by(
+        dplyr::across(c(
+          {{sex}},
+          tmp.fuzz.ym,
+          tmp.fuzz.n1,
+          tmp.fuzz.n2
+        ))
+      ) %>%
+      dplyr::mutate(
+        id = ifelse(
+          tmp.valid.sex & tmp.valid.dob & tmp.valid.n2,
+          id[1],
+          id
+        )
+      ) %>%
+      dplyr::ungroup()
+
+  }
+
+  .data <- .data %>%
+    select(-c(dplyr::starts_with("tmp.")))
+
+  return(.data)
+
 }
 
 
