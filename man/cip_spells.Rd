@@ -98,7 +98,7 @@ ex <- dplyr::tribble(
   78915,  "ABX",  "2020-04-24", "2020-05-13", "11", "51", "1","54",1,
   78915,  "ABX",  "2020-05-13", "2020-06-11", "81", "51", "2","19",1
 ) \%>\%
-  dplyr::mutate_at(vars(dplyr::contains("spell")),~as.Date(.))
+  dplyr::mutate_at(dplyr::vars(dplyr::contains("spell")),~as.Date(.))
 
 ex \%>\% cip_spells(
   patient_group_vars = c(id,provider),

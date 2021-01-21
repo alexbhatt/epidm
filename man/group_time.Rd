@@ -18,6 +18,8 @@ group_time(
 )
 }
 \arguments{
+\item{.data}{data frame, this can be piped in}
+
 \item{date_start}{the start dates for the grouping}
 
 \item{date_end}{the end dates for the grouping}
@@ -30,7 +32,7 @@ group_time(
 
 \item{max_varname}{set variable name for the time period maximum}
 
-\item{data}{data frame, this can be piped in}
+\item{drop_original}{a logical to determine if you want to retain the original variables or write over with the max and min varname}
 }
 \value{
 a data frame with 4 new variables: indx, a grouping flag; and new start and end dates

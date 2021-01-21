@@ -14,7 +14,7 @@ The result is a data frame with the NHS number and a column for the validity in 
 valid_nhs(nhs_number)
 }
 \arguments{
-\item{nhs}{a vector}
+\item{nhs_number}{a vector}
 }
 \value{
 a vector, 1 if NHS number is valid, 0 if not valid

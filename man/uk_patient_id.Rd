@@ -32,6 +32,8 @@ uk_patient_id(
 )
 }
 \arguments{
+\item{.data}{a data.frame or tibble containing the cleaned line list}
+
 \item{nhs_number}{a column as a character containing the patient NHS numbers}
 
 \item{hospital_number}{a column as a character containing the patient Hospital numbers}
@@ -45,8 +47,6 @@ uk_patient_id(
 \item{surname}{a column as a character containing the patient surname; leave as NONAME if unavailable}
 
 \item{sort_by}{a column to give a priority sort order if required}
-
-\item{data}{a data.frame or tibble containing the cleaned line list}
 }
 \value{
 patientID grouping variable
