@@ -25,8 +25,8 @@ or text file and remove all comments for use with database query packages
 testSQL <- c(
 "/*********",
 "INTRO HEADER COMMENTS",
-"*********/","SELECT ",
-"[VAR 1]  -- with comments",
+"*********/","  SELECT ",
+"  [VAR 1]  -- with comments",
 ",[VAR 2]",",[VAR 3]","FROM DATASET ",
 "-- output here")
 clean_sql(testSQL)

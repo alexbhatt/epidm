@@ -11,15 +11,13 @@ The remainder is checked against the 10th digit
 Where the remainder is 11, it is replaced with 0
 The result is a data frame with the NHS number and a column for the validity in logical format}
 \usage{
-valid_nhs(nhs_number, keep = FALSE)
+valid_nhs(nhs_number)
 }
 \arguments{
-\item{keep}{to retain the checksum values}
-
-\item{nhs}{a vector or data.frame column in format data$nhs for testing}
+\item{nhs}{a vector}
 }
 \value{
-a data.frame containing the NHS numbers and a logical flag if its valid
+a vector, 1 if NHS number is valid, 0 if not valid
 }
 \description{
 NHS Number Validity Check
@@ -34,4 +32,5 @@ The result is a data frame with the NHS number and a column for the validity in 
 \examples{
 test <- floor(runif(1000,1000000000,9999999999))
 valid_nhs(test)
+valid_nhs(9434765919)
 }

@@ -22,7 +22,7 @@ group_time(
 
 \item{date_end}{the end dates for the grouping}
 
-\item{window}{if there is no end dateNum, a time window which will be applied to the start dateNum}
+\item{window}{if there is no end date, a time window which will be applied to the start date}
 
 \item{group_vars}{in a vector, the all vars used to group records}
 
@@ -46,7 +46,7 @@ episode_test <- data.frame(
   org = c(rep("E. coli",7),
           rep("K. pneumoniae",6)
           ),
-  specimen_date = as.dateNum(
+  specimen_date = as.Date(
     c(
       "2020-03-01",
       "2020-03-11",

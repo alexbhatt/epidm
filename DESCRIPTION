@@ -1,16 +1,15 @@
 Package: epidm
-Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Title: UK Epidemiological Data Management
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Alex",
+           family = "Bhattacharya",
+           role = c("aut", "cre"),
+           email = "alex.bhatt@gmail.com",
+           comment = c(ORCID = "0000-0003-3000-2771"))
+Description: This package contains utilties and functions for the cleaning, processing and management of UK public health data.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Suggests: 
-    testthat
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
-Imports: 
-    magrittr
