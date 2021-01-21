@@ -7,8 +7,20 @@ Authors@R:
            role = c("aut", "cre"),
            email = "alex.bhatt@gmail.com",
            comment = c(ORCID = "0000-0003-3000-2771"))
-Description: This package contains utilties and functions for the cleaning, processing and management of UK public health data.
+Description: This package contains utilties and functions
+    for the cleaning, processing and management of UK public health
+    data.
 License: MIT + file LICENSE
+Imports: 
+    dplyr,
+    magrittr,
+    phonics,
+    readr,
+    rlang,
+    stringi,
+    stringr
+Suggests: 
+    testthat
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
