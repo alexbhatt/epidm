@@ -11,8 +11,8 @@
 #' testSQL <- c(
 #' "/*********",
 #' "INTRO HEADER COMMENTS",
-#' "*********/","SELECT ",
-#' "[VAR 1]  -- with comments",
+#' "*********/","  SELECT ",
+#' "  [VAR 1]  -- with comments",
 #' ",[VAR 2]",",[VAR 3]","FROM DATASET ",
 #' "-- output here")
 #' clean_sql(testSQL)
@@ -25,14 +25,12 @@ clean_sql <- function(sql) {
   # read in
   x <- readr::read_lines(sql)
 
+  # note these gsubs could be combined with the next line separated with |
   # remove comments
   x <- gsub("--.*","",x)
-  x <- gsub("--.*","",x)
 
-  # breaks, tabs and carriage returns
-  x <- gsub("\\r","",x)
-  x <- gsub("\\t","",x)
-  x <- gsub("\\n","",x)
+  # breaks, tabs and carriage returns; separated with | in regex
+  x <- gsub("\\r|\\t|\\n","",x)
 
   # single string
   x <- paste(x,collapse=" ")
