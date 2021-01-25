@@ -30,7 +30,7 @@ clean_sql <- function(sql) {
   x <- gsub("--.*","",x)
 
   # breaks, tabs and carriage returns; separated with | in regex
-  x <- gsub("\\r|\\t|\\n","",x)
+  x <- gsub("\\r|\\t|\\n"," ",x)
 
   # single string
   x <- paste(x,collapse=" ")
