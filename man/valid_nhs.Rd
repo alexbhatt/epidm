@@ -2,14 +2,7 @@
 % Please edit documentation in R/valid_nhs.R
 \name{valid_nhs}
 \alias{valid_nhs}
-\title{NHS Number Validity Check
-
-Check if NHS numbers are valid based on the checksum algorithm
-This uses the first 9 digits, multiplied by 10 down to 2 eg digit 1x10, d2x9
-The sum of the products of the first 9 digits are divided by 11
-The remainder is checked against the 10th digit
-Where the remainder is 11, it is replaced with 0
-The result is a data frame with the NHS number and a column for the validity in logical format}
+\title{NHS Number Validity Check}
 \usage{
 valid_nhs(nhs_number)
 }
@@ -20,14 +13,15 @@ valid_nhs(nhs_number)
 a vector, 1 if NHS number is valid, 0 if not valid
 }
 \description{
-NHS Number Validity Check
-
 Check if NHS numbers are valid based on the checksum algorithm
+
 This uses the first 9 digits, multiplied by 10 down to 2 eg digit 1x10, d2x9
+
 The sum of the products of the first 9 digits are divided by 11
+
 The remainder is checked against the 10th digit
+
 Where the remainder is 11, it is replaced with 0
-The result is a data frame with the NHS number and a column for the validity in logical format
 }
 \examples{
 test <- floor(runif(1000,1000000000,9999999999))
