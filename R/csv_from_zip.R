@@ -4,9 +4,10 @@
 #' @return a zip file for ingestion into your chosen readr
 #' @importFrom utils download.file unzip
 #'
+#' @export
+#'
 #' @examples head(read.csv(csv_from_zip("https://files.digital.nhs.uk/assets/ods/current/succarc.zip")))
 #'
-#' @export
 
 csv_from_zip <- function(x) {
   loc.url <- x
