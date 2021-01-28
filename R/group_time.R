@@ -150,11 +150,7 @@ group_time <- function(.data,
   ## group time
   .data <- .data %>%
     dplyr::group_by(dplyr::across({{group_vars}})) %>%
-    dplyr::mutate(N = dplyr::n())%>%
-    dplyr::filter(
-      N>1,
-      !is.na(dateNum)
-    ) %>%
+    dplyr::mutate(N = dplyr::n()) %>%
     dplyr::arrange(dateNum,.by_group=T) %>%
     dplyr::mutate(
       window_start = dplyr::lead(dateNum,
