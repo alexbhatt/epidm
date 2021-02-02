@@ -5,17 +5,15 @@
 #'
 #' @return a data frame with 4 new variables: indx, a grouping flag; and new start and end dates
 #'
-#' @import dplyr
-#' @importFrom rlang .data :=
+#' @import data.table
 #'
-#' @param .data data frame, this can be piped in
+#' @param x data frame, this can be piped in
 #' @param date_start the start dates for the grouping
 #' @param date_end the end dates for the grouping
 #' @param window if there is no end date, a time window which will be applied to the start date
 #' @param group_vars in a vector, the all vars used to group records
 #' @param min_varname set variable name for the time period minimum
 #' @param max_varname set variable name for the time period maximum
-#' @param drop_original a logical to determine if you want to retain the original variables or write over with the max and min varname
 #'
 #' @examples
 #' episode_test <- data.frame(
@@ -41,7 +39,7 @@
 #'     )
 #'   )
 #' )
-#' episode_test %>% group_time(date_start=specimen_date,window=14,group_vars=c(id,org))
+#' group_time(x=episode_test,date_start=specimen_date,window=14,group_vars=c(id,org))
 #'
 #' spell_test <- data.frame(
 #'   id = c(rep(99,6),rep(88,4),rep(3,3)),
@@ -80,113 +78,62 @@
 #'   )
 #' )
 #'
-#' spell_test %>% group_time(date_start=spell_start,
-#'                           date_end=spell_end,
-#'                           group_vars=c(id,provider),
-#'                           min_varname="spell_min_date",
-#'                           max_varname="spell_max_date",
-#'                           drop_original = FALSE)
+#' group_time(x=spell_test,
+#'            date_start=spell_start,
+#'            date_end=spell_end,
+#'            group_vars=c(id,provider),
+#'            min_varname="spell_min_date",
+#'            max_varname="spell_max_date")
 #'
 #' @export
 
 
-group_time <- function(.data,
-                       date_start,
-                       date_end,
-                       window,
-                       group_vars,
-                       min_varname="date_min",
-                       max_varname="date_max",
-                       drop_original = TRUE
+group_time2 <- function(x,
+                        date_start,
+                        date_end,
+                        window,
+                        group_vars,
+                        min_varname="date_min",
+                        max_varname="date_max"
 ){
 
-  ## check date start
-  if(!missing(date_start)){
-    t1 <- .data %>% dplyr::pull({{date_start}}) %>% class()
-    if(!t1 %in% c("Date","POSIXct","POSIXt")) stop("date_start must be in date format")
+  eds.grp <- eval(deparse(substitute(group_vars)))
 
-    .data$dateNum <- as.numeric(
-      .data[[sym(gsub("~", "", rlang::expr_text(expr({{date_start}}))))]]
+  x <- data.table::data.table(x)
+
+  x[,
+    `:=`(
+      dateNum = as.numeric(deparse(substitute(date_start))),
+      window_end = as.numeric(deparse(substitute(date_end)))
     )
+  ]
 
-  } else {
-    stop("input date required for start_date")
-  }
+  data.table::setorder(x,dateNum)
 
-  ## check end points (date_end or window)
-  if(!missing(date_end) & !missing(window)){
-    stop("window or date_end argument required")
+  x[,
+    `:=`(
+      window_start = data.table::shift(dateNum, 1,
+                                       type="lead",
+                                       fill = dateNum[data.table::.N]),
+      window_cmax = cummax(window_end)
+    ),
+    keyby=eds.grp
+  ][,
+    indx := paste0(
+      data.table::.GRP,
+      ".",
+      data.table::.N,
+      ".",
+      c(0,cumsum(window_start > window_cmax))[-data.table::.N]),
+    keyby=eds.grp
+  ][,
+    `:=`(
+      min = min(as.Date(dateNum, origin="1970-01-01")),
+      max = max(as.Date(window_cmax, origin="1970-01-01"))
+    ),
+    keyby=indx
+  ][]
 
-  } else if (!missing(date_end)) {
-    t2 <- .data %>% dplyr::pull({{date_end}}) %>% class()
-    if(!t2 %in% c("Date","POSIXct","POSIXt")) stop("date_start must be in date format")
-
-    print("end date specified")
-    .data$window_end <- as.numeric(
-      .data[[sym(gsub("~", "", rlang::expr_text(expr({{date_end}}))))]]
-    )
-
-  } else {
-    print(paste(window,"day rolling window applied"))
-    .data$window_end <- .data$dateNum + {{window}}
-  }
-
-  ## retain or rename original window varnames if they match the rewrites
-  if(min_varname %in% names(.data)) {
-    if(drop_original == TRUE) {
-      .data <- .data %>% dplyr::select(-{{min_varname}})
-    } else {
-      .data <- .data %>% dplyr::rename("{min_varname}_original" := {{min_varname}})
-    }
-  }
-  if(max_varname %in% names(.data)) {
-    if(drop_original == TRUE) {
-      .data <- .data %>% dplyr::select(-{{max_varname}})
-    } else {
-      .data <- .data %>% dplyr::rename("{max_varname}_original" := {{max_varname}})
-    }
-  }
-
-  ## group time
-  .data <- .data %>%
-    dplyr::group_by(dplyr::across({{group_vars}})) %>%
-    dplyr::mutate(N = dplyr::n()) %>%
-    dplyr::arrange(dateNum,.by_group=T) %>%
-    dplyr::mutate(
-      window_start = dplyr::lead(dateNum,
-                                 default = dplyr::last(dateNum)),
-      window_cmax = cummax(window_end),
-      indx = paste0(
-        dplyr::cur_group_id(),
-        ".",
-        N,
-        ".",
-        c(0,cumsum(window_start > window_cmax))[-dplyr::n()]
-      )
-    ) %>%
-    dplyr::group_by(indx,.add=TRUE)
-
-  ## how to determine which max date to display
-  if(missing(window)) {
-  .data <- .data %>%
-    dplyr::mutate(
-      {{min_varname}} := min(as.Date(dateNum, origin="1970-01-01")),
-      {{max_varname}} := max(as.Date(window_cmax, origin="1970-01-01"))
-    )
-  } else {
-    .data <- .data %>%
-      dplyr::mutate(
-        {{min_varname}} := min(as.Date(dateNum, origin="1970-01-01")),
-        {{max_varname}} := max(as.Date(dateNum, origin="1970-01-01"))
-      )
-  }
-
-  ## bring back in the removed records
-  ## cleanup variable names and remove the temp columns created
-  .data <- .data %>%
-    dplyr::ungroup() %>%
-    dplyr::select(-c(dateNum,window_start,window_end,window_cmax,N))
-
-  return(.data)
+  return(x)
 
 }
