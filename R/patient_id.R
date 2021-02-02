@@ -64,7 +64,7 @@
 #'
 #' @export
 
-uk_patient_id_dt <- function(x,
+uk_patient_id <- function(x,
                              nhs_number,
                              hospital_number,
                              date_of_birth,

@@ -88,7 +88,7 @@
 #' @export
 
 
-group_time2 <- function(x,
+group_time <- function(x,
                         date_start,
                         date_end,
                         window,

@@ -21,18 +21,17 @@ Grouping is based on five stages:
 }}
 \usage{
 uk_patient_id(
-  .data,
+  x,
   nhs_number,
   hospital_number,
   date_of_birth,
   sex,
   forename = "NONAME",
-  surname = "NONAME",
-  sort_by
+  surname = "NONAME"
 )
 }
 \arguments{
-\item{.data}{a data.frame or tibble containing the cleaned line list}
+\item{x}{a data.frame or tibble containing the cleaned line list}
 
 \item{nhs_number}{a column as a character containing the patient NHS numbers}
 

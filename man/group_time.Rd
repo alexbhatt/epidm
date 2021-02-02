@@ -7,18 +7,17 @@
 Group overlapping time periods, with start and end dates, or start dates with a rolling window}
 \usage{
 group_time(
-  .data,
+  x,
   date_start,
   date_end,
   window,
   group_vars,
   min_varname = "date_min",
-  max_varname = "date_max",
-  drop_original = TRUE
+  max_varname = "date_max"
 )
 }
 \arguments{
-\item{.data}{data frame, this can be piped in}
+\item{x}{data frame, this can be piped in}
 
 \item{date_start}{the start dates for the grouping}
 
@@ -31,8 +30,6 @@ group_time(
 \item{min_varname}{set variable name for the time period minimum}
 
 \item{max_varname}{set variable name for the time period maximum}
-
-\item{drop_original}{a logical to determine if you want to retain the original variables or write over with the max and min varname}
 }
 \value{
 a data frame with 4 new variables: indx, a grouping flag; and new start and end dates
@@ -66,7 +63,7 @@ episode_test <- data.frame(
     )
   )
 )
-episode_test \%>\% group_time(date_start=specimen_date,window=14,group_vars=c(id,org))
+group_time(x=episode_test,date_start=specimen_date,window=14,group_vars=c(id,org))
 
 spell_test <- data.frame(
   id = c(rep(99,6),rep(88,4),rep(3,3)),
@@ -105,11 +102,11 @@ spell_test <- data.frame(
   )
 )
 
-spell_test \%>\% group_time(date_start=spell_start,
-                          date_end=spell_end,
-                          group_vars=c(id,provider),
-                          min_varname="spell_min_date",
-                          max_varname="spell_max_date",
-                          drop_original = FALSE)
+group_time(x=spell_test,
+           date_start=spell_start,
+           date_end=spell_end,
+           group_vars=c(id,provider),
+           min_varname="spell_min_date",
+           max_varname="spell_max_date")
 
 }
