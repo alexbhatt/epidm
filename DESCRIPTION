@@ -12,15 +12,14 @@ Description: This package contains utilties and functions
     data.
 License: MIT + file LICENSE
 Imports: 
+    data.table,
     dplyr,
     magrittr,
     phonics,
     readr,
-    rlang,
     stringi,
     stringr,
-    utils,
-    data.table
+    utils
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

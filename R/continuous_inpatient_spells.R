@@ -6,7 +6,6 @@
 #' @seealso http://content.digital.nhs.uk/media/11859/Provider-Spells-Methodology/pdf/Spells_Methodology.pdf
 #'
 #' @import dplyr
-#' @importFrom rlang .data :=
 #'
 #' @param .data a data frame, tibble; direct or piped (%>%)
 #' @param patient_group_vars a vector containing any variables to be used for record grouping, minimum is a patient identifier

@@ -1,12 +1,8 @@
-
 #' @title Patient ID record grouping
 #'
-#' Groups patient records from multiple isolates with a single patientID
-#' GROUPED by nhs_number, hospital_number, date_of_birth, assigns a unique IDno to each patient.
-#' sort by specimen date
-#' generates a unique sequential number from 1-X for each record
-#' then based on grouping, reassigns records to same number
-#' group by different combos of patient identifiers, also dont include invalid nhs_numbers
+#' @description
+#' Groups patient records from multiple isolates with a single integer patientID
+#' by grouping patient identifiers.
 #'
 #' Grouping is based on five stages:
 #' \enumerate{
@@ -17,14 +13,15 @@
 #' \item Sex & Date of Birth & Fuzzy Name
 #' }
 #'
-#' @return patientID grouping variable
+#' @return patientID grouping variable addedd to the data.frame
 #'
 #' @import data.table
+#' @importFrom data.table .N .I ':='
 #' @importFrom phonics soundex
 #' @importFrom stringr word
 #' @importFrom stringi stri_trans_general stri_trans_toupper
 #'
-#' @param x a data.frame or tibble containing the cleaned line list
+#' @param x a data.frame or data.table containing the cleaned line list
 #' @param nhs_number a column as a character containing the patient NHS numbers
 #' @param hospital_number a column as a character containing the patient Hospital numbers
 #' @param date_of_birth a column as a date variable containing the patient date of birth in date format
@@ -36,64 +33,68 @@
 #' @return A dataframe with two new variables: id a unique patient id, and n_in_id an integer variable with the number of rows in the id
 #'
 #' @examples
-#' dat <- dplyr::tribble(
-#'   ~nhs_n, ~hosp_n, ~sex, ~dateofbirth, ~firstname, ~lastname,
-#'   9434765919, 13L, "M", "1988-10-06", "Danger", "Mouse",
-#'   9434765919, 13L, "M", "1988-06-10", "Danger", "MÔuse",
-#'   9434765919, 13L, "M", "1900-01-01", "Denger", "Mouse",
-#'   NA,         NA,  "M", "1988-10-06", "Danger", "Moose",
-#'   NA,         13L, "M", "1988-10-06", "Danger", "Moose",
-#'   3367170666, 13L, "M", "1988-10-06", "DANGER", "Mouse",
-#'   5185293519, 13L, "M", "1988-10-06", "Danger", "MOUSe",
-#'   5185293519, 31L, "M", "1988-10-06", "Danger", "Mouse",
-#'   5185293519, 31L, "M", "1988-10-06", "Danger", "Mouse",
-#'   8082318562, 96L, "F", "2020-01-28", "Crazy",  "Frog",
-#'   NA,         96L, "U", "2020-01-28", "Crazy",  "FROG",
-#'   NA,         96L, "U", "2020-01-28", "Krazy",  "Frug",
-#'   NA,         96L, "F", "2020-01-28", "C",      "Frog"
-#' ) %>% dplyr::mutate(dateofbirth=as.Date(dateofbirth))
-#'
-# uk_patient_id(.data = dat,
-#               nhs_number = "nhs_n",
-#               hospital_number = "hosp_n",
-#               forename = "firstname",
-#               surname = "lsatname",
-#               sex = "s",
-#               date_of_birth = "dateofbirth",
-#               sort_by = "dateofbirth")
+#' dat <- data.frame(
+#'   nhs_n = c(
+#'     9434765919,9434765919,9434765919,NA,NA,
+#'     3367170666,5185293519,5185293519,5185293519,8082318562,NA,NA,NA
+#'   ),
+#'   hosp_n = c(
+#'     '13','13','13','NA','13','13','13','31','31','96','96','96','96'
+#'   ),
+#'   sex = c('M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'F', 'U', 'U', 'F'),
+#'   dateofbirth = as.Date(
+#'     c(
+#'       '1988-10-06','1988-06-10','1900-01-01','1988-10-06','1988-10-06',
+#'       '1988-10-06','1988-10-06','1988-10-06','1988-10-06','2020-01-28',
+#'       '2020-01-28','2020-01-28','2020-01-28'
+#'     )
+#'   ),
+#'   firstname = c(
+#'     'Danger','Danger','Denger','Danger','Danger','DANGER','Danger',
+#'     'Danger','Danger','Crazy','Crazy','Krazy','C'
+#'   ),
+#'   lastname = c(
+#'     'Mouse','Mause','Mouse','Moose','Moose','Mouse','MOUSe',
+#'     'Mouse','Mouse','Frog','FROG','Frug','Frog'
+#'   )
+#' )
+# uk_patient_id(x = dat,
+#               nhs_number = nhs_n,
+#               hospital_number = hosp_n,
+#               forename = firstname,
+#               surname = lastname,
+#               sex = sex,
+#               date_of_birth = dateofbirth)
 #'
 #' @export
 
 uk_patient_id <- function(x,
-                             nhs_number,
-                             hospital_number,
-                             date_of_birth,
-                             sex,
-                             forename="NONAME",
-                             surname="NONAME") {
-
-  ## setup varaibles for entry into data.table
-  nhs_number <- deparse(substitute(nhs_number))
-  hospital_number <- deparse(substitute(hospital_number))
-  date_of_birth <- deparse(substitute(date_of_birth))
-  sex <- deparse(substitute(sex))
-  forename <- deparse(substitute(forename))
-  surname <- deparse(substitute(surname))
+                          nhs_number,
+                          hospital_number,
+                          date_of_birth,
+                          sex,
+                          forename="NONAME",
+                          surname="NONAME") {
 
   ## convert object if its not already
-  if("data.table" %in% class(x)) {
+  if(data.table::is.data.table(x)==FALSE) {
     x <- data.table::as.data.table(x)
   }
 
+  ## setup variables for entry into data.table
+  nhs_number <- substitute(nhs_number)
+  hospital_number <- substitute(hospital_number)
+  date_of_birth <- substitute(date_of_birth)
+  sex <- substitute(sex)
+  forename <- substitute(forename)
+  surname <- substitute(surname)
+
   # apply other validity features
-  x[,
-    `:=`(
-      id = seq(1:.N),
-      tmp.valid.nhs = epidm::valid_nhs(nhs_number) == 1,
-      tmp.valid.dob = !date_of_birth %in% c("1900-01-01", NA),
-      tmp.valid.hos = !hospital_number %in% c("UNKNOWN", "NO PATIENT ID", NA),
-      tmp.valid.sex = grepl("^M|F",sex,ignore.case=T)
-    )]
+  x[,id := seq(1:.N)]
+  x[,tmp.valid.nhs := epidm::valid_nhs(eval(nhs_number)) == 1]
+  x[,tmp.valid.dob := !eval(date_of_birth) %in% c("1900-01-01", NA)]
+  x[,tmp.valid.hos := !eval(hospital_number) %in% c("UNKNOWN", "NO PATIENT ID", NA)]
+  x[,tmp.valid.sex := grepl("^M|F",eval(sex),ignore.case=T)]
 
   ## S1: NHS + DOB ###########################################################
   x[,
@@ -102,7 +103,10 @@ uk_patient_id <- function(x,
       id[1],
       id
     ),
-    by = c(nhs_number,date_of_birth)
+    by = c(
+      deparse(nhs_number),
+      deparse(date_of_birth)
+      )
   ]
 
 
@@ -112,7 +116,10 @@ uk_patient_id <- function(x,
       tmp.valid.hos & tmp.valid.dob,
       id[1],
       id),
-    by = c(hospital_number,date_of_birth)
+    by = c(
+      deparse(hospital_number),
+      deparse(date_of_birth)
+      )
   ]
 
   ## S3: NHS + HOS ###########################################################
@@ -121,53 +128,65 @@ uk_patient_id <- function(x,
       tmp.valid.nhs & tmp.valid.hos,
       id[1],
       id),
-    by = c(nhs_number,hospital_number)
+    by = c(
+      deparse(nhs_number),
+      deparse(hospital_number)
+      )
   ]
 
   if(surname!="NONAME"){
     ## S4: SEX + DOB + NAME ####################################################
+    namecols <- grep("name",names(dat),ignore.case=T,value=T)
     x[,
-      lapply(.SD,
+      (namecols) := lapply(.SD,
              function(X) stringi::stri_trans_general(
                stringi::stri_trans_toupper(X),
                "Latin-ASCII")
       ),
-      .SDcols = grep("name",names(dat),ignore.case=T,value=T)
+      .SDcols = namecols
     ]
     x[,
-      tmp.valid.n2 := !surname %in% c("","NA",NA)
+      tmp.valid.n2 := !eval(surname) %in% c("","NA",NA)
     ]
     x[,
       id := data.table::fifelse(
         tmp.valid.sex & tmp.valid.dob & tmp.valid.n2,
         id[1],
         id),
-      by = c(sex,date_of_birth,surname,forename)
+      by = c(
+        deparse(sex),
+        deparse(date_of_birth),
+        deparse(surname),
+        deparse(forename)
+        )
     ]
 
 
     ## S5: SEX + DOB + FUZZY NAME ##############################################
-    x[,
-      `:=`(
-        tmp.fuzz.n1 = base::substr(forename,1,1),
-        tmp.fuzz.n2 = phonics::soundex(stringr::word(surname,1)),
-        tmp.fuzz.ym = substr(as.character(date_of_birth),1,7)
-      )
-    ]
+    x[,tmp.fuzz.n1 := base::substr(eval(forename),1,1)]
+    x[,tmp.fuzz.n2 := phonics::soundex(stringr::word(eval(surname),1))]
+    x[,tmp.fuzz.ym := substr(eval(date_of_birth),1,7)]
+
     x[,
       id := data.table::fifelse(
         tmp.valid.sex & tmp.valid.dob & tmp.valid.n2,
         id[1],
         id),
-      by = c(sex,tmp.fuzz.ym,tmp.fuzz.n1,tmp.fuzz.n2)
+      by = c(
+        deparse(sex),
+        tmp.fuzz.ym,
+        tmp.fuzz.n1,
+        tmp.fuzz.n2
+        )
     ]
-
 
   }
 
+  ## cleanup and remove temporary vars
   x[,
     lapply(.SD,NULL),
-    .SDcols = grep("^tmp.",names(x),value=TRUE)][]
+    .SDcols = grep("^tmp.",names(x),value=TRUE)
+    ][]
 
   return(x)
 
