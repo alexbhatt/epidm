@@ -6,6 +6,7 @@
 #' @return a data frame with 4 new variables: indx, a grouping flag; and new start and end dates
 #'
 #' @import data.table
+#' @importFrom data.table .N .GRP ':='
 #'
 #' @param x data frame, this can be piped in
 #' @param date_start the start dates for the grouping
@@ -97,42 +98,62 @@ group_time <- function(x,
                         max_varname="date_max"
 ){
 
-  eds.grp <- eval(deparse(substitute(group_vars)))
+  ## convert object if its not already
+  if(data.table::is.data.table(x)==FALSE) {
+    x <- data.table::as.data.table(x)
+  }
 
-  x <- data.table::data.table(x)
+  # setup NSE substitutes
+  date_start <- substitute(date_start)
+  date_end <- substitute(date_end)
+  group_vars <- substitute(group_vars)
 
-  x[,
-    `:=`(
-      dateNum = as.numeric(deparse(substitute(date_start))),
-      window_end = as.numeric(deparse(substitute(date_end)))
-    )
-  ]
+  x[,dateNum := as.numeric(eval(date_start))]
+  x[,window_end := as.numeric(eval(date_end))]
 
   data.table::setorder(x,dateNum)
 
   x[,
-    `:=`(
-      window_start = data.table::shift(dateNum, 1,
-                                       type="lead",
-                                       fill = dateNum[data.table::.N]),
-      window_cmax = cummax(window_end)
+    window_start := data.table::shift(eval(dateNum),
+                                      1,
+                                      type="lead",
+                                      fill = eval(dateNum)[.N]
+                                      ),
+    keyby = group_vars
+  ]
+  x[,
+    window_cmax := cummax(window_end),
+    keyby = group_vars
+    ]
+  x[,
+    window_cmax := data.table::fifelse(
+      is.na(window_cmax) & !is.na(window_end),
+      window_end,
+      window_cmax
     ),
-    keyby=eds.grp
-  ][,
+    keyby = group_vars
+    ]
+  x[,
     indx := paste0(
-      data.table::.GRP,
+      .GRP,
       ".",
-      data.table::.N,
+      .N,
       ".",
-      c(0,cumsum(window_start > window_cmax))[-data.table::.N]),
-    keyby=eds.grp
-  ][,
-    `:=`(
-      min = min(as.Date(dateNum, origin="1970-01-01")),
-      max = max(as.Date(window_cmax, origin="1970-01-01"))
-    ),
-    keyby=indx
-  ][]
+      c(0,cumsum(window_start > window_cmax))[-.N]),
+    keyby = group_vars
+  ]
+  x[,
+    min := min(as.Date(dateNum, origin="1970-01-01")),
+    keyby = c(group_vars,
+              deparse(substitute(indx))
+              )
+    ]
+  x[,
+    max := max(as.Date(window_cmax, origin="1970-01-01")),
+    keyby = c(group_vars,
+              deparse(substitute(indx))
+              )
+    ]
 
   return(x)
 
