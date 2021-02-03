@@ -37,12 +37,8 @@ patientID grouping variable addedd to the data.frame
 A dataframe with two new variables: id a unique patient id, and n_in_id an integer variable with the number of rows in the id
 }
 \description{
-Groups patient records from multiple isolates with a single patientID
-GROUPED by nhs_number, hospital_number, date_of_birth, assigns a unique IDno to each patient.
-sort by specimen date
-generates a unique sequential number from 1-X for each record
-then based on grouping, reassigns records to same number
-group by different combos of patient identifiers, also dont include invalid nhs_numbers
+Groups patient records from multiple isolates with a single integer patientID
+by grouping patient identifiers.
 
 Grouping is based on five stages:
 \enumerate{
@@ -79,5 +75,13 @@ dat <- data.frame(
     'Mouse','Mouse','Frog','FROG','Frug','Frog'
   )
 )
+dat <- uk_patient_id(x = dat,
+                   nhs_number = nhs_n,
+                   hospital_number = hosp_n,
+                   forename = firstname,
+                   surname = lastname,
+                   sex = sex,
+                   date_of_birth = dateofbirth)
+dat
 
 }

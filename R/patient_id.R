@@ -16,7 +16,7 @@
 #' @return patientID grouping variable addedd to the data.frame
 #'
 #' @import data.table
-#' @importFrom data.table .N .I ':='
+#' @importFrom data.table .N ':='
 #' @importFrom phonics soundex
 #' @importFrom stringr word
 #' @importFrom stringi stri_trans_general stri_trans_toupper
@@ -58,13 +58,14 @@
 #'     'Mouse','Mouse','Frog','FROG','Frug','Frog'
 #'   )
 #' )
-# uk_patient_id(x = dat,
-#               nhs_number = nhs_n,
-#               hospital_number = hosp_n,
-#               forename = firstname,
-#               surname = lastname,
-#               sex = sex,
-#               date_of_birth = dateofbirth)
+#' dat <- uk_patient_id(x = dat,
+#'                    nhs_number = nhs_n,
+#'                    hospital_number = hosp_n,
+#'                    forename = firstname,
+#'                    surname = lastname,
+#'                    sex = sex,
+#'                    date_of_birth = dateofbirth)
+#' dat
 #'
 #' @export
 
@@ -82,6 +83,9 @@ uk_patient_id <- function(x,
   }
 
   ## setup variables for entry into data.table
+
+  ## NSE within DT[i,j,by]
+  ## items within j require eval() and by require deparse()
   nhs_number <- substitute(nhs_number)
   hospital_number <- substitute(hospital_number)
   date_of_birth <- substitute(date_of_birth)
@@ -174,19 +178,21 @@ uk_patient_id <- function(x,
         id),
       by = c(
         deparse(sex),
-        tmp.fuzz.ym,
-        tmp.fuzz.n1,
-        tmp.fuzz.n2
+        deparse(substitute(tmp.fuzz.ym)),
+        deparse(substitute(tmp.fuzz.n1)),
+        deparse(substitute(tmp.fuzz.n2))
         )
     ]
 
   }
 
   ## cleanup and remove temporary vars
+  tmpcols <- grep("^tmp.",colnames(x),value=TRUE)
   x[,
-    lapply(.SD,NULL),
-    .SDcols = grep("^tmp.",names(x),value=TRUE)
-    ][]
+    (tmpcols) := NULL
+    ]
+
+  data.table::setcolorder(x,deparse(substitute(id)))
 
   return(x)
 
