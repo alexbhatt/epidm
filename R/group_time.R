@@ -9,10 +9,10 @@
 #' @importFrom data.table .N .GRP ':='
 #'
 #' @param x data frame, this can be piped in
-#' @param date_start the start dates for the grouping
-#' @param date_end the end dates for the grouping
+#' @param date_start the start dates for the grouping, provided quoted
+#' @param date_end the end dates for the grouping, provided quoted
 #' @param window if there is no end date, a time window which will be applied to the start date
-#' @param group_vars in a vector, the all vars used to group records
+#' @param group_vars in a vector, the all vars used to group records, propvded quoted
 #' @param min_varname set variable name for the time period minimum
 #' @param max_varname set variable name for the time period maximum
 #'
@@ -79,12 +79,12 @@
 #'   )
 #' )
 #'
-#' group_time(x=spell_test,
-#'            date_start=spell_start,
-#'            date_end=spell_end,
-#'            group_vars=c(id,provider),
-#'            min_varname="spell_min_date",
-#'            max_varname="spell_max_date")
+#' group_time(x = spell_test,
+#'            date_start = 'spell_start',
+#'            date_end = 'spell_end',
+#'            group_vars = c('id','provider'),
+#'            min_varname = 'spell_min_date',
+#'            max_varname = 'spell_max_date')
 #'
 #' @export
 
@@ -103,57 +103,95 @@ group_time <- function(x,
     x <- data.table::as.data.table(x)
   }
 
-  # setup NSE substitutes
-  date_start <- substitute(date_start)
-  date_end <- substitute(date_end)
+  # setup NSE
+  # subtitute() not needed on other vars as quoted so use get()
   group_vars <- substitute(group_vars)
 
-  x[,dateNum := as.numeric(eval(date_start))]
-  x[,window_end := as.numeric(eval(date_end))]
+  x[,tmp.dateNum := as.numeric(get(date_start))]
 
-  data.table::setorder(x,dateNum)
+
+  if(missing(date_end) & missing(window)){
+    stop("date_end or window argument required")
+  }
+
+  if(!missing(date_end)){
+    x[,tmp.window_end := as.numeric(get(date_end))]
+  }
+
+  if(!missing(window)){
+    x[,tmp.window_end := tmp.dateNum + window]
+  }
+
+  data.table::setorder(x,tmp.dateNum)
 
   x[,
-    window_start := data.table::shift(eval(dateNum),
+    tmp.window_start := data.table::shift(tmp.dateNum,
                                       1,
                                       type="lead",
-                                      fill = eval(dateNum)[.N]
+                                      fill = tmp.dateNum[.N]
                                       ),
     keyby = group_vars
   ]
   x[,
-    window_cmax := cummax(window_end),
+    tmp.window_cmax := cummax(tmp.window_end),
     keyby = group_vars
     ]
   x[,
-    window_cmax := data.table::fifelse(
-      is.na(window_cmax) & !is.na(window_end),
-      window_end,
-      window_cmax
+    tmp.window_cmax := data.table::fifelse(
+      is.na(tmp.window_cmax) & !is.na(tmp.window_end),
+      tmp.window_end,
+      tmp.window_cmax
     ),
     keyby = group_vars
     ]
+
+  ## group the records
   x[,
     indx := paste0(
       .GRP,
       ".",
       .N,
       ".",
-      c(0,cumsum(window_start > window_cmax))[-.N]),
+      c(0,
+        data.table::fifelse(
+          is.na(tmp.dateNum),
+          .I,
+          cumsum(tmp.window_start > tmp.window_cmax)
+          )[-.N]
+        )
+      ),
     keyby = group_vars
   ]
   x[,
-    min := min(as.Date(dateNum, origin="1970-01-01")),
-    keyby = c(group_vars,
-              deparse(substitute(indx))
-              )
+    min_date := min(as.Date(tmp.dateNum, origin="1970-01-01")),
+    keyby = indx
     ]
+
+  if(!missing(date_end)){
   x[,
-    max := max(as.Date(window_cmax, origin="1970-01-01")),
-    keyby = c(group_vars,
-              deparse(substitute(indx))
-              )
+    max_date := max(as.Date(tmp.window_cmax, origin="1970-01-01")),
+    keyby = indx
+  ]
+  } else {
+    x[,
+      max_date := min(as.Date(tmp.window_cmax, origin="1970-01-01")),
+      keyby = indx
     ]
+  }
+
+  ## rename if arguments are provided
+  if(min_varname!="min_date" & !missing(min_varname)){
+    data.table::setnames(x,'min_date',min_varname)
+  }
+  if(max_varname!="max_date" & !missing(max_varname)){
+    data.table::setnames(x,'max_date',max_varname)
+  }
+
+  ## cleanup and remove temp columns
+  tmpcols <- grep("^tmp.",colnames(x),value=TRUE)
+  x[,
+    (tmpcols) := NULL
+  ]
 
   return(x)
 
