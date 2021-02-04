@@ -19,13 +19,13 @@ group_time(
 \arguments{
 \item{x}{data frame, this can be piped in}
 
-\item{date_start}{the start dates for the grouping}
+\item{date_start}{the start dates for the grouping, provided quoted}
 
-\item{date_end}{the end dates for the grouping}
+\item{date_end}{the end dates for the grouping, provided quoted}
 
 \item{window}{if there is no end date, a time window which will be applied to the start date}
 
-\item{group_vars}{in a vector, the all vars used to group records}
+\item{group_vars}{in a vector, the all vars used to group records, propvded quoted}
 
 \item{min_varname}{set variable name for the time period minimum}
 
@@ -63,7 +63,10 @@ episode_test <- data.frame(
     )
   )
 )
-group_time(x=episode_test,date_start=specimen_date,window=14,group_vars=c(id,org))
+group_time(x=episode_test,
+           date_start='specimen_date',
+           window=14,
+           group_vars=c('id','org'))[]
 
 spell_test <- data.frame(
   id = c(rep(99,6),rep(88,4),rep(3,3)),
@@ -102,11 +105,11 @@ spell_test <- data.frame(
   )
 )
 
-group_time(x=spell_test,
-           date_start=spell_start,
-           date_end=spell_end,
-           group_vars=c(id,provider),
-           min_varname="spell_min_date",
-           max_varname="spell_max_date")
+group_time(x = spell_test,
+           date_start = 'spell_start',
+           date_end = 'spell_end',
+           group_vars = c('id','provider'),
+           min_varname = 'spell_min_date',
+           max_varname = 'spell_max_date')[]
 
 }

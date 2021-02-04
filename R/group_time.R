@@ -40,7 +40,10 @@
 #'     )
 #'   )
 #' )
-#' group_time(x=episode_test,date_start=specimen_date,window=14,group_vars=c(id,org))
+#' group_time(x=episode_test,
+#'            date_start='specimen_date',
+#'            window=14,
+#'            group_vars=c('id','org'))[]
 #'
 #' spell_test <- data.frame(
 #'   id = c(rep(99,6),rep(88,4),rep(3,3)),
@@ -84,7 +87,7 @@
 #'            date_end = 'spell_end',
 #'            group_vars = c('id','provider'),
 #'            min_varname = 'spell_min_date',
-#'            max_varname = 'spell_max_date')
+#'            max_varname = 'spell_max_date')[]
 #'
 #' @export
 
