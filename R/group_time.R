@@ -125,11 +125,12 @@ group_time <- function(x,
   data.table::setorder(x,tmp.dateNum)
 
   x[,
-    tmp.window_start := data.table::shift(tmp.dateNum,
-                                      1,
-                                      type="lead",
-                                      fill = tmp.dateNum[.N]
-                                      ),
+    tmp.window_start := data.table::shift(
+      tmp.dateNum,
+      1,
+      type="lead",
+      fill = tmp.dateNum[.N]
+    ),
     keyby = group_vars
   ]
   x[,
@@ -145,7 +146,7 @@ group_time <- function(x,
     keyby = group_vars
     ]
 
-  ## group the records
+  ## create an index to group records sequentially and overlapping in time
   x[,
     indx := paste0(
       .GRP,
@@ -168,10 +169,10 @@ group_time <- function(x,
     ]
 
   if(!missing(date_end)){
-  x[,
-    max_date := max(as.Date(tmp.window_cmax, origin="1970-01-01")),
-    keyby = indx
-  ]
+    x[,
+      max_date := max(as.Date(tmp.window_cmax, origin="1970-01-01")),
+      keyby = indx
+    ]
   } else {
     x[,
       max_date := min(as.Date(tmp.window_cmax, origin="1970-01-01")),
