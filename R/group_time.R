@@ -6,7 +6,7 @@
 #' @return a data frame with 4 new variables: indx, a grouping flag; and new start and end dates
 #'
 #' @import data.table
-#' @importFrom data.table .N .GRP ':='
+#' @importFrom data.table .I .N .GRP ':='
 #'
 #' @param x data frame, this can be piped in
 #' @param date_start the start dates for the grouping, provided quoted
@@ -110,9 +110,10 @@ group_time <- function(x,
   # subtitute() not needed on other vars as quoted so use get()
   group_vars <- substitute(group_vars)
 
+  ## change the dates into numeric
   x[,tmp.dateNum := as.numeric(get(date_start))]
 
-
+  ## select based on end date or window methods
   if(missing(date_end) & missing(window)){
     stop("date_end or window argument required")
   }
@@ -127,6 +128,7 @@ group_time <- function(x,
 
   data.table::setorder(x,tmp.dateNum)
 
+  ## look at the next start date
   x[,
     tmp.window_start := data.table::shift(
       tmp.dateNum,
@@ -136,10 +138,14 @@ group_time <- function(x,
     ),
     keyby = group_vars
   ]
+
+  ## compare the end end date within the groups
   x[,
     tmp.window_cmax := cummax(tmp.window_end),
     keyby = group_vars
     ]
+
+  ## correct for missing values
   x[,
     tmp.window_cmax := data.table::fifelse(
       is.na(tmp.window_cmax) & !is.na(tmp.window_end),
@@ -166,6 +172,8 @@ group_time <- function(x,
       ),
     keyby = group_vars
   ]
+
+  ## create new columns back in date format
   x[,
     min_date := min(as.Date(tmp.dateNum, origin="1970-01-01")),
     keyby = indx
