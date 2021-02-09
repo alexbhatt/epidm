@@ -61,7 +61,7 @@ cip_spells <- function(x,
 
   ## counter columns to make life easier
   x[,
-    c('tmp.spell.N', 'tmp.spell.n') := .(.N, seq(1:.N)),
+    tmp.spell.n := seq(1:.N),
     by = patient_group_vars
   ]
 
@@ -113,7 +113,8 @@ cip_spells <- function(x,
                                   patient_group_vars = patient_group_vars,
                                   spell_start_date = spell_start_date,
                                   spell_end_date = spell_end_date,
-                                  discharge_destination = discharge_destination)
+                                  discharge_destination = discharge_destination,
+                                  drop.tmp=F)
 
   ## setup requirement variables
   x[,tmp.dateNum_start := as.numeric(get(spell_start_date))]
@@ -162,26 +163,26 @@ cip_spells <- function(x,
   ]
 
   x[,
-    tmp.cip_indx := paste0(
+    cip_indx := paste0(
       .GRP,
       ".",
-      .I,
+      .N,
       ".",
       c(0,cumsum(tmp.win_next > tmp.win_cmax))[-.N]
     ),
     by = patient_group_vars
   ]
 
+
   x[,
-    c(
-      tmp.cip_spell_start,
-      tmp.cip_spell_end)
+    c('cip_spell_start',
+      'cip_spell_end')
     :=
       .(
         min(get(spell_start_date)),
         max(get(spell_end_date))
       ),
-    by = tmp.cip_indx]
+    by = cip_indx]
 
 
   ## cleanup and remove temp columns
