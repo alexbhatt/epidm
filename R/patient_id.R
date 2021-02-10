@@ -9,7 +9,7 @@
 #' \item matching nhs number and date of birth
 #' \item Hospital number &  Date of Birth
 #' \item NHS number & Hospital Number
-#' \item Sex & Date of Birth & Surname IF nhs unknown
+#' \item Date of Birth & Surname IF nhs unknown
 #' \item Sex & Date of Birth & Fuzzy Name
 #' }
 #'
@@ -33,13 +33,13 @@
 #' @return A dataframe with two new variables: id a unique patient id, and n_in_id an integer variable with the number of rows in the id
 #'
 #' @examples
-#' dat <- data.frame(
+#' id_test <- data.frame(
 #'   nhs_n = c(
 #'     9434765919,9434765919,9434765919,NA,NA,
 #'     3367170666,5185293519,5185293519,5185293519,8082318562,NA,NA,NA
 #'   ),
 #'   hosp_n = c(
-#'     '13','13','13','NA','13','13','13','31','31','96','96','96','96'
+#'     '13','13','13','UNKNOWN','13','13','13','31','31','96','96',NA,'96',
 #'   ),
 #'   sex = c('M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'F', 'U', 'U', 'F'),
 #'   dateofbirth = as.Date(
@@ -58,14 +58,14 @@
 #'     'Mouse','Mouse','Frog','FROG','Frug','Frog'
 #'   )
 #' )
-#' dat <- uk_patient_id(x = dat,
-#'                    nhs_number = nhs_n,
-#'                    hospital_number = hosp_n,
-#'                    forename = firstname,
-#'                    surname = lastname,
-#'                    sex = sex,
-#'                    date_of_birth = dateofbirth)
-#' dat
+#' id_test <- uk_patient_id(x = id_test,
+#'                    nhs_number = 'nhs_n',
+#'                    hospital_number = 'hosp_n',
+#'                    forename = 'firstname',
+#'                    surname = 'lastname',
+#'                    sex = 'sex',
+#'                    date_of_birth = 'dateofbirth')
+#' print(id_test)
 #'
 #' @export
 
@@ -84,21 +84,30 @@ uk_patient_id <- function(x,
 
   ## setup variables for entry into data.table
 
-  ## NSE within DT[i,j,by]
-  ## items within j require eval() and by require deparse()
-  nhs_number <- substitute(nhs_number)
-  hospital_number <- substitute(hospital_number)
-  date_of_birth <- substitute(date_of_birth)
-  sex <- substitute(sex)
-  forename <- substitute(forename)
-  surname <- substitute(surname)
-
   # apply other validity features
+  # use SDcols version to ensure that the column name and argument name work if the same
   x[,id := seq(1:.N)]
-  x[,tmp.valid.nhs := epidm::valid_nhs(eval(nhs_number)) == 1]
-  x[,tmp.valid.dob := !eval(date_of_birth) %in% c("1900-01-01", NA)]
-  x[,tmp.valid.hos := !eval(hospital_number) %in% c("UNKNOWN", "NO PATIENT ID", NA)]
-  x[,tmp.valid.sex := grepl("^M|F",eval(sex),ignore.case=T)]
+  ## set id to column 1
+  data.table::setcolorder(x,'id')
+
+  x[,tmp.valid.nhs := lapply(.SD,function(x) epidm::valid_nhs(x) == 1),
+    .SDcols = nhs_number]
+  x[,tmp.valid.dob := lapply(.SD,
+                             function(x) !x %in% as.Date(c("1900-01-01", NA))),
+    .SDcols = date_of_birth
+    ]
+  x[,tmp.valid.hos := lapply(.SD,
+                             function(x) !x %in% c("UNKNOWN", "NO PATIENT ID", NA)),
+    .SDcols = hospital_number]
+  x[,
+    tmp.valid.sex := lapply(.SD,function(x) grepl("^M|F",x,ignore.case=T)),
+    .SDcols = sex
+    ]
+  x[,
+    c(sex) := .(
+      data.table::fifelse(tmp.valid.sex,toupper(substr(sex,1,1)),"U")
+    )
+  ]
 
   ## S1: NHS + DOB ###########################################################
   x[,
@@ -108,8 +117,8 @@ uk_patient_id <- function(x,
       id
     ),
     by = c(
-      deparse(nhs_number),
-      deparse(date_of_birth)
+      nhs_number,
+      date_of_birth
       )
   ]
 
@@ -121,8 +130,8 @@ uk_patient_id <- function(x,
       id[1],
       id),
     by = c(
-      deparse(hospital_number),
-      deparse(date_of_birth)
+      hospital_number,
+      date_of_birth
       )
   ]
 
@@ -133,14 +142,14 @@ uk_patient_id <- function(x,
       id[1],
       id),
     by = c(
-      deparse(nhs_number),
-      deparse(hospital_number)
+      nhs_number,
+      hospital_number
       )
   ]
 
   if(surname!="NONAME"){
     ## S4: SEX + DOB + NAME ####################################################
-    namecols <- grep("name",names(dat),ignore.case=T,value=T)
+    namecols <- grep("name",names(x),ignore.case=T,value=T)
     x[,
       (namecols) := lapply(.SD,
              function(X) stringi::stri_trans_general(
@@ -150,38 +159,37 @@ uk_patient_id <- function(x,
       .SDcols = namecols
     ]
     x[,
-      tmp.valid.n2 := !eval(surname) %in% c("","NA",NA)
+      tmp.valid.n2 := !get(surname) %in% c("","NA",NA)
     ]
     x[,
       id := data.table::fifelse(
-        tmp.valid.sex & tmp.valid.dob & tmp.valid.n2,
+        tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
         id[1],
         id),
       by = c(
-        deparse(sex),
-        deparse(date_of_birth),
-        deparse(surname),
-        deparse(forename)
+        date_of_birth,
+        surname,
+        forename
         )
     ]
 
 
     ## S5: SEX + DOB + FUZZY NAME ##############################################
-    x[,tmp.fuzz.n1 := base::substr(eval(forename),1,1)]
-    x[,tmp.fuzz.n2 := phonics::soundex(stringr::word(eval(surname),1))]
-    x[,tmp.fuzz.ym := substr(eval(date_of_birth),1,7)]
+    x[,tmp.fuzz.n1 := base::substr(get(forename),1,1)]
+    x[,tmp.fuzz.n2 := phonics::soundex(stringr::word(get(surname),1))]
+    x[,tmp.fuzz.ym := substr(get(date_of_birth),1,7)]
 
     x[,
       id := data.table::fifelse(
-        tmp.valid.sex & tmp.valid.dob & tmp.valid.n2,
+        tmp.valid.sex & tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
         id[1],
         id),
       by = c(
-        deparse(sex),
-        deparse(substitute(tmp.fuzz.ym)),
-        deparse(substitute(tmp.fuzz.n1)),
-        deparse(substitute(tmp.fuzz.n2))
-        )
+        sex,
+        'tmp.fuzz.ym',
+        'tmp.fuzz.n1',
+        'tmp.fuzz.n2'
+      )
     ]
 
   }
@@ -192,7 +200,7 @@ uk_patient_id <- function(x,
     (tmpcols) := NULL
     ]
 
-  data.table::setcolorder(x,deparse(substitute(id)))
+
 
   return(x)
 

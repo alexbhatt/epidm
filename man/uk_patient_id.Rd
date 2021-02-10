@@ -45,18 +45,18 @@ Grouping is based on five stages:
 \item matching nhs number and date of birth
 \item Hospital number &  Date of Birth
 \item NHS number & Hospital Number
-\item Sex & Date of Birth & Surname IF nhs unknown
+\item Date of Birth & Surname IF nhs unknown
 \item Sex & Date of Birth & Fuzzy Name
 }
 }
 \examples{
-dat <- data.frame(
+id_test <- data.frame(
   nhs_n = c(
     9434765919,9434765919,9434765919,NA,NA,
     3367170666,5185293519,5185293519,5185293519,8082318562,NA,NA,NA
   ),
   hosp_n = c(
-    '13','13','13','NA','13','13','13','31','31','96','96','96','96'
+    '13','13','13','UNKNOWN','13','13','13','31','31','96','96',NA,'96',
   ),
   sex = c('M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'F', 'U', 'U', 'F'),
   dateofbirth = as.Date(
@@ -75,13 +75,13 @@ dat <- data.frame(
     'Mouse','Mouse','Frog','FROG','Frug','Frog'
   )
 )
-dat <- uk_patient_id(x = dat,
-                   nhs_number = nhs_n,
-                   hospital_number = hosp_n,
-                   forename = firstname,
-                   surname = lastname,
-                   sex = sex,
-                   date_of_birth = dateofbirth)
-dat
+id_test <- uk_patient_id(x = id_test,
+                   nhs_number = 'nhs_n',
+                   hospital_number = 'hosp_n',
+                   forename = 'firstname',
+                   surname = 'lastname',
+                   sex = 'sex',
+                   date_of_birth = 'dateofbirth')
+print(id_test)
 
 }
