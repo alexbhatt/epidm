@@ -38,7 +38,9 @@
 #'   x = episode_test,
 #'   group_vars = c("pat_id", "spec_type", "species"),
 #'   event_date = "sp_date",
-#'   episode_window = 14
+#'   event_window = 14,
+#'   window_type = 'static',
+#'   indx_name = 'episode_indx'
 #' )[]
 #'
 #' @export
