@@ -2,37 +2,20 @@
 % Please edit documentation in R/patient_id.R
 \name{uk_patient_id}
 \alias{uk_patient_id}
-\title{Patient ID record grouping
-
-Groups patient records from multiple isolates with a single patientID
-GROUPED by nhs_number, hospital_number, date_of_birth, assigns a unique IDno to each patient.
-sort by specimen date
-generates a unique sequential number from 1-X for each record
-then based on grouping, reassigns records to same number
-group by different combos of patient identifiers, also dont include invalid nhs_numbers
-
-Grouping is based on five stages:
-\enumerate{
-\item matching nhs number and date of birth
-\item Hospital number &  Date of Birth
-\item NHS number & Hospital Number
-\item Sex & Date of Birth & Surname IF nhs unknown
-\item Sex & Date of Birth & Fuzzy Name
-}}
+\title{Patient ID record grouping}
 \usage{
 uk_patient_id(
-  .data,
+  x,
   nhs_number,
   hospital_number,
   date_of_birth,
   sex,
   forename = "NONAME",
-  surname = "NONAME",
-  sort_by
+  surname = "NONAME"
 )
 }
 \arguments{
-\item{.data}{a data.frame or tibble containing the cleaned line list}
+\item{x}{a data.frame or data.table containing the cleaned line list}
 
 \item{nhs_number}{a column as a character containing the patient NHS numbers}
 
@@ -49,46 +32,56 @@ uk_patient_id(
 \item{sort_by}{a column to give a priority sort order if required}
 }
 \value{
-patientID grouping variable
+patientID grouping variable addedd to the data.frame
 
 A dataframe with two new variables: id a unique patient id, and n_in_id an integer variable with the number of rows in the id
 }
 \description{
-Patient ID record grouping
-
-Groups patient records from multiple isolates with a single patientID
-GROUPED by nhs_number, hospital_number, date_of_birth, assigns a unique IDno to each patient.
-sort by specimen date
-generates a unique sequential number from 1-X for each record
-then based on grouping, reassigns records to same number
-group by different combos of patient identifiers, also dont include invalid nhs_numbers
+Groups patient records from multiple isolates with a single integer patientID
+by grouping patient identifiers.
 
 Grouping is based on five stages:
 \enumerate{
 \item matching nhs number and date of birth
 \item Hospital number &  Date of Birth
 \item NHS number & Hospital Number
-\item Sex & Date of Birth & Surname IF nhs unknown
+\item Date of Birth & Surname IF nhs unknown
 \item Sex & Date of Birth & Fuzzy Name
 }
 }
 \examples{
-dat <- dplyr::tribble(
-  ~nhs_n, ~hosp_n, ~sex, ~dateofbirth, ~firstname, ~lastname,
-  9434765919, 13L, "M", "1988-10-06", "Danger", "Mouse",
-  9434765919, 13L, "M", "1988-06-10", "Danger", "MÃ”use",
-  9434765919, 13L, "M", "1900-01-01", "Denger", "Mouse",
-  NA,         NA,  "M", "1988-10-06", "Danger", "Moose",
-  NA,         13L, "M", "1988-10-06", "Danger", "Moose",
-  3367170666, 13L, "M", "1988-10-06", "DANGER", "Mouse",
-  5185293519, 13L, "M", "1988-10-06", "Danger", "MOUSe",
-  5185293519, 31L, "M", "1988-10-06", "Danger", "Mouse",
-  5185293519, 31L, "M", "1988-10-06", "Danger", "Mouse",
-  8082318562, 96L, "F", "2020-01-28", "Crazy",  "Frog",
-  NA,         96L, "U", "2020-01-28", "Crazy",  "FROG",
-  NA,         96L, "U", "2020-01-28", "Krazy",  "Frug",
-  NA,         96L, "F", "2020-01-28", "C",      "Frog"
-) \%>\% dplyr::mutate(dateofbirth=as.Date(dateofbirth))
-
+id_test <- data.frame(
+  nhs_n = c(
+    9434765919,9434765919,9434765919,NA,NA,
+    3367170666,5185293519,5185293519,5185293519,8082318562,NA,NA,NA
+  ),
+  hosp_n = c(
+    '13','13','13','UNKNOWN','13','13','13','31','31','96','96',NA,'96',
+  ),
+  sex = c('M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'F', 'U', 'U', 'F'),
+  dateofbirth = as.Date(
+    c(
+      '1988-10-06','1988-06-10','1900-01-01','1988-10-06','1988-10-06',
+      '1988-10-06','1988-10-06','1988-10-06','1988-10-06','2020-01-28',
+      '2020-01-28','2020-01-28','2020-01-28'
+    )
+  ),
+  firstname = c(
+    'Danger','Danger','Denger','Danger','Danger','DANGER','Danger',
+    'Danger','Danger','Crazy','Crazy','Krazy','C'
+  ),
+  lastname = c(
+    'Mouse','Mause','Mouse','Moose','Moose','Mouse','MOUSe',
+    'Mouse','Mouse','Frog','FROG','Frug','Frog'
+  )
+)
+id_test <- uk_patient_id(x = id_test,
+                   nhs_number = 'nhs_n',
+                   hospital_number = 'hosp_n',
+                   forename = 'firstname',
+                   surname = 'lastname',
+                   sex = 'sex',
+                   date_of_birth = 'dateofbirth')
+print(id_test)
 
 }

@@ -5,43 +5,34 @@
 #'
 #' @return a data frame with 4 new variables: indx, a grouping flag; and new start and end dates
 #'
-#' @import dplyr
-#' @importFrom rlang .data :=
+#' @import data.table
+#' @importFrom data.table .I .N .GRP ':='
 #'
-#' @param .data data frame, this can be piped in
-#' @param date_start the start dates for the grouping
-#' @param date_end the end dates for the grouping
+#' @param x data frame, this can be piped in
+#' @param date_start the start dates for the grouping, provided quoted
+#' @param date_end the end dates for the grouping, provided quoted
 #' @param window if there is no end date, a time window which will be applied to the start date
-#' @param group_vars in a vector, the all vars used to group records
+#' @param group_vars in a vector, the all vars used to group records, quoted
 #' @param min_varname set variable name for the time period minimum
 #' @param max_varname set variable name for the time period maximum
-#' @param drop_original a logical to determine if you want to retain the original variables or write over with the max and min varname
 #'
 #' @examples
-#' episode_test <- data.frame(
-#'   id = c(99),
-#'   org = c(rep("E. coli",7),
-#'           rep("K. pneumoniae",6)
-#'           ),
-#'   specimen_date = as.Date(
-#'     c(
-#'       "2020-03-01",
-#'       "2020-03-11",
-#'       "2020-03-16",
-#'       "2020-04-03",
-#'       "2020-04-04",
-#'       "2020-04-24",
-#'       "2020-04-27",
-#'       "2020-07-17",
-#'       "2020-07-23",
-#'       "2020-07-30",
-#'       "2020-08-04",
-#'       "2020-07-12",
-#'       "2020-08-24"
-#'     )
-#'   )
-#' )
-#' episode_test %>% group_time(date_start=specimen_date,window=14,group_vars=c(id,org))
+#' episode_test <- structure(
+#'   list(
+#'     pat_id = c(1L, 1L, 1L, 1L, 2L, 2L, 2L,
+#'                1L, 1L, 1L, 1L, 2L, 2L, 2L),
+#'     species = c(rep("E. coli",7),rep("K. pneumonia",7)),
+#'     spec_type = c(rep("Blood",7),rep("Blood",4),rep("Sputum",3)),
+#'     sp_date = structure(c(18262, 18263, 18281, 18282, 18262, 18263, 18281,
+#'                           18265, 18270, 18281, 18283, 18259, 18260, 18281),
+#'                         class = "Date")
+#'   ),
+#'   row.names = c(NA, -14L), class = "data.frame")
+#'
+#' group_time(x=episode_test,
+#'            date_start='sp_date',
+#'            window=14,
+#'            group_vars=c('pat_id','species','spec_type'))[]
 #'
 #' spell_test <- data.frame(
 #'   id = c(rep(99,6),rep(88,4),rep(3,3)),
@@ -80,113 +71,130 @@
 #'   )
 #' )
 #'
-#' spell_test %>% group_time(date_start=spell_start,
-#'                           date_end=spell_end,
-#'                           group_vars=c(id,provider),
-#'                           min_varname="spell_min_date",
-#'                           max_varname="spell_max_date",
-#'                           drop_original = FALSE)
+#' group_time(x = spell_test,
+#'            date_start = 'spell_start',
+#'            date_end = 'spell_end',
+#'            group_vars = c('id','provider'),
+#'            min_varname = 'spell_min_date',
+#'            max_varname = 'spell_max_date')[]
 #'
 #' @export
 
 
-group_time <- function(.data,
-                       date_start,
-                       date_end,
-                       window,
-                       group_vars,
-                       min_varname="date_min",
-                       max_varname="date_max",
-                       drop_original = TRUE
+group_time <- function(x,
+                        date_start,
+                        date_end,
+                        window,
+                        group_vars,
+                        min_varname="date_min",
+                        max_varname="date_max"
 ){
 
-  ## check date start
-  if(!missing(date_start)){
-    t1 <- .data %>% dplyr::pull({{date_start}}) %>% class()
-    if(!t1 %in% c("Date","POSIXct","POSIXt")) stop("date_start must be in date format")
+  ## convert object if its not already
+  if(data.table::is.data.table(x)==FALSE) {
+    x <- data.table::as.data.table(x)
+  }
 
-    .data$dateNum <- as.numeric(
-      .data[[sym(gsub("~", "", rlang::expr_text(expr({{date_start}}))))]]
-    )
+  # setup NSE
+  # subtitute() not needed on other vars as quoted so use get()
+  group_vars <- substitute(group_vars)
 
+  ## change the dates into numeric
+  x[,tmp.dateNum := as.numeric(get(date_start))]
+
+  ## select based on end date or window methods
+  if(missing(date_end) & missing(window)){
+    stop("date_end or window argument required")
+  }
+
+  if(!missing(date_end)){
+    x[,tmp.window_end := as.numeric(get(date_end))]
+  }
+
+  if(!missing(window)){
+    x[,tmp.window_end := tmp.dateNum + window]
+  }
+
+  ## set sort order
+  data.table::setorder(x,tmp.dateNum)
+
+  ## look at the next start date
+  x[,
+    tmp.window_start := data.table::shift(
+      tmp.dateNum,
+      1,
+      type="lead",
+      fill = tmp.dateNum[.N]
+    ),
+    by = group_vars
+  ]
+
+  ## compare the end end date within the groups
+  x[,
+    tmp.window_cmax := cummax(tmp.window_end),
+    by = group_vars
+    ]
+
+  ## correct for missing values
+  x[,
+    tmp.window_cmax := data.table::fifelse(
+      is.na(tmp.window_cmax) & !is.na(tmp.window_end),
+      tmp.window_end,
+      tmp.window_cmax
+    ),
+    by = group_vars
+    ]
+
+  ## create an index to group records sequentially and overlapping in time
+  x[,
+    indx := paste0(
+      .GRP,
+      ".",
+      .N,
+      ".",
+      c(0,
+        data.table::fifelse(
+          is.na(tmp.dateNum),
+          .I,
+          cumsum(tmp.window_start > tmp.window_cmax)
+          )[-.N]
+        )
+      ),
+    by = group_vars
+  ]
+
+  ## create new columns back in date format
+  x[,
+    min_date := min(as.Date(tmp.dateNum, origin="1970-01-01")),
+    by = indx
+    ]
+
+  if(!missing(date_end)){
+    x[,
+      max_date := max(as.Date(tmp.window_cmax, origin="1970-01-01")),
+      by = indx
+    ]
   } else {
-    stop("input date required for start_date")
+    x[,
+      max_date := min(as.Date(tmp.window_cmax, origin="1970-01-01")),
+      by = indx
+    ]
   }
 
-  ## check end points (date_end or window)
-  if(!missing(date_end) & !missing(window)){
-    stop("window or date_end argument required")
-
-  } else if (!missing(date_end)) {
-    t2 <- .data %>% dplyr::pull({{date_end}}) %>% class()
-    if(!t2 %in% c("Date","POSIXct","POSIXt")) stop("date_start must be in date format")
-
-    print("end date specified")
-    .data$window_end <- as.numeric(
-      .data[[sym(gsub("~", "", rlang::expr_text(expr({{date_end}}))))]]
-    )
-
-  } else {
-    print(paste(window,"day rolling window applied"))
-    .data$window_end <- .data$dateNum + {{window}}
+  ## rename if arguments are provided
+  if(min_varname!="min_date" & !missing(min_varname)){
+    data.table::setnames(x,'min_date',min_varname)
+  }
+  if(max_varname!="max_date" & !missing(max_varname)){
+    data.table::setnames(x,'max_date',max_varname)
   }
 
-  ## retain or rename original window varnames if they match the rewrites
-  if(min_varname %in% names(.data)) {
-    if(drop_original == TRUE) {
-      .data <- .data %>% dplyr::select(-{{min_varname}})
-    } else {
-      .data <- .data %>% dplyr::rename("{min_varname}_original" := {{min_varname}})
-    }
-  }
-  if(max_varname %in% names(.data)) {
-    if(drop_original == TRUE) {
-      .data <- .data %>% dplyr::select(-{{max_varname}})
-    } else {
-      .data <- .data %>% dplyr::rename("{max_varname}_original" := {{max_varname}})
-    }
-  }
+  ## cleanup and remove temp columns
+  tmpcols <- grep("^tmp.",colnames(x),value=TRUE)
+  x[,
+    (tmpcols) := NULL
+  ]
 
-  ## group time
-  .data <- .data %>%
-    dplyr::group_by(dplyr::across({{group_vars}})) %>%
-    dplyr::mutate(N = dplyr::n()) %>%
-    dplyr::arrange(dateNum,.by_group=T) %>%
-    dplyr::mutate(
-      window_start = dplyr::lead(dateNum,
-                                 default = dplyr::last(dateNum)),
-      window_cmax = cummax(window_end),
-      indx = paste0(
-        dplyr::cur_group_id(),
-        ".",
-        N,
-        ".",
-        c(0,cumsum(window_start > window_cmax))[-dplyr::n()]
-      )
-    ) %>%
-    dplyr::group_by(indx,.add=TRUE)
-
-  ## how to determine which max date to display
-  if(missing(window)) {
-  .data <- .data %>%
-    dplyr::mutate(
-      {{min_varname}} := min(as.Date(dateNum, origin="1970-01-01")),
-      {{max_varname}} := max(as.Date(window_cmax, origin="1970-01-01"))
-    )
-  } else {
-    .data <- .data %>%
-      dplyr::mutate(
-        {{min_varname}} := min(as.Date(dateNum, origin="1970-01-01")),
-        {{max_varname}} := max(as.Date(dateNum, origin="1970-01-01"))
-      )
-  }
-
-  ## bring back in the removed records
-  ## cleanup variable names and remove the temp columns created
-  .data <- .data %>%
-    dplyr::ungroup() %>%
-    dplyr::select(-c(dateNum,window_start,window_end,window_cmax,N))
-
-  return(.data)
+  return(x)
 
 }
