@@ -25,7 +25,7 @@ group_time(
 
 \item{window}{if there is no end date, a time window which will be applied to the start date}
 
-\item{group_vars}{in a vector, the all vars used to group records, propvded quoted}
+\item{group_vars}{in a vector, the all vars used to group records, quoted}
 
 \item{min_varname}{set variable name for the time period minimum}
 
@@ -40,33 +40,22 @@ Time grouping
 Group overlapping time periods, with start and end dates, or start dates with a rolling window
 }
 \examples{
-episode_test <- data.frame(
-  id = c(99),
-  org = c(rep("E. coli",7),
-          rep("K. pneumoniae",6)
-          ),
-  specimen_date = as.Date(
-    c(
-      "2020-03-01",
-      "2020-03-11",
-      "2020-03-16",
-      "2020-04-03",
-      "2020-04-04",
-      "2020-04-24",
-      "2020-04-27",
-      "2020-07-17",
-      "2020-07-23",
-      "2020-07-30",
-      "2020-08-04",
-      "2020-07-12",
-      "2020-08-24"
-    )
-  )
-)
+episode_test <- structure(
+  list(
+    pat_id = c(1L, 1L, 1L, 1L, 2L, 2L, 2L,
+               1L, 1L, 1L, 1L, 2L, 2L, 2L),
+    species = c(rep("E. coli",7),rep("K. pneumonia",7)),
+    spec_type = c(rep("Blood",7),rep("Blood",4),rep("Sputum",3)),
+    sp_date = structure(c(18262, 18263, 18281, 18282, 18262, 18263, 18281,
+                          18265, 18270, 18281, 18283, 18259, 18260, 18281),
+                        class = "Date")
+  ),
+  row.names = c(NA, -14L), class = "data.frame")
+
 group_time(x=episode_test,
-           date_start='specimen_date',
+           date_start='sp_date',
            window=14,
-           group_vars=c('id','org'))[]
+           group_vars=c('pat_id','species','spec_type'))[]
 
 spell_test <- data.frame(
   id = c(rep(99,6),rep(88,4),rep(3,3)),

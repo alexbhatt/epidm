@@ -12,38 +12,27 @@
 #' @param date_start the start dates for the grouping, provided quoted
 #' @param date_end the end dates for the grouping, provided quoted
 #' @param window if there is no end date, a time window which will be applied to the start date
-#' @param group_vars in a vector, the all vars used to group records, propvded quoted
+#' @param group_vars in a vector, the all vars used to group records, quoted
 #' @param min_varname set variable name for the time period minimum
 #' @param max_varname set variable name for the time period maximum
 #'
 #' @examples
-#' episode_test <- data.frame(
-#'   id = c(99),
-#'   org = c(rep("E. coli",7),
-#'           rep("K. pneumoniae",6)
-#'           ),
-#'   specimen_date = as.Date(
-#'     c(
-#'       "2020-03-01",
-#'       "2020-03-11",
-#'       "2020-03-16",
-#'       "2020-04-03",
-#'       "2020-04-04",
-#'       "2020-04-24",
-#'       "2020-04-27",
-#'       "2020-07-17",
-#'       "2020-07-23",
-#'       "2020-07-30",
-#'       "2020-08-04",
-#'       "2020-07-12",
-#'       "2020-08-24"
-#'     )
-#'   )
-#' )
+#' episode_test <- structure(
+#'   list(
+#'     pat_id = c(1L, 1L, 1L, 1L, 2L, 2L, 2L,
+#'                1L, 1L, 1L, 1L, 2L, 2L, 2L),
+#'     species = c(rep("E. coli",7),rep("K. pneumonia",7)),
+#'     spec_type = c(rep("Blood",7),rep("Blood",4),rep("Sputum",3)),
+#'     sp_date = structure(c(18262, 18263, 18281, 18282, 18262, 18263, 18281,
+#'                           18265, 18270, 18281, 18283, 18259, 18260, 18281),
+#'                         class = "Date")
+#'   ),
+#'   row.names = c(NA, -14L), class = "data.frame")
+#'
 #' group_time(x=episode_test,
-#'            date_start='specimen_date',
+#'            date_start='sp_date',
 #'            window=14,
-#'            group_vars=c('id','org'))[]
+#'            group_vars=c('pat_id','species','spec_type'))[]
 #'
 #' spell_test <- data.frame(
 #'   id = c(rep(99,6),rep(88,4),rep(3,3)),
@@ -126,6 +115,7 @@ group_time <- function(x,
     x[,tmp.window_end := tmp.dateNum + window]
   }
 
+  ## set sort order
   data.table::setorder(x,tmp.dateNum)
 
   ## look at the next start date
@@ -136,13 +126,13 @@ group_time <- function(x,
       type="lead",
       fill = tmp.dateNum[.N]
     ),
-    keyby = group_vars
+    by = group_vars
   ]
 
   ## compare the end end date within the groups
   x[,
     tmp.window_cmax := cummax(tmp.window_end),
-    keyby = group_vars
+    by = group_vars
     ]
 
   ## correct for missing values
@@ -152,7 +142,7 @@ group_time <- function(x,
       tmp.window_end,
       tmp.window_cmax
     ),
-    keyby = group_vars
+    by = group_vars
     ]
 
   ## create an index to group records sequentially and overlapping in time
@@ -170,24 +160,24 @@ group_time <- function(x,
           )[-.N]
         )
       ),
-    keyby = group_vars
+    by = group_vars
   ]
 
   ## create new columns back in date format
   x[,
     min_date := min(as.Date(tmp.dateNum, origin="1970-01-01")),
-    keyby = indx
+    by = indx
     ]
 
   if(!missing(date_end)){
     x[,
       max_date := max(as.Date(tmp.window_cmax, origin="1970-01-01")),
-      keyby = indx
+      by = indx
     ]
   } else {
     x[,
       max_date := min(as.Date(tmp.window_cmax, origin="1970-01-01")),
-      keyby = indx
+      by = indx
     ]
   }
 
