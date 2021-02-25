@@ -13,7 +13,6 @@ Description: This package contains utilties and functions
 License: MIT + file LICENSE
 Imports: 
     data.table,
-    magrittr,
     phonics,
     readr,
     stringi,
