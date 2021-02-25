@@ -178,7 +178,7 @@ infection_episode <- function(x,
 
   ## allow rename of indx column for multiple runs
   if(indx_name!='indx' & !missing(indx_name)){
-    data.table::setnames(x,'tmp.indx',indx_name)
+    data.table::setnames(x,'indx',indx_name)
   }
 
   ## cleanup and remove temporary vars
