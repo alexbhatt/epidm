@@ -2,42 +2,50 @@
 % Please edit documentation in R/group_time.R
 \name{group_time}
 \alias{group_time}
-\title{Time grouping
+\title{Time grouping for intervals or events
 
-Group overlapping time periods, with start and end dates, or start dates with a rolling window}
+Group overlapping time intervals, with defined start and end dates,
+or events within a static/fixed or rolling window of time.}
 \usage{
 group_time(
   x,
   date_start,
   date_end,
   window,
+  window_type = c("rolling", "static"),
   group_vars,
+  indx_varname = "indx",
   min_varname = "date_min",
   max_varname = "date_max"
 )
 }
 \arguments{
-\item{x}{data frame, this can be piped in}
+\item{x}{data frame, this will be converted to a data.table}
 
-\item{date_start}{the start dates for the grouping, provided quoted}
+\item{date_start}{column containing the start dates for the grouping, provided quoted}
 
-\item{date_end}{the end dates for the grouping, provided quoted}
+\item{date_end}{column containing the end dates for the grouping, provided quoted}
 
-\item{window}{if there is no end date, a time window which will be applied to the start date}
+\item{window}{an integer if there is no end date, a time window which will be applied to the start date}
 
-\item{group_vars}{in a vector, the all vars used to group records, quoted}
+\item{window_type}{character, supplied only for event grouping, to determine if a 'rolling' or 'static' grouping method should be used}
 
-\item{min_varname}{set variable name for the time period minimum}
+\item{group_vars}{in a vector, the all columns used to group records, quoted}
 
-\item{max_varname}{set variable name for the time period maximum}
+\item{indx_varname}{a character string to set variable name for the index column which provides a grouping key; default is indx}
+
+\item{min_varname}{a character string to set variable name for the time period minimum}
+
+\item{max_varname}{a character string set variable name for the time period maximum}
 }
 \value{
-a data frame with 4 new variables: indx, a grouping flag; and new start and end dates
+a data frame with 3 new variables: indx, a grouping flag; and new start and end dates
 }
 \description{
-Time grouping
+Time grouping for intervals or events
 
-Group overlapping time periods, with start and end dates, or start dates with a rolling window
+Group overlapping time intervals, with defined start and end dates,
+or events within a static/fixed or rolling window of time.
 }
 \examples{
 episode_test <- structure(

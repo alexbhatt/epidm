@@ -1,20 +1,23 @@
 #'
-#' @title Time grouping
+#' @title Time grouping for intervals or events
 #'
-#' Group overlapping time periods, with start and end dates, or start dates with a rolling window
+#' Group overlapping time intervals, with defined start and end dates,
+#'  or events within a static/fixed or rolling window of time.
 #'
-#' @return a data frame with 4 new variables: indx, a grouping flag; and new start and end dates
+#' @return a data frame with 3 new variables: indx, a grouping flag; and new start and end dates
 #'
 #' @import data.table
 #' @importFrom data.table .I .N .GRP ':='
 #'
-#' @param x data frame, this can be piped in
-#' @param date_start the start dates for the grouping, provided quoted
-#' @param date_end the end dates for the grouping, provided quoted
-#' @param window if there is no end date, a time window which will be applied to the start date
-#' @param group_vars in a vector, the all vars used to group records, quoted
-#' @param min_varname set variable name for the time period minimum
-#' @param max_varname set variable name for the time period maximum
+#' @param x data frame, this will be converted to a data.table
+#' @param date_start column containing the start dates for the grouping, provided quoted
+#' @param date_end column containing the end dates for the grouping, provided quoted
+#' @param group_vars in a vector, the all columns used to group records, quoted
+#' @param window an integer if there is no end date, a time window which will be applied to the start date
+#' @param window_type character, supplied only for event grouping, to determine if a 'rolling' or 'static' grouping method should be used
+#' @param indx_varname a character string to set variable name for the index column which provides a grouping key; default is indx
+#' @param min_varname a character string to set variable name for the time period minimum
+#' @param max_varname a character string set variable name for the time period maximum
 #'
 #' @examples
 #' episode_test <- structure(
@@ -82,12 +85,14 @@
 
 
 group_time <- function(x,
-                        date_start,
-                        date_end,
-                        window,
-                        group_vars,
-                        min_varname="date_min",
-                        max_varname="date_max"
+                       date_start,
+                       date_end,
+                       window,
+                       window_type = c('rolling','static'),
+                       group_vars,
+                       indx_varname = 'indx',
+                       min_varname = 'date_min',
+                       max_varname = 'date_max'
 ){
 
   ## convert object if its not already
@@ -99,94 +104,183 @@ group_time <- function(x,
   # subtitute() not needed on other vars as quoted so use get()
   group_vars <- substitute(group_vars)
 
-  ## change the dates into numeric
-  x[,tmp.dateNum := as.numeric(get(date_start))]
 
-  ## select based on end date or window methods
-  if(missing(date_end) & missing(window)){
-    stop("date_end or window argument required")
+  ## static + window methods only ##############################################
+  ## bring the static window function in so its all a one stop shop for ease
+  if(missing(date_end)){
+
+    if(missing(window_type)){
+      stop("window_type must be specified as either rolling or static")
+    }
+
+    if(missing(window)){
+      stop("window parameter must be supplied as numeric value, the unit is days")
+    }
+
+    ## this is for static grouping of single date windows
+    if(window_type=='static'){
+
+      ## set a fixed ordering
+      data.table::setorderv(x, c(date_start))
+
+      ## move through static episodes in a loop.
+      ## next steps: update with data.table::set()
+      x[,tmp.episode:=0]
+
+      ## setup loop episode counter
+      i <- 1L
+
+      while (min(x[['tmp.episode']]) == 0) {
+
+        x[tmp.episode==0,
+          c('tmp.diff',
+            'tmp.diff.start'
+          ) := .(
+            as.integer(difftime(get(date_start),
+                                data.table::shift(date_start,n=1,type="lag"),
+                                units="days")),
+            as.integer(difftime(get(date_start),
+                                get(date_start)[1],
+                                units="days"))
+          ),
+          by = group_vars
+        ][tmp.episode==0,
+          tmp.diff := data.table::fifelse(is.na(tmp.diff),0L,tmp.diff),
+          by = group_vars
+        ][tmp.episode == 0,
+          tmp.episode := data.table::fifelse(tmp.diff <= window &
+                                               tmp.diff.start <= window,
+                                             i,
+                                             tmp.episode),
+          by = group_vars
+        ]
+
+        i <- i + 1L
+      } # static loop
+
+      x[,
+        indx := paste0(
+          .GRP,
+          ".",
+          .N,
+          ".",
+          tmp.episode),
+        keyby = group_vars]
+
+      ## only produce these if the arguments are defined
+      if(!missing(min_varname) & !missing(max_varname))
+        x[,
+          c('min_date',
+            'max_date'
+          ) := .(
+            min(get(date_start)),
+            max(get(date_start))
+          ),
+          by = indx
+        ]
+
+
+    } # static method
+
+    if(window_type == 'rolling') {
+      x[,tmp.window_end := as.numeric(get(date_start)) + window]
+    }
   }
 
-  if(!missing(date_end)){
-    x[,tmp.window_end := as.numeric(get(date_end))]
-  }
+  ## everything else ###########################################################
+  if(any(window_type == "rolling" | !missing(date_end))) {
 
-  if(!missing(window)){
-    x[,tmp.window_end := tmp.dateNum + window]
-  }
+    ## change the dates into numeric
+    x[,tmp.dateNum := as.numeric(get(date_start))]
 
-  ## set sort order
-  data.table::setorder(x,tmp.dateNum)
+    if(!missing(date_end)){
+      x[,tmp.window_end := as.numeric(get(date_end))]
+    }
 
-  ## look at the next start date
-  x[,
-    tmp.window_start := data.table::shift(
-      tmp.dateNum,
-      1,
-      type="lead",
-      fill = tmp.dateNum[.N]
-    ),
-    by = group_vars
-  ]
+    ## set sort order
+    data.table::setorder(x,tmp.dateNum)
 
-  ## compare the end end date within the groups
-  x[,
-    tmp.window_cmax := cummax(tmp.window_end),
-    by = group_vars
+    ## look at the next start date
+    x[,
+      tmp.window_start := data.table::shift(
+        tmp.dateNum,
+        1,
+        type="lead",
+        fill = tmp.dateNum[.N]
+      ),
+      by = group_vars
     ]
 
-  ## correct for missing values
-  x[,
-    tmp.window_cmax := data.table::fifelse(
-      is.na(tmp.window_cmax) & !is.na(tmp.window_end),
-      tmp.window_end,
-      tmp.window_cmax
-    ),
-    by = group_vars
+    ## compare the end end date within the groups
+    x[,
+      tmp.window_cmax := cummax(tmp.window_end),
+      by = group_vars
     ]
 
-  ## create an index to group records sequentially and overlapping in time
-  x[,
-    indx := paste0(
-      .GRP,
-      ".",
-      .N,
-      ".",
-      c(0,
-        data.table::fifelse(
-          is.na(tmp.dateNum),
-          .I,
-          cumsum(tmp.window_start > tmp.window_cmax)
+    ## correct for missing values
+    x[,
+      tmp.window_cmax := data.table::fifelse(
+        is.na(tmp.window_cmax) & !is.na(tmp.window_end),
+        tmp.window_end,
+        tmp.window_cmax
+      ),
+      by = group_vars
+    ]
+
+    ## create an index to group records sequentially and overlapping in time
+    x[,
+      indx := paste0(
+        .GRP,
+        ".",
+        .N,
+        ".",
+        c(0,
+          data.table::fifelse(
+            is.na(tmp.dateNum),
+            .I,
+            cumsum(tmp.window_start > tmp.window_cmax)
           )[-.N]
         )
       ),
-    by = group_vars
-  ]
-
-  ## create new columns back in date format
-  x[,
-    min_date := min(as.Date(tmp.dateNum, origin="1970-01-01")),
-    by = indx
+      by = group_vars
     ]
 
-  if(!missing(date_end)){
+    ## create new columns back in date format
     x[,
-      max_date := max(as.Date(tmp.window_cmax, origin="1970-01-01")),
+      min_date := min(as.Date(tmp.dateNum, origin="1970-01-01")),
       by = indx
     ]
-  } else {
-    x[,
-      max_date := min(as.Date(tmp.window_cmax, origin="1970-01-01")),
-      by = indx
-    ]
-  }
 
+    if(!missing(date_end)){
+      ## there are confirmed end dates, so use them
+      x[,
+        max_date := max(as.Date(tmp.window_cmax, origin="1970-01-01")),
+        by = indx
+      ]
+    } else {
+      ## these are for windows, so we cant always assume the window
+      ## time was still relevant, so we use the last known time in the series
+      x[,
+        max_date := min(as.Date(tmp.window_cmax, origin="1970-01-01")),
+        by = indx
+      ]
+    }
+
+  } ## rolling windows
+
+
+  ## variable cleanup ##########################################################
   ## rename if arguments are provided
   if(min_varname!="min_date" & !missing(min_varname)){
     data.table::setnames(x,'min_date',min_varname)
   }
   if(max_varname!="max_date" & !missing(max_varname)){
     data.table::setnames(x,'max_date',max_varname)
+  }
+
+  ## allow rename of indx column for multiple runs
+  if(indx_varname!='indx' & !missing(indx_varname)){
+    data.table::setnames(x,'indx',indx_varname)
   }
 
   ## cleanup and remove temp columns
