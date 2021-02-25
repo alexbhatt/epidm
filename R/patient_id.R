@@ -28,7 +28,6 @@
 #' @param sex a column as a character containing the patient sex
 #' @param forename a column as a character containing the patient forename; leave as NONAME if unavailable
 #' @param surname a column as a character containing the patient surname; leave as NONAME if unavailable
-#' @param sort_by a column to give a priority sort order if required
 #'
 #' @return A dataframe with two new variables: id a unique patient id, and n_in_id an integer variable with the number of rows in the id
 #'

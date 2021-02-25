@@ -28,8 +28,6 @@ uk_patient_id(
 \item{forename}{a column as a character containing the patient forename; leave as NONAME if unavailable}
 
 \item{surname}{a column as a character containing the patient surname; leave as NONAME if unavailable}
-
-\item{sort_by}{a column to give a priority sort order if required}
 }
 \value{
 patientID grouping variable addedd to the data.frame
