@@ -20,8 +20,8 @@ devtools::install_github("alexbhatt/epidm")
 
 ### Utilities 
 
- + __clean_sql__: import a SQL query, and remove out any comments
- + __csv_from_zip__: pointing to a zip file from the web, extract a csv or xlsx; NHS/ODS files are often available in this format
+ + __clean_sql__: import a SQL query, and remove out any comments, including multi line ones
+ + __csv_from_zip__: pointing to a zip file from the web, extract a csv or xlsx; NHS/ODS files are often available in this format, user choice of reader after extraction
  
 ### Data management
 
