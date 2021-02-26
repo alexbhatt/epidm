@@ -61,7 +61,7 @@ cip_spells <- function(x,
 
   ## counter columns to make life easier
   x[,
-    tmp.spell.n := seq(1:.N),
+    tmp.spell.n := seq_len(.N),
     by = patient_group_vars
   ]
 
