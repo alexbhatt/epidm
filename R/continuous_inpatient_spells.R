@@ -53,21 +53,22 @@ cip_spells <- function(x,
                        discharge_destination,
                        patient_classification) {
 
+  ## needed to prevent a Invalid .internal.selfref error
+  x <- copy(x)
 
   ## convert object if its not already
   if(data.table::is.data.table(x)==FALSE) {
     x <- data.table::as.data.table(x)
   }
 
+  ## just arrange the data
+  data.table::setorderv(x,c(eval(patient_group_vars),spell_start_date))
+
   ## counter columns to make life easier
   x[,
     tmp.spell.n := seq_len(.N),
     by = patient_group_vars
   ]
-
-  ## just arrange the data
-  data.table::setorderv(x,c(eval(patient_group_vars),spell_start_date))
-
 
   ## CIP CRITERIA ##############################################################
   # difference between admission and discharge is <2 days
@@ -119,7 +120,7 @@ cip_spells <- function(x,
   ## setup requirement variables
   x[,tmp.dateNum_start := as.numeric(get(spell_start_date))]
   x[,tmp.dateNum_end := as.numeric(get(spell_end_date))]
-  x[,tmp.regular_attender := as.character(get(patient_classification)) %in% c("3","4")]
+  x[,tmp.regular_attender := as.character(patient_classification) %in% c("3","4")]
 
 
   # group records using tmp.cip_valid
