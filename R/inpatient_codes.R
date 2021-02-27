@@ -179,7 +179,7 @@
 inpatient_codes <- function(x,
                             field_strings,
                             patient_id_vars,
-                            type = c('icd','opcs')) {
+                            type = c('icd9','icd10','opcs')) {
 
   ## convert object if its not already
   if(data.table::is.data.table(x)==FALSE) {
@@ -188,7 +188,7 @@ inpatient_codes <- function(x,
 
   ## capture the fields of interest
   ## icd just have the codes
-  if(type=='icd'){
+  if(type %in% c('icd9','icd10')){
     fields <- grep(field_strings[1],colnames(x),ignore.case=T,value=T)
     sel <- c(patient_id_vars,fields)
   }
@@ -213,7 +213,7 @@ inpatient_codes <- function(x,
   ]
 
 
-  if(type == 'icd'){
+  if(type %in% c('icd9','icd10')){
     ## reshape the data from wide to long so we can manipulate it better
     x <- melt(
       data = x,
