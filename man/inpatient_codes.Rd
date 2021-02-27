@@ -4,7 +4,12 @@
 \alias{inpatient_codes}
 \title{Inpatient Codes cleanup}
 \usage{
-inpatient_codes(x, field_strings, patient_id_vars, type = c("icd", "opcs"))
+inpatient_codes(
+  x,
+  field_strings,
+  patient_id_vars,
+  type = c("icd9", "icd10", "opcs")
+)
 }
 \arguments{
 \item{x}{a data.frame or data.table containing inpatient data}
@@ -176,7 +181,7 @@ secondary_procedure_date_6 = c(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
 inpatient_codes(x=inpatient_test,
                 field_strings='diagnosis',
                 patient_id_vars = c('id','spell_id'),
-                type = 'icd')
+                type = 'icd10')
 
 inpatient_codes(x=inpatient_test,
                 field_strings=c('procedure_code','procedure_date'),

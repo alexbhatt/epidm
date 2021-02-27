@@ -167,7 +167,7 @@
 #' inpatient_codes(x=inpatient_test,
 #'                 field_strings='diagnosis',
 #'                 patient_id_vars = c('id','spell_id'),
-#'                 type = 'icd')
+#'                 type = 'icd10')
 #'
 #' inpatient_codes(x=inpatient_test,
 #'                 field_strings=c('procedure_code','procedure_date'),
@@ -183,7 +183,7 @@ inpatient_codes <- function(x,
 
   ## convert object if its not already
   if(data.table::is.data.table(x)==FALSE) {
-    x <- data.table::as.data.table(x)
+    data.table::setDT(x)
   }
 
   ## capture the fields of interest
@@ -215,7 +215,7 @@ inpatient_codes <- function(x,
 
   if(type %in% c('icd9','icd10')){
     ## reshape the data from wide to long so we can manipulate it better
-    x <- melt(
+    x <- data.table::melt(
       data = x,
       id.vars = patient_id_vars,
       measure_vars = fields,
@@ -224,10 +224,13 @@ inpatient_codes <- function(x,
       na.rm = TRUE,
       variable.factor = FALSE
     )
+
+    ## order the dataset, makes your life easier
+    setorderv(x,c(eval(patient_id_vars)))
   }
   if(type=='opcs'){
     ## needs to separate out the dates and codes for each
-    x <- melt(
+    x <- data.table::melt(
       data = x,
       id.vars = patient_id_vars,
       measure = list(fields,dates),
@@ -236,10 +239,19 @@ inpatient_codes <- function(x,
       na.rm = TRUE,
       variable.factor = FALSE
     )
+
+    ## order the dataset, makes your life easier
+    setorderv(x,c(eval(patient_id_vars),type,'date'))
   }
 
-  ## order the dataset, makes your life easier
-  setorderv(x,c(eval(patient_id_vars)))
+  ## drop duplicates
+  x <- unique(x,
+              by = c(eval(patient_id_vars),type))
+
+  x[,
+    order_n := seq_len(.N),
+    by = c(eval(patient_id_vars))
+    ]
 
   return(x)
 
