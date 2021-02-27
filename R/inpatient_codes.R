@@ -227,6 +227,11 @@ inpatient_codes <- function(x,
 
     ## order the dataset, makes your life easier
     setorderv(x,c(eval(patient_id_vars)))
+
+  x[,
+    order_n := seq_len(.N),
+    by = c(eval(patient_id_vars))
+    ]
   }
   if(type=='opcs'){
     ## needs to separate out the dates and codes for each
@@ -234,24 +239,19 @@ inpatient_codes <- function(x,
       data = x,
       id.vars = patient_id_vars,
       measure = list(fields,dates),
-      variable.name = 'order',
+      variable.name = 'order_n',
       value.name = c(type,'date'),
       na.rm = TRUE,
       variable.factor = FALSE
     )
 
     ## order the dataset, makes your life easier
-    setorderv(x,c(eval(patient_id_vars),'date'))
+    setorderv(x,c(eval(patient_id_vars),'date','order'))
   }
 
   ## drop duplicates
   x <- unique(x,
               by = c(eval(patient_id_vars),type))
-
-  x[,
-    order_n := seq_len(.N),
-    by = c(eval(patient_id_vars))
-    ]
 
   return(x)
 
