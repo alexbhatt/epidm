@@ -241,7 +241,7 @@ inpatient_codes <- function(x,
     )
 
     ## order the dataset, makes your life easier
-    setorderv(x,c(eval(patient_id_vars),type,'date'))
+    setorderv(x,c(eval(patient_id_vars),'date'))
   }
 
   ## drop duplicates
