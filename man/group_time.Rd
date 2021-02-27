@@ -2,9 +2,10 @@
 % Please edit documentation in R/group_time.R
 \name{group_time}
 \alias{group_time}
-\title{Time grouping for intervals or events
+\title{Grouping of intervals or events in time together
 
-Group overlapping time intervals, with defined start and end dates,
+Group across multiple observations of
+overlapping time intervals, with defined start and end dates,
 or events within a static/fixed or rolling window of time.}
 \usage{
 group_time(
@@ -39,12 +40,13 @@ group_time(
 \item{max_varname}{a character string set variable name for the time period maximum}
 }
 \value{
-a data frame with 3 new variables: indx, a grouping flag; and new start and end dates
+a data.table with 3 new variables: indx, a grouping flag; and new start and end dates
 }
 \description{
-Time grouping for intervals or events
+Grouping of intervals or events in time together
 
-Group overlapping time intervals, with defined start and end dates,
+Group across multiple observations of
+overlapping time intervals, with defined start and end dates,
 or events within a static/fixed or rolling window of time.
 }
 \examples{
@@ -63,6 +65,8 @@ episode_test <- structure(
 group_time(x=episode_test,
            date_start='sp_date',
            window=14,
+           window_type = 'static',
+           indx_varname = 'static_indx',
            group_vars=c('pat_id','species','spec_type'))[]
 
 spell_test <- data.frame(
@@ -106,6 +110,7 @@ group_time(x = spell_test,
            date_start = 'spell_start',
            date_end = 'spell_end',
            group_vars = c('id','provider'),
+           indx_varname = 'spell_id',
            min_varname = 'spell_min_date',
            max_varname = 'spell_max_date')[]
 
