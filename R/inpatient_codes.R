@@ -17,7 +17,7 @@
 #' @return a separate table with codes and id in long form
 #'
 #' @examples
-#' ex <- data.frame(
+#' inpatient_test <- data.frame(
 #' id = c(1053L,5487L,8180L,528L,1085L,344L,2021L,2040L,
 #'        6504L,10867L,12411L,7917L,2950L,2812L,7757L,12227L,2675L,
 #'        8548L,536L,11830L,12708L,10421L,5503L,2494L,14001L),
@@ -164,12 +164,12 @@
 #'                                NA,NA)
 #' )
 #'
-#' inpatient_codes(x=y,
+#' inpatient_codes(x=inpatient_test,
 #'                 field_strings='diagnosis',
 #'                 patient_id_vars = c('id','spell_id'),
 #'                 type = 'icd')
 #'
-#' inpatient_codes(x=y,
+#' inpatient_codes(x=inpatient_test,
 #'                 field_strings=c('procedure_code','procedure_date'),
 #'                 patient_id_vars = c('id','spell_id'),
 #'                 type = 'opcs')
@@ -237,6 +237,8 @@ inpatient_codes <- function(x,
       variable.factor = FALSE
     )
   }
+
+  setorder(x,patient_id_vars)
 
   return(x)
 
