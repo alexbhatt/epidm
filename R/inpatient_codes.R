@@ -238,7 +238,8 @@ inpatient_codes <- function(x,
     )
   }
 
-  setorder(x,patient_id_vars)
+  ## order the dataset, makes your life easier
+  setorderv(x,c(eval(patient_id_vars)))
 
   return(x)
 
