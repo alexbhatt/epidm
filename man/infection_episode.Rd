@@ -14,6 +14,8 @@ infection_episode(
 )
 }
 \arguments{
+\item{x}{a data.frame or tibble containing the line list}
+
 \item{group_vars}{a vector containing any columns used to identify the patient, infection, and site}
 
 \item{event_date}{the column as a date variable containing the specimen date}
@@ -23,8 +25,6 @@ infection_episode(
 \item{indx_name}{a character string to rename an indx column}
 
 \item{window_type}{a choice of static or rolling for how the event_window is calculated}
-
-\item{data}{a data.frame or tibble containing the line list}
 }
 \value{
 A new dataframe containing the original data, and columns specifying monomicrobial or polymicrobial patient episodes.

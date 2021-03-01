@@ -14,7 +14,7 @@
 #' @import data.table
 #' @importFrom data.table .I .N .GRP ':='
 #'
-#' @param data a data.frame or tibble containing the line list
+#' @param x a data.frame or tibble containing the line list
 #' @param group_vars a vector containing any columns used to identify the patient, infection, and site
 #' @param event_date the column as a date variable containing the specimen date
 #' @param event_window an integer to specify the length of the event_window in time
