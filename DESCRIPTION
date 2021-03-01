@@ -1,6 +1,6 @@
 Package: epidm
 Title: UK Epidemiological Data Management
-Version: 0.0.1.0002
+Version: 0.0.1.0003
 Authors@R: 
     person(given = "Alex",
            family = "Bhattacharya",
@@ -22,3 +22,5 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Depends: 
+    R (>= 2.10)
