@@ -10,6 +10,7 @@ file.respeciate_organism <- system.file(
 respeciate_organism <- read.csv(
   file.respeciate_organism,
   stringsAsFactors = FALSE,
+  strip.white = TRUE,
   encoding = "UTF-8"
 )
 
@@ -23,7 +24,7 @@ respeciate_organism$organism_species_name <- toupper(respeciate_organism$organis
 respeciate_organism <- with(respeciate_organism,
                             respeciate_organism[order(organism_species_name,
                                                       previous_organism_name),]
-                            )
+)
 
 ## work with the genus now.
 respeciate_organism$organism_genus_name <- stringr::word(respeciate_organism$organism_species_name)
@@ -45,8 +46,8 @@ respeciate_organism$genus_all_species <- with(
   ifelse(grepl("SP$",previous_organism_name),
          1,
          0
-         )
   )
+)
 
 ## printout some stats
 dim(respeciate_organism)
