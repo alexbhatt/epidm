@@ -1,14 +1,14 @@
 ## code to prepare `genus_gram_stain` dataset goes here
 
 ## allow file to be maintained as csv
-ggs <- system.file(
+file.genus_gram_stain <- system.file(
   "extdata",
   "genus_gram_stain.csv",
   package = "epidm"
 )
 
 genus_gram_stain <- read.csv(
-  ggs,
+  file.genus_gram_stain,
   stringsAsFactors = FALSE,
   encoding = "UTF-8"
 )
@@ -22,7 +22,7 @@ genus_gram_stain$gram_stain <- ifelse(
   grepl("^p",genus_gram_stain$gram_stain,ignore.case = T),
   "POSITIVE",
   "NEGATIVE"
-  )
+)
 
 ## create some flags
 genus_gram_stain$gram_positive <- ifelse(genus_gram_stain$gram_stain=="POSITIVE",1,0)

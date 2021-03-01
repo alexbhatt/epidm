@@ -9,8 +9,8 @@ A data frame with four columns
 \describe{
 \item{organism_genus}{The bacterial genus}
 \item{gram_stain}{A character string to indicate POSITIVE or NEGATIVE type}
-\item{gram_pos}{A 0/1 flag to indicate if the genus is gram positive}
-\item{gram_neg}{A 0/1 flag to indicate if the genus is gram negative}
+\item{gram_positive}{A 0/1 flag to indicate if the genus is gram positive}
+\item{gram_negative}{A 0/1 flag to indicate if the genus is gram negative}
 }
 }
 \usage{
