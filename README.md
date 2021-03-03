@@ -28,5 +28,8 @@ devtools::install_github("alexbhatt/epidm")
  + __valid_nhs__: the UK NHS checksum algorithm to validate an NHS number
  + __uk_patient_id__: a multistage deterministic algorithm for grouping patient records using common UK patient identifiers
  + __continuous_inpatient_spells__: grouping of episodes/spells from HES/SUS following the NHSD methodology
+ + __proxy_episode_dates__: cleanup of dates for inpatient spells when they are missing or not yet discharged
+ + __inpatient_codes__: cleanup for inpatient ICD9/10 or OPCS codes for analysis
  + __group_time__: grouping of time events where they overlap; applies to both rolling infection windows (eg. all samples within 14-days of the last) or overlapping time intervals (eg. HES/SUS mega spells)
  + __infection_episode__: grouping of single point time events where they overlap given a window (in days) using either a static or rolling window; primarily used for infection episodes to deduplicate multiple positive tests
+ + __respec_orgs__: using the `respeciate_organism.csv` lookup, a fast method for recoding character strings in a vector where they have updated genus or species
