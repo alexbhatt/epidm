@@ -113,7 +113,7 @@ cip_spells <- function(x,
 
   ## convert object if its not already
   if(data.table::is.data.table(x)==FALSE) {
-    x <- data.table::as.data.table(x)
+    data.table::setDT(x)
   }
 
   ## just arrange the data

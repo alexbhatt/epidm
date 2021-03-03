@@ -68,9 +68,7 @@ proxy_episode_dates <- function(x,
 
 
   ## convert object if its not already
-  if(data.table::is.data.table(x)==FALSE) {
-    x <- data.table::as.data.table(x)
-  }
+  if(data.table::is.data.table(x)==FALSE) data.table::setDT(x)
 
 
   ## just arrange the data

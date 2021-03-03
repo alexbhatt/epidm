@@ -78,7 +78,7 @@ uk_patient_id <- function(x,
 
   ## convert object if its not already
   if(data.table::is.data.table(x)==FALSE) {
-    x <- data.table::as.data.table(x)
+    data.table::setDT(x)
   }
 
   ## setup variables for entry into data.table
