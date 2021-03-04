@@ -6,24 +6,25 @@
 #' Built in are  the organism re-classifications and specimen_type groupings
 #' and a manual mode.
 #'
-#' @param col a vector containing the variable to be created/changed
-#' @param type a character value to denote the lookup
+#' @param src a character, vector or column containing the value(s) to be referenced
+#' @param type a character value to denote the lookup table used
 #' @param .import a list  in the order list(new,old) containing the
 #' values for another lookup table existing in the environment
 #'
-#' @return a vector/list object of the recoded field
+#' @return a list object of the recoded field
 #' @export
 #'
 #' @examples
 #' df <- data.frame(
 #'   sp = c(
-#'     sample(respeciate_organism$previous_organism_name,10),
+#'     sample(respeciate_organism$previous_organism_name,9),
 #'     "ESCHERICHIA COLI","SARS-COV-2","CANDIDA AUREUS"),
-#'   ty = sample(specimen_type_grouping$specimen_type,13),
+#'   ty = sample(specimen_type_grouping$specimen_type,12),
 #'   dt = sample(seq.Date(from = Sys.Date()-365,
 #'                        to = Sys.Date(),
-#'                        by = "day"),13)
+#'                        by = "day"),12)
 #' )
+#' df <- df[order(df$dt),]
 #'
 #' df$species <- lookup_recode(df$sp,'species')
 #' df$grp <- lookup_recode(df$ty,'specimen')
@@ -38,7 +39,7 @@
 
 
 
-lookup_recode <- function(col,
+lookup_recode <- function(src,
                           type=c('species','specimen','manual'),
                           .import = NULL) {
 
@@ -61,7 +62,7 @@ lookup_recode <- function(col,
   } else if (type == "specimen") {
 
     ## calls upon the lookup table stored in the epidm package
-    ## data(respeciate_organism)
+    ## data(specimen_type_grouping)
     lk <- as.list(
       setNames(
         specimen_type_grouping$specimen_group,
@@ -80,13 +81,20 @@ lookup_recode <- function(col,
 
   }
 
-  x <- unname(lk[col])
 
   ## what happens if the value does not exist in the lookup
   ## use the original value, as they will often be overwritten
-  where(is.null(x)) {
-    x <- col
-  }
+
+  nullReplace <- function(x) {
+    z <- ifelse(x=="NULL",src,x)
+    z <- unlist(z)
+    return(z)
+    }
+
+  x <- unname(lk[src])
+
+  x <- purrr::map_chr(x,nullReplace)
+
 
   return(x)
 
