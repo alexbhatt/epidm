@@ -1,6 +1,6 @@
 specimen_type,specimen_group
 BLOOD,Blood
-CORDBLOOD,Blood
+CORD BLOOD,Blood
 JOINT,Bones & Joints
 SYNOVIAL FLUID,Bones & Joints
 BONE,Bones & Joints
@@ -20,13 +20,13 @@ FAECES/LOWER GASTRO-INTESTINAL TRACT,Faeces & Lowergut
 ASCITIC FLUID,Fluids
 FLUID-NOS,Fluids
 PLEURAL FLUID,Fluids
-PUS(SOURCE UNKNOWN,Fluids
+PUS (SOURCE UNKNOWN),Fluids
 SPUTUM,Fluids
 PERITONEAL FLUID,Fluids
 BILE,Fluids
 SEMEN,Fluids
-BREASTMILK,Fluids
-CHESTDRAIN,Fluids
+BREAST MILK,Fluids
+CHEST DRAIN,Fluids
 DRAINSITE,Fluids
 PUS SOURCE UNKNOWN,Fluids
 HVS,Genital
@@ -44,10 +44,10 @@ BAL,Lower Respiratory Tract
 BRONCHIAL,Lower Respiratory Tract
 TRACHEA,Lower Respiratory Tract
 LUNG,Lower Respiratory Tract
-ALVEOLARLAVAGE,Lower Respiratory Tract
+ALVEOLAR LAVAGE,Lower Respiratory Tract
 CHEST,Lower Respiratory Tract
 PLEURA,Lower Respiratory Tract
-LOWERRESPIRATORYTRACT,Lower Respiratory Tract
+LOWER RESPIRATORY TRACT,Lower Respiratory Tract
 SWAB-NOS,Swabs-General
 ASPIRATION,Swabs-General
 BLISTER,Swabs-General
@@ -74,7 +74,7 @@ NAIL,Swabs-General
 NORMAL SKIN,Swabs-General
 CYST,Swabs-General
 SWAB,Swabs-General
-UNASSIGNEDPARENT,Swabs-General
+UNASSIGNED PARENT,Swabs-General
 ARTERIAL LINE TIP,Tips & Lines
 INTRA-VASCULAR LINE,Tips & Lines
 IV CATHETER TIP,Tips & Lines
