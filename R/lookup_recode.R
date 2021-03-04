@@ -36,7 +36,7 @@ lookup_recode <- function(col,
 
 
   if (type == 'manual' & missing(.import)) {
-    stop("supply a two column list for the lookup vector in the format list(new,old)")
+    stop("supply a two object list for the lookup table inthe format list(new,old)")
   }
 
   if(type == "species"){
