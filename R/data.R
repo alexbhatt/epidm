@@ -35,3 +35,18 @@
 #' }
 #'
 "respeciate_organism"
+
+#' Specimen type grouping
+#'
+#' In order to help clean up an analysis based on a group of specimen types,
+#' a lookup table has been created to help group sampling sites.
+#' This is  a manually updated list.
+#' If there are organisms missing, or new respeciates to be added,
+#' please raise and issue or push request on the
+#' \href{https://github.com/alexbhatt/epidm}{epidm GitHub}
+#' @format
+#' \describe{
+#' \item{specimen_type}{The primary specimen type with detail}
+#' \item{specimen_group}{A simple grouping of like specimen sites}
+#' }
+"specimen_type_grouping"
