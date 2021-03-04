@@ -15,12 +15,19 @@
 #' @export
 #'
 #' @examples
-#' respec_example <- data.frame(
-#'   sp=respeciate_organism$previous_organism_name,
-#'   ge=gsub("([A-Za-z]+).*", "\\1",respeciate_organism$previous_organism_name)
-#'   )
-#' respec_example$new <- lookup_recode("species",respec_example$sp)
-#' head(respec_example)
+#' df <- data.frame(
+#'   sp = c(
+#'     sample(respeciate_organism$previous_organism_name,10),
+#'     "ESCHERICHIA COLI","SARS-COV-2","CANDIDA AUREUS"),
+#'   ty = sample(specimen_type_grouping$specimen_type,13),
+#'   dt = sample(seq.Date(from = Sys.Date()-365,
+#'                        to = Sys.Date(),
+#'                        by = "day"),13)
+#' )
+#'
+#' df$species <- lookup_recode(df$sp,'species')
+#' df$grp <- lookup_recode(df$ty,'specimen')
+#' df
 #'
 #' lookup_recode(
 #'   "ALCALIGENES DENITRIFICANS",
@@ -28,6 +35,7 @@
 #'   .import=list(respeciate_organism$organism_species_name,
 #'                respeciate_organism$previous_organism_name)
 #'   )
+
 
 
 lookup_recode <- function(col,
@@ -73,6 +81,12 @@ lookup_recode <- function(col,
   }
 
   x <- unname(lk[col])
+
+  ## what happens if the value does not exist in the lookup
+  ## use the original value, as they will often be overwritten
+  where(is.null(x)) {
+    x <- col
+  }
 
   return(x)
 
