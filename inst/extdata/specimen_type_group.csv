@@ -1,0 +1,144 @@
+specimen_type,specimen_group
+BLOOD,Blood
+CORDBLOOD,Blood
+JOINT,Bones & Joints
+SYNOVIAL FLUID,Bones & Joints
+BONE,Bones & Joints
+JOINT PROSTHESIS,Bones & Joints
+BONE PIN/PLATE,Bones & Joints
+FAECES,Faeces & Lowergut
+RECTUM,Faeces & Lowergut
+PERIANAL,Faeces & Lowergut
+GITRACT,Faeces & Lowergut
+COLOSTOMY,Faeces & Lowergut
+GASTRIC,Faeces & Lowergut
+GALL BLADDER,Faeces & Lowergut
+STOOL,Faeces & Lowergut
+ISCHIO-RECTAL,Faeces & Lowergut
+DUODENUM,Faeces & Lowergut
+FAECES/LOWER GASTRO-INTESTINAL TRACT,Faeces & Lowergut
+ASCITIC FLUID,Fluids
+FLUID-NOS,Fluids
+PLEURAL FLUID,Fluids
+PUS(SOURCE UNKNOWN,Fluids
+SPUTUM,Fluids
+PERITONEAL FLUID,Fluids
+BILE,Fluids
+SEMEN,Fluids
+BREASTMILK,Fluids
+CHESTDRAIN,Fluids
+DRAINSITE,Fluids
+PUS SOURCE UNKNOWN,Fluids
+HVS,Genital
+LOWER GENITAL TRACT,Genital
+LVS,Genital
+PENIS,Genital
+VAGINA,Genital
+VULVA,Genital
+CERVIX,Genital
+ENDOCERVICAL,Genital
+BARTHOLIN GLAND,Genital
+PROSTATE,Genital
+UPPER GENITAL TRACT,Genital
+BAL,Lower Respiratory Tract
+BRONCHIAL,Lower Respiratory Tract
+TRACHEA,Lower Respiratory Tract
+LUNG,Lower Respiratory Tract
+ALVEOLARLAVAGE,Lower Respiratory Tract
+CHEST,Lower Respiratory Tract
+PLEURA,Lower Respiratory Tract
+LOWERRESPIRATORYTRACT,Lower Respiratory Tract
+SWAB-NOS,Swabs-General
+ASPIRATION,Swabs-General
+BLISTER,Swabs-General
+EYE,Swabs-General
+NOSE,Swabs-General
+SKIN ULCER,Swabs-General
+SKIN/WOUND,Swabs-General
+UMBILICAL CORD,Swabs-General
+UNKNOWN,Swabs-General
+NASAL,Swabs-General
+ABSCESS,Swabs-General
+PRESSURE SORE,Swabs-General
+BURN,Swabs-General
+UMBILICUS,Swabs-General
+GROIN-NOS,Swabs-General
+TOE,Swabs-General
+NECKLINE,Swabs-General
+ULCER-NOS,Swabs-General
+UNASSIGNED SPECIMEN,Swabs-General
+LIP,Swabs-General
+BIOPSY-NOS,Swabs-General
+FINGER,Swabs-General
+NAIL,Swabs-General
+NORMAL SKIN,Swabs-General
+CYST,Swabs-General
+SWAB,Swabs-General
+UNASSIGNEDPARENT,Swabs-General
+ARTERIAL LINE TIP,Tips & Lines
+INTRA-VASCULAR LINE,Tips & Lines
+IV CATHETER TIP,Tips & Lines
+CVP LINE TIP,Tips & Lines
+VENFLON,Tips & Lines
+HICKMAN LINE,Tips & Lines
+IUCD,Tips & Lines
+TIP - NOS,Tips & Lines
+EPIDURAL,Tips & Lines
+TISSUE,Tissues
+PLACENTA,Tissues
+PERINEUM,Tissues
+LYMPH NODES,Tissues
+LIVER,Tissues
+PERITONEUM,Tissues
+CORNEA,Tissues
+APPENDIX,Tissues
+SKIN SCRAPING,Tissues
+SPLEEN,Tissues
+AXILLARY LYMPH NODE,Tissues
+HEART/HEART VALVE,Tissues
+CARDIOVASCULAR SYSTEM,Tissues
+HEART VALVE,Tissues
+PACEMAKER,Tissues
+PRODUCTS OF CONCEPTION,Tissues
+MUSCLE,Tissues
+PERICARDIUM,Tissues
+BREAST,Tissues
+LIVER/BILE,Tissues
+UPPER GASTRO-INTESTINAL TRACT,Tissues
+MEDIASTINUM,Tissues
+CSU,Urine/Kidney
+MSU,Urine/Kidney
+NEPHROSTOMY,Urine/Kidney
+PERITONEAL,Urine/Kidney
+DIALYSATE,Urine/Kidney
+SUPRAPUBIC ASPIRATE,Urine/Kidney
+URINARY CATHETER,Urine/Kidney
+URINE,Urine/Kidney
+URETHRA,Urine/Kidney
+EMU,Urine/Kidney
+SPA,Urine/Kidney
+URINE/KIDNEY,Urine/Kidney
+ENDOTRACHEAL ASPIRATE,URT/Mouth/Ear
+MIDDLE EAR,URT/Mouth/Ear
+MOUTH,URT/Mouth/Ear
+NPA,URT/Mouth/Ear
+OUTER EAR,URT/Mouth/Ear
+SALIVA,URT/Mouth/Ear
+THROAT,URT/Mouth/Ear
+ENDOTRACHEAL TUBE,URT/Mouth/Ear
+TONGUE,URT/Mouth/Ear
+TRACHEAL ASPIRATE,URT/Mouth/Ear
+DENTAL ABSCESS,URT/Mouth/Ear
+SINUS (NASAL),URT/Mouth/Ear
+PERNASAL,URT/Mouth/Ear
+ENDOTRACHEAL SECRETIONS,URT/Mouth/Ear
+UPPER RESPIRATORY TRACT,URT/Mouth/Ear
+MIDDLE EAR/MASTOID,URT/Mouth/Ear
+PHARYNGEAL,URT/Mouth/Ear
+CSF,Brain & Cerebral
+BRAIN,Brain & Cerebral
+CNS SHUNT,Brain & Cerebral
+BRAIN/SPINAL CORD,Brain & Cerebral
+WOUND (SURGICAL),Wound Swabs
+WOUND (TRAUMATIC),Wound Swabs
+WOUND,Wound Swabs
