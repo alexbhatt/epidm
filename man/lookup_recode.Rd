@@ -4,18 +4,18 @@
 \alias{lookup_recode}
 \title{Lookup table switch handler}
 \usage{
-lookup_recode(col, type = c("species", "specimen", "manual"), .import = NULL)
+lookup_recode(src, type = c("species", "specimen", "manual"), .import = NULL)
 }
 \arguments{
-\item{col}{a vector containing the variable to be created/changed}
+\item{src}{a character, vector or column containing the value(s) to be referenced}
 
-\item{type}{a character value to denote the lookup}
+\item{type}{a character value to denote the lookup table used}
 
 \item{.import}{a list  in the order list(new,old) containing the
 values for another lookup table existing in the environment}
 }
 \value{
-a vector/list object of the recoded field
+a list object of the recoded field
 }
 \description{
 A function to call an epidm lookup table and
@@ -26,12 +26,20 @@ Built in are  the organism re-classifications and specimen_type groupings
 and a manual mode.
 }
 \examples{
-respec_example <- data.frame(
-  sp=respeciate_organism$previous_organism_name,
-  ge=gsub("([A-Za-z]+).*", "\\\\1",respeciate_organism$previous_organism_name)
-  )
-respec_example$new <- lookup_recode("species",respec_example$sp)
-head(respec_example)
+df <- data.frame(
+  sp = c(
+    sample(respeciate_organism$previous_organism_name,9),
+    "ESCHERICHIA COLI","SARS-COV-2","CANDIDA AUREUS"),
+  ty = sample(specimen_type_grouping$specimen_type,12),
+  dt = sample(seq.Date(from = Sys.Date()-365,
+                       to = Sys.Date(),
+                       by = "day"),12)
+)
+df <- df[order(df$dt),]
+
+df$species <- lookup_recode(df$sp,'species')
+df$grp <- lookup_recode(df$ty,'specimen')
+df
 
 lookup_recode(
   "ALCALIGENES DENITRIFICANS",
