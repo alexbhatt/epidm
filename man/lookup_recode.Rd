@@ -24,6 +24,7 @@ recode  where we are aware of a new value.
 \details{
 Built in are  the organism re-classifications and specimen_type groupings
 and a manual mode.
+#'
 }
 \examples{
 df <- data.frame(
@@ -40,6 +41,9 @@ df <- df[order(df$dt),]
 df$species <- lookup_recode(df$sp,'species')
 df$grp <- lookup_recode(df$ty,'specimen')
 df
+
+# for a tidyverse use
+# df \%>\% mutate(sp=lookup_recode(sp,'species))
 
 lookup_recode(
   "ALCALIGENES DENITRIFICANS",

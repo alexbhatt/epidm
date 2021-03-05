@@ -5,11 +5,13 @@
 #'
 #' Built in are  the organism re-classifications and specimen_type groupings
 #' and a manual mode.
-#'
+#'#'
 #' @param src a character, vector or column containing the value(s) to be referenced
 #' @param type a character value to denote the lookup table used
 #' @param .import a list  in the order list(new,old) containing the
 #' values for another lookup table existing in the environment
+#'
+#' @importFrom purrr imap
 #'
 #' @return a list object of the recoded field
 #' @export
@@ -29,6 +31,9 @@
 #' df$species <- lookup_recode(df$sp,'species')
 #' df$grp <- lookup_recode(df$ty,'specimen')
 #' df
+#'
+#' # for a tidyverse use
+#' # df %>% mutate(sp=lookup_recode(sp,'species))
 #'
 #' lookup_recode(
 #'   "ALCALIGENES DENITRIFICANS",
@@ -82,19 +87,23 @@ lookup_recode <- function(src,
   }
 
 
-  ## what happens if the value does not exist in the lookup
-  ## use the original value, as they will often be overwritten
-
-  nullReplace <- function(x) {
-    z <- ifelse(x=="NULL",src,x)
-    z <- unlist(z)
-    return(z)
-    }
-
+  # create a list of the original and lookup elements
   x <- unname(lk[src])
 
-  x <- purrr::map_chr(x,nullReplace)
 
+  ## what happens if the value does not exist in the lookup
+  ## use the original value, as they will often be overwritten
+  nullReplace <- function(x,y) {
+    if(is.null(x)) {
+      src[y]
+    } else {
+      x
+    }
+  }
+
+  ## purrr::imap uses two arguments, the first is the mapped item
+  ## the second is the index number of that item
+  x <- purrr::imap(x,nullReplace)
 
   return(x)
 
