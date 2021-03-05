@@ -1,6 +1,6 @@
 Package: epidm
 Title: UK Epidemiological Data Management
-Version: 0.0.1.0004
+Version: 0.0.1.0005
 Authors@R: 
     person(given = "Alex",
            family = "Bhattacharya",
@@ -11,9 +11,12 @@ Description: This package contains utilties and functions
     for the cleaning, processing and management of UK public health
     data.
 License: MIT + file LICENSE
+Depends: 
+    R (>= 2.10)
 Imports: 
     data.table,
     phonics,
+    purrr,
     readr,
     stringi,
     stringr,
@@ -22,5 +25,3 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
-Depends: 
-    R (>= 2.10)
