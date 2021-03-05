@@ -33,3 +33,4 @@ devtools::install_github("alexbhatt/epidm")
  + __proxy_episode_dates__: cleanup of dates for inpatient spells when they are missing or not yet discharged
  + __inpatient_codes__: cleanup for inpatient ICD9/10 or OPCS codes for analysis
  + __infection_episode__: grouping of single point time events where they overlap given a window (in days) using either a static or rolling window; primarily used for infection episodes to deduplicate multiple positive tests
+ + __respeciate_generic__: allows for the respeciation of unspecified isolates within a time window
