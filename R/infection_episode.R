@@ -3,6 +3,7 @@
 #'
 #' @description
 #' `r lifecycle::badge('deprecated')`
+#'
 #' Groups single event instances eg. test results in time based on a
 #' static or rolling window in days. Events can be grouped according to a
 #' any number of columns, to group monomicrobial or polymicrobial episodes
