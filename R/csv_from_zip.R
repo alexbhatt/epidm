@@ -1,8 +1,14 @@
 #' @title Download a csv from a zip
+#'
+#' @description
+#' `r lifecycle::badge('stable')`
+#' A convenience function to allow you to pull data from NHS, ONS and ODR assets
+#'
 #' @param x a zip file from the web
 #'
 #' @return a zip file for ingestion into your chosen readr
 #' @importFrom utils download.file unzip
+#'
 #'
 #' @export
 #'

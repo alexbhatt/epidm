@@ -1,12 +1,15 @@
 
 #' Continuous Inpatient Spells
 #'
+#' @description
+#' `r lifecycle::badge('stable')`
 #' A continuous inpatient (CIP) spell is a continuous period of care within the NHS, regardless of any transfers which may take place. It can therefore be made up of one or more provider spells. A CIP spell starts when a decision has been made to admit the patient, and a consultant has taken responsibility for their care. The spell ends when the patient dies or is discharged from hospital
 #'
 #' @seealso http://content.digital.nhs.uk/media/11859/Provider-Spells-Methodology/pdf/Spells_Methodology.pdf
 #'
 #' @import data.table
 #' @importFrom data.table .I .N .GRP ':='
+#'
 #'
 #' @param x a data frame; will be converted to a data.table
 #' @param patient_group_vars a vector containing any variables to be used for record grouping, minimum is a patient identifier

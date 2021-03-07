@@ -21,6 +21,7 @@ respeciate_generic(x, group_vars, species, date, window = c(0:Inf))
 a data.table with a recharacterised specimen column
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 Some samples within SGSS are submitted by laboratories as "GENUS SP" or
 "GENUS UNNAMED". However, they may also have a fully identified sample taken
 from the same site within a recent time period.  This function captures

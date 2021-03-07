@@ -13,6 +13,8 @@ valid_nhs(nhs_number)
 a vector, 1 if NHS number is valid, 0 if not valid
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Check if NHS numbers are valid based on the checksum algorithm
 
 This uses the first 9 digits, multiplied by 10 down to 2 eg digit 1x10, d2x9

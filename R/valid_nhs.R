@@ -1,6 +1,8 @@
 #' @title NHS Number Validity Check
 #'
 #' @description
+#' `r lifecycle::badge('stable')`
+#'
 #' Check if NHS numbers are valid based on the checksum algorithm
 #'
 #' This uses the first 9 digits, multiplied by 10 down to 2 eg digit 1x10, d2x9
@@ -10,6 +12,7 @@
 #' The remainder is checked against the 10th digit
 #'
 #' Where the remainder is 11, it is replaced with 0
+#'
 #'
 #' @param nhs_number a vector
 #'

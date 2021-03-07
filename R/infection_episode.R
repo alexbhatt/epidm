@@ -2,14 +2,19 @@
 #' @title Patient Episode Groupings
 #'
 #' @description
+#' `r lifecycle::badge('deprecated')`
 #' Groups single event instances eg. test results in time based on a
 #' static or rolling window in days. Events can be grouped according to a
 #' any number of columns, to group monomicrobial or polymicrobial episodes
 #' eg. group infection episodes within 14-days
 #'
+#' this function was deprecated as the full functionality is embedded in group_time()
+#'
+#'
 #' @return A new dataframe containing the original data, and columns specifying monomicrobial or polymicrobial patient episodes.
 #'
 #' @seealso epidm::group_time
+#'
 #'
 #' @import data.table
 #' @importFrom data.table .I .N .GRP ':='
@@ -43,7 +48,7 @@
 #'   indx_name = 'episode_indx'
 #' )[]
 #'
-#' @export
+#' @keywords internal
 #'
 
 infection_episode <- function(x,
@@ -53,6 +58,8 @@ infection_episode <- function(x,
                               indx_name = 'indx',
                               window_type = c('static','rolling')
 ) {
+
+  lifecycle::deprecate_warn("0.0.1", "infection_episode()", "group_time()")
 
   ## convert object if its not already
   if(data.table::is.data.table(x)==FALSE) {

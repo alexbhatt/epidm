@@ -1,6 +1,7 @@
 #' Inpatient Codes cleanup
 #'
 #' @description
+#' `r lifecycle::badge('experimental')`
 #' When HES/SUS ICD/OPCS codes are provided in wide format
 #'   you may want to clean them up into long for easier analysis.
 #'   This function helps by reshaping long as a seperate table.
@@ -8,6 +9,7 @@
 #'   appropriately later.
 #'
 #' @import data.table
+#'
 #'
 #' @param x a data.frame or data.table containing inpatient data
 #' @param field_strings a vector or string containing the regex for the the columns

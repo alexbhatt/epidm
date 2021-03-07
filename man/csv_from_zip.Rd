@@ -13,7 +13,8 @@ csv_from_zip(x)
 a zip file for ingestion into your chosen readr
 }
 \description{
-Download a csv from a zip
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+A convenience function to allow you to pull data from NHS, ONS and ODR assets
 }
 \examples{
 head(read.csv(csv_from_zip("https://files.digital.nhs.uk/assets/ods/current/succarc.zip")))

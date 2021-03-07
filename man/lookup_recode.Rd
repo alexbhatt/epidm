@@ -18,13 +18,12 @@ values for another lookup table existing in the environment}
 a list object of the recoded field
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 A function to call an epidm lookup table and
 recode  where we are aware of a new value.
-}
-\details{
+
 Built in are  the organism re-classifications and specimen_type groupings
 and a manual mode.
-#'
 }
 \examples{
 df <- data.frame(

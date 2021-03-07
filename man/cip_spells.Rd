@@ -36,6 +36,7 @@ cip_spells(
 a data.table with cleaned start and end dates, a cip_indx and new cip window dates
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 A continuous inpatient (CIP) spell is a continuous period of care within the NHS, regardless of any transfers which may take place. It can therefore be made up of one or more provider spells. A CIP spell starts when a decision has been made to admit the patient, and a consultant has taken responsibility for their care. The spell ends when the patient dies or is discharged from hospital
 }
 \examples{

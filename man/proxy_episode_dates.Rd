@@ -2,9 +2,7 @@
 % Please edit documentation in R/proxy_episode_dates.R
 \name{proxy_episode_dates}
 \alias{proxy_episode_dates}
-\title{HES/SUS Episode Date Cleaning
-
-Correcting for missing end dates on HES/SUS episodes}
+\title{HES/SUS Episode Date Cleaning}
 \usage{
 proxy_episode_dates(
   x,
@@ -32,8 +30,7 @@ proxy_episode_dates(
 a data.table with cleaned start and end dates, and an indicator proxy_missing where the value has changed
 }
 \description{
-HES/SUS Episode Date Cleaning
-
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 Correcting for missing end dates on HES/SUS episodes
 }
 \examples{

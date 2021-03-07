@@ -1,6 +1,8 @@
 #'
 #' @title Grouping of intervals or events in time together
 #'
+#' @description
+#' `r lifecycle::badge('stable')`
 #' Group across multiple observations of
 #'  overlapping time intervals, with defined start and end dates,
 #'  or events within a static/fixed or rolling window of time.
@@ -9,6 +11,7 @@
 #'
 #' @import data.table
 #' @importFrom data.table .I .N .GRP ':='
+#'
 #'
 #' @param x data frame, this will be converted to a data.table
 #' @param date_start column containing the start dates for the grouping, provided quoted

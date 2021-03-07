@@ -2,11 +2,7 @@
 % Please edit documentation in R/group_time.R
 \name{group_time}
 \alias{group_time}
-\title{Grouping of intervals or events in time together
-
-Group across multiple observations of
-overlapping time intervals, with defined start and end dates,
-or events within a static/fixed or rolling window of time.}
+\title{Grouping of intervals or events in time together}
 \usage{
 group_time(
   x,
@@ -43,8 +39,7 @@ group_time(
 a data.table with 3 new variables: indx, a grouping flag; and new start and end dates
 }
 \description{
-Grouping of intervals or events in time together
-
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 Group across multiple observations of
 overlapping time intervals, with defined start and end dates,
 or events within a static/fixed or rolling window of time.

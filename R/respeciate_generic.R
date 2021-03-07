@@ -2,6 +2,7 @@
 #'  Respeciate unspecified samples
 #'
 #' @description
+#' `r lifecycle::badge('stable')`
 #' Some samples within SGSS are submitted by laboratories as "GENUS SP" or
 #' "GENUS UNNAMED". However, they may also have a fully identified sample taken
 #' from the same site within a recent time period.  This function captures
@@ -9,6 +10,7 @@
 #'
 #' @import data.table
 #' @importFrom stringr str_detect
+#'
 #'
 #' @param x a data.frame or data.table object
 #' @param group_vars the minimum grouping set of variables for like samples in a character vector; suggest c('patient_id','specimen_type','genus')

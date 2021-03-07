@@ -1,6 +1,7 @@
 #' @title Patient ID record grouping
 #'
 #' @description
+#' `r lifecycle::badge('stable')`
 #' Groups patient records from multiple isolates with a single integer patientID
 #' by grouping patient identifiers.
 #'
@@ -14,6 +15,7 @@
 #' }
 #'
 #' @return patientID grouping variable addedd to the data.frame
+#'
 #'
 #' @import data.table
 #' @importFrom data.table .N ':='

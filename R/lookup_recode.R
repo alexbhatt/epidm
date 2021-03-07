@@ -1,17 +1,20 @@
 #' Lookup table switch handler
 #'
+#' @description
+#' `r lifecycle::badge('stable')`
 #' A function to call an epidm lookup table and
 #' recode  where we are aware of a new value.
 #'
 #' Built in are  the organism re-classifications and specimen_type groupings
 #' and a manual mode.
-#'#'
+#'
 #' @param src a character, vector or column containing the value(s) to be referenced
 #' @param type a character value to denote the lookup table used
 #' @param .import a list  in the order list(new,old) containing the
 #' values for another lookup table existing in the environment
 #'
 #' @importFrom purrr imap
+#'
 #'
 #' @return a list object of the recoded field
 #' @export

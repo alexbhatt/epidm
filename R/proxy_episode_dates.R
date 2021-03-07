@@ -1,9 +1,12 @@
 #' @title HES/SUS Episode Date Cleaning
 #'
+#' @description
+#' `r lifecycle::badge('stable')`
 #' Correcting for missing end dates on HES/SUS episodes
 #'
 #' @import data.table
 #' @importFrom data.table .I .N .GRP ':='
+#'
 #'
 #' @param x a data frame; will be converted to a data.table
 #' @param patient_group_vars a vector containing any variables to be used for record grouping, minimum is a patient identifier

@@ -24,6 +24,7 @@ inpatient_codes(
 a separate table with codes and id in long form
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 When HES/SUS ICD/OPCS codes are provided in wide format
 you may want to clean them up into long for easier analysis.
 This function helps by reshaping long as a seperate table.

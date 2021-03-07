@@ -30,10 +30,13 @@ infection_episode(
 A new dataframe containing the original data, and columns specifying monomicrobial or polymicrobial patient episodes.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 Groups single event instances eg. test results in time based on a
 static or rolling window in days. Events can be grouped according to a
 any number of columns, to group monomicrobial or polymicrobial episodes
 eg. group infection episodes within 14-days
+
+this function was deprecated as the full functionality is embedded in group_time()
 }
 \examples{
 episode_test <- structure(
@@ -61,3 +64,4 @@ infection_episode(
 \seealso{
 epidm::group_time
 }
+\keyword{internal}

@@ -1,11 +1,16 @@
 #'
 #' @title Clean and Read a SQL query
 #'
+#' @description
+#' `r lifecycle::badge('stable')`
+#'
 #' A utility function to read in a SQL query from a character object, clipboard
 #' or text file and remove all comments for use with database query packages
 #'
+#'
 #' @param sql a SQL file or text string
 #' @importFrom readr read_lines
+#'
 #'
 #' @examples
 #' testSQL <- c(

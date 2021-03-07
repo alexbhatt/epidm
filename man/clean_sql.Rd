@@ -2,10 +2,7 @@
 % Please edit documentation in R/clean_sql.R
 \name{clean_sql}
 \alias{clean_sql}
-\title{Clean and Read a SQL query
-
-A utility function to read in a SQL query from a character object, clipboard
-or text file and remove all comments for use with database query packages}
+\title{Clean and Read a SQL query}
 \usage{
 clean_sql(sql)
 }
@@ -16,7 +13,7 @@ clean_sql(sql)
 a cleaned SQL query without comments as a character string
 }
 \description{
-Clean and Read a SQL query
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
 A utility function to read in a SQL query from a character object, clipboard
 or text file and remove all comments for use with database query packages
