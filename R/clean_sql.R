@@ -20,13 +20,13 @@
 #' "  [VAR 1]  -- with comments",
 #' ",[VAR 2]",",[VAR 3]","FROM DATASET ",
 #' "-- output here")
-#' clean_sql(testSQL)
+#' sql_clean(testSQL)
 #'
 #' @return a cleaned SQL query without comments as a character string
 #' @export
 
 
-clean_sql <- function(sql) {
+sql_clean <- function(sql) {
   # read in
   x <- readr::read_lines(sql)
 
