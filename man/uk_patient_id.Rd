@@ -11,7 +11,8 @@ uk_patient_id(
   date_of_birth,
   sex,
   forename = "NONAME",
-  surname = "NONAME"
+  surname = "NONAME",
+  .forceCopy = FALSE
 )
 }
 \arguments{
@@ -19,15 +20,22 @@ uk_patient_id(
 
 \item{nhs_number}{a column as a character containing the patient NHS numbers}
 
-\item{hospital_number}{a column as a character containing the patient Hospital numbers}
+\item{hospital_number}{a column as a character containing the patient
+Hospital numbers}
 
-\item{date_of_birth}{a column as a date variable containing the patient date of birth in date format}
+\item{date_of_birth}{a column as a date variable containing the patient
+date of birth in date format}
 
 \item{sex}{a column as a character containing the patient sex}
 
-\item{forename}{a column as a character containing the patient forename; leave as NONAME if unavailable}
+\item{forename}{a column as a character containing the patient forename;
+leave as NONAME if unavailable}
 
-\item{surname}{a column as a character containing the patient surname; leave as NONAME if unavailable}
+\item{surname}{a column as a character containing the patient surname;
+leave as NONAME if unavailable}
+
+\item{.forceCopy}{default FALSE; TRUE will force data.table to take a copy
+instead of editing the data without reference}
 }
 \value{
 patientID grouping variable addedd to the data.frame

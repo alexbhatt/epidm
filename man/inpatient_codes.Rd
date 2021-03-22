@@ -8,7 +8,8 @@ inpatient_codes(
   x,
   field_strings,
   patient_id_vars,
-  type = c("icd9", "icd10", "opcs")
+  type = c("icd9", "icd10", "opcs"),
+  .forceCopy = FALSE
 )
 }
 \arguments{
@@ -19,6 +20,9 @@ inpatient_codes(
 \item{patient_id_vars}{a vector containing colnames used to identify a patient episode or spell}
 
 \item{type}{a string to denote if the codes are diagnostic or prcedural}
+
+\item{.forceCopy}{default FALSE; TRUE will force data.table to take a copy
+instead of editing the data without reference}
 }
 \value{
 a separate table with codes and id in long form

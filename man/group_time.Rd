@@ -13,33 +13,50 @@ group_time(
   group_vars,
   indx_varname = "indx",
   min_varname = "date_min",
-  max_varname = "date_max"
+  max_varname = "date_max",
+  .forceCopy = FALSE
 )
 }
 \arguments{
 \item{x}{data frame, this will be converted to a data.table}
 
-\item{date_start}{column containing the start dates for the grouping, provided quoted}
-
-\item{date_end}{column containing the end dates for the grouping, provided quoted}
-
-\item{window}{an integer if there is no end date, a time window which will be applied to the start date}
-
-\item{window_type}{character, supplied only for event grouping, to determine if a 'rolling' or 'static' grouping method should be used}
+\item{date_start}{column containing the start dates for the grouping,
+provided quoted}
 
 \item{group_vars}{in a vector, the all columns used to group records, quoted}
 
-\item{indx_varname}{a character string to set variable name for the index column which provides a grouping key; default is indx}
+\item{indx_varname}{a character string to set variable name for the
+index column which provides a grouping key; default is indx}
 
-\item{min_varname}{a character string to set variable name for the time period minimum}
+\item{min_varname}{a character string to set variable name for the
+time period minimum}
 
-\item{max_varname}{a character string set variable name for the time period maximum}
+\item{max_varname}{a character string set variable name for the time
+period maximum}
+
+\item{.forceCopy}{default FALSE; TRUE will force data.table to take a copy
+instead of editing the data without reference}
+
+\item{time_intervals}{must use:
+\describe{
+\item {date_end}{column containing the end dates for the interval, quoted}
+}}
+
+\item{events}{must use:
+\itemize{
+\item {window}{an integer representing a time window in days
+which will be applied to the start date}
+\item {window_type}{character, supplied only for event grouping,
+to determine if a 'rolling' or 'static' grouping method should be used}
+}}
 }
 \value{
-a data.table with 3 new variables: indx, a grouping flag; and new start and end dates
+a data.table with 3 new variables: indx, a grouping flag;
+and new start and end dates
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Group across multiple observations of
 overlapping time intervals, with defined start and end dates,
 or events within a static/fixed or rolling window of time.

@@ -6,17 +6,19 @@
 \usage{
 proxy_episode_dates(
   x,
-  patient_group_vars,
+  group_vars,
   spell_start_date,
   spell_end_date,
   discharge_destination,
-  drop.tmp = TRUE
+  .dropTmp = TRUE,
+  .forceCopy = FALSE
 )
 }
 \arguments{
 \item{x}{a data frame; will be converted to a data.table}
 
-\item{patient_group_vars}{a vector containing any variables to be used for record grouping, minimum is a patient identifier}
+\item{group_vars}{a vector containing any variables to be used for
+record grouping, minimum is a patient identifier}
 
 \item{spell_start_date}{Inpatient provider spell or episode admission date}
 
@@ -24,7 +26,10 @@ proxy_episode_dates(
 
 \item{discharge_destination}{CDS discharge destination code}
 
-\item{drop.tmp}{a logical to drop all tmp values used, default to TRUE}
+\item{.dropTmp}{default TRUE; a logical to drop all tmp values used}
+
+\item{.forceCopy}{default FALSE; TRUE will force data.table to take a copy
+instead of editing the data without reference}
 }
 \value{
 a data.table with cleaned start and end dates, and an indicator proxy_missing where the value has changed
@@ -71,7 +76,7 @@ proxy_test <- data.frame(
 
 proxy_episode_dates(
   x=proxy_test,
-  patient_group_vars = c('id','provider'),
+  group_vars = c('id','provider'),
   spell_start_date = 'spell_start',
   spell_end_date = 'spell_end',
   discharge_destination = 'disdest'

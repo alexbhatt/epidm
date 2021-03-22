@@ -6,19 +6,21 @@
 \usage{
 cip_spells(
   x,
-  patient_group_vars,
+  group_vars,
   spell_start_date,
   admission_method,
   admission_source,
   spell_end_date,
   discharge_destination,
-  patient_classification
+  patient_classification,
+  .forceCopy = FALSE
 )
 }
 \arguments{
 \item{x}{a data frame; will be converted to a data.table}
 
-\item{patient_group_vars}{a vector containing any variables to be used for record grouping, minimum is a patient identifier}
+\item{group_vars}{a vector containing any variables to be used for
+record grouping, minimum is a patient identifier}
 
 \item{spell_start_date}{Inpatient provider spell or episode admission date}
 
@@ -31,9 +33,13 @@ cip_spells(
 \item{discharge_destination}{CDS discharge destination code}
 
 \item{patient_classification}{CDS patient classification code}
+
+\item{.forceCopy}{default FALSE; TRUE will force data.table to take a copy
+instead of editing the data without reference}
 }
 \value{
-a data.table with cleaned start and end dates, a cip_indx and new cip window dates
+a data.table with cleaned start and end dates, a cip_indx
+and new cip window dates
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
@@ -109,7 +115,7 @@ cip_test <- data.frame(
 )
 
 cip_spells(x=cip_test,
-  patient_group_vars = c('id','provider'),
+  group_vars = c('id','provider'),
   patient_classification = 'patclass',
   spell_start_date = 'spell_start',
   admission_method = 'adm_meth',
