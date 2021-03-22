@@ -3,25 +3,42 @@
 #'
 #' @description
 #' `r lifecycle::badge('stable')`
+#'
+#'
 #' Group across multiple observations of
 #'  overlapping time intervals, with defined start and end dates,
 #'  or events within a static/fixed or rolling window of time.
 #'
-#' @return a data.table with 3 new variables: indx, a grouping flag; and new start and end dates
+#' @return a data.table with 3 new variables: indx, a grouping flag;
+#'   and new start and end dates
 #'
 #' @import data.table
 #' @importFrom data.table .I .N .GRP ':='
 #'
 #'
 #' @param x data frame, this will be converted to a data.table
-#' @param date_start column containing the start dates for the grouping, provided quoted
-#' @param date_end column containing the end dates for the grouping, provided quoted
 #' @param group_vars in a vector, the all columns used to group records, quoted
-#' @param window an integer if there is no end date, a time window which will be applied to the start date
-#' @param window_type character, supplied only for event grouping, to determine if a 'rolling' or 'static' grouping method should be used
-#' @param indx_varname a character string to set variable name for the index column which provides a grouping key; default is indx
-#' @param min_varname a character string to set variable name for the time period minimum
-#' @param max_varname a character string set variable name for the time period maximum
+#' @param date_start column containing the start dates for the grouping,
+#'   provided quoted
+#' @param time_intervals must use:
+#' \describe{
+#'   \item {date_end}{column containing the end dates for the interval, quoted}
+#'   }
+#' @param events must use:
+#' \itemize{
+#'   \item {window}{an integer representing a time window in days
+#'     which will be applied to the start date}
+#'   \item {window_type}{character, supplied only for event grouping,
+#'     to determine if a 'rolling' or 'static' grouping method should be used}
+#'   }
+#' @param indx_varname a character string to set variable name for the
+#'   index column which provides a grouping key; default is indx
+#' @param min_varname a character string to set variable name for the
+#'   time period minimum
+#' @param max_varname a character string set variable name for the time
+#'   period maximum
+#' @param .forceCopy default FALSE; TRUE will force data.table to take a copy
+#'   instead of editing the data without reference
 #'
 #' @examples
 #' episode_test <- structure(
@@ -99,11 +116,23 @@ group_time <- function(x,
                        group_vars,
                        indx_varname = 'indx',
                        min_varname = 'date_min',
-                       max_varname = 'date_max'
+                       max_varname = 'date_max',
+                       .forceCopy = FALSE
 ){
 
-  ## convert object if its not already
-  if(data.table::is.data.table(x)==FALSE) {
+  ## Needed to prevent RCMD Check fails
+  ## recommended by data.table
+  ## https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
+  indx <-
+    tmp.dateNum <-
+    max_date <- min_date <-
+    tmp.episode <- tmp.windowEnd <- tmp.windowStart <- tmp.windowCmax <-
+    NULL
+
+  ## convert data.frame to data.table or take a copy
+  if(.forceCopy) {
+    x <- data.table::copy(x)
+  } else {
     data.table::setDT(x)
   }
 
@@ -111,6 +140,13 @@ group_time <- function(x,
   # subtitute() not needed on other vars as quoted so use get()
   group_vars <- substitute(group_vars)
 
+  ## checks
+  if(missing(x)){
+    stop("x must be supplied as a data.frame or data.table")
+  }
+  if(missing(date_start)){
+    stop("date_start must be supplied as a quoted column name from x")
+  }
 
   ## static + window methods only ##############################################
   ## bring the static window function in so its all a one stop shop for ease
@@ -190,7 +226,7 @@ group_time <- function(x,
     } # static method
 
     if(window_type == 'rolling') {
-      x[,tmp.window_end := as.numeric(get(date_start)) + window]
+      x[,tmp.windowEnd := as.numeric(get(date_start)) + window]
     }
   }
 
@@ -201,7 +237,7 @@ group_time <- function(x,
     x[,tmp.dateNum := as.numeric(get(date_start))]
 
     if(!missing(date_end)){
-      x[,tmp.window_end := as.numeric(get(date_end))]
+      x[,tmp.windowEnd := as.numeric(get(date_end))]
     }
 
     ## set sort order
@@ -209,7 +245,7 @@ group_time <- function(x,
 
     ## look at the next start date
     x[,
-      tmp.window_start := data.table::shift(
+      tmp.windowStart := data.table::shift(
         tmp.dateNum,
         1,
         type="lead",
@@ -220,16 +256,16 @@ group_time <- function(x,
 
     ## compare the end end date within the groups
     x[,
-      tmp.window_cmax := cummax(tmp.window_end),
+      tmp.windowCmax := cummax(tmp.windowEnd),
       by = group_vars
     ]
 
     ## correct for missing values
     x[,
-      tmp.window_cmax := data.table::fifelse(
-        is.na(tmp.window_cmax) & !is.na(tmp.window_end),
-        tmp.window_end,
-        tmp.window_cmax
+      tmp.windowCmax := data.table::fifelse(
+        is.na(tmp.windowCmax) & !is.na(tmp.windowEnd),
+        tmp.windowEnd,
+        tmp.windowCmax
       ),
       by = group_vars
     ]
@@ -245,7 +281,7 @@ group_time <- function(x,
           data.table::fifelse(
             is.na(tmp.dateNum),
             .I,
-            cumsum(tmp.window_start > tmp.window_cmax)
+            cumsum(tmp.windowStart > tmp.windowCmax)
           )[-.N]
         )
       ),
@@ -261,14 +297,14 @@ group_time <- function(x,
     if(!missing(date_end)){
       ## there are confirmed end dates, so use them
       x[,
-        max_date := max(as.Date(tmp.window_cmax, origin="1970-01-01")),
+        max_date := max(as.Date(tmp.windowCmax, origin="1970-01-01")),
         by = indx
       ]
     } else {
       ## these are for windows, so we cant always assume the window
       ## time was still relevant, so we use the last known time in the series
       x[,
-        max_date := min(as.Date(tmp.window_cmax, origin="1970-01-01")),
+        max_date := min(as.Date(tmp.windowCmax, origin="1970-01-01")),
         by = indx
       ]
     }

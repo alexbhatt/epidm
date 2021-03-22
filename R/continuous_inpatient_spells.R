@@ -12,15 +12,19 @@
 #'
 #'
 #' @param x a data frame; will be converted to a data.table
-#' @param patient_group_vars a vector containing any variables to be used for record grouping, minimum is a patient identifier
+#' @param group_vars a vector containing any variables to be used for
+#'   record grouping, minimum is a patient identifier
 #' @param spell_start_date Inpatient provider spell or episode admission date
 #' @param admission_method CDS admission method code
 #' @param admission_source CDS admission source code
 #' @param spell_end_date Inpatient provider spell or episode discharge  date
 #' @param discharge_destination CDS discharge destination code
 #' @param patient_classification CDS patient classification code
+#' @param .forceCopy default FALSE; TRUE will force data.table to take a copy
+#'   instead of editing the data without reference
 #'
-#' @return a data.table with cleaned start and end dates, a cip_indx and new cip window dates
+#' @return a data.table with cleaned start and end dates, a cip_indx
+#'   and new cip window dates
 #' @export
 #'
 #' @examples
@@ -93,7 +97,7 @@
 #' )
 #'
 #' cip_spells(x=cip_test,
-#'   patient_group_vars = c('id','provider'),
+#'   group_vars = c('id','provider'),
 #'   patient_classification = 'patclass',
 #'   spell_start_date = 'spell_start',
 #'   admission_method = 'adm_meth',
@@ -103,60 +107,70 @@
 #' )
 
 cip_spells <- function(x,
-                       patient_group_vars,
+                       group_vars,
                        spell_start_date,
                        admission_method,
                        admission_source,
                        spell_end_date,
                        discharge_destination,
-                       patient_classification) {
+                       patient_classification,
+                       .forceCopy = FALSE) {
 
-  ## needed to prevent a Invalid .internal.selfref error
-  x <- copy(x)
-
-  ## convert object if its not already
-  if(data.table::is.data.table(x)==FALSE) {
+  ## convert data.frame to data.table or take a copy
+  if(.forceCopy) {
+    x <- data.table::copy(x)
+  } else {
     data.table::setDT(x)
   }
 
+  ## Needed to prevent RCMD Check fails
+  ## recommended by data.table
+  ## https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
+  cip_indx <-
+    tmp.spellN <-
+    tmp.cip2daydiff <- tmp.cipTransfer <- tmp.cipExclude <-
+    tmp.dateNumStart <- tmp.dateNumEnd <- tmp.regular_attender <-
+    tmp.windowNext <- tmp.windowCmax <-
+    NULL
+
   ## just arrange the data
-  data.table::setorderv(x,c(eval(patient_group_vars),spell_start_date))
+  data.table::setorderv(x,c(eval(group_vars),spell_start_date))
 
   ## counter columns to make life easier
   x[,
-    tmp.spell.n := seq_len(.N),
-    by = patient_group_vars
+    tmp.spellN := seq_len(.N),
+    by = group_vars
   ]
 
   ## CIP CRITERIA ##############################################################
   # difference between admission and discharge is <2 days
   x[,
-    tmp.cip_2daydiff := as.numeric(
+    tmp.cip2daydiff := as.numeric(
       difftime(
         data.table::shift(get(spell_start_date),n=1,type = "lead"),
         get(spell_end_date),
         units="days")
     ) %in% c(0,1,2),
-    by = patient_group_vars
+    by = group_vars
   ]
 
   # a transfer has taken place (based on these criteria)
   # used the simple criteria, as we dont need to determine transfer type (1,2,3)
   x[,
-    tmp.cip_transfer :=
+    tmp.cipTransfer :=
       get(discharge_destination) %in%
       c("49", "50", "51", "52", "53", "84") |
       data.table::shift(get(admission_source),n=1,type="lead") %in%
       c("49", "50", "51", "52", "53", "87") |
       data.table::shift(get(admission_method),n=1,type="lead") %in%
       c("2B", "81"),
-    by = patient_group_vars
+    by = group_vars
   ]
 
 
   # exclusion criteria
   x[,
-    tmp.cip_exclude :=
+    tmp.cipExclude :=
       get(discharge_destination) %in% c("19") &
       data.table::shift(get(admission_source),
                         n=1,
@@ -164,29 +178,29 @@ cip_spells <- function(x,
       data.table::shift(get(admission_method),
                         n=1,
                         type="lead") %in% c("21"),
-    by = patient_group_vars
+    by = group_vars
   ]
 
   ## call the other epidm function to clean the dates.
-  x <- epidm::proxy_episode_dates(x=x,
-                                  patient_group_vars = patient_group_vars,
+  x <- epidm::proxy_episode_dates(x = x,
+                                  group_vars = group_vars,
                                   spell_start_date = spell_start_date,
                                   spell_end_date = spell_end_date,
                                   discharge_destination = discharge_destination,
-                                  drop.tmp=F)
+                                  .dropTmp = FALSE)
 
   ## setup requirement variables
-  x[,tmp.dateNum_start := as.numeric(get(spell_start_date))]
-  x[,tmp.dateNum_end := as.numeric(get(spell_end_date))]
+  x[,tmp.dateNumStart := as.numeric(get(spell_start_date))]
+  x[,tmp.dateNumEnd := as.numeric(get(spell_end_date))]
   x[,tmp.regular_attender := as.character(patient_classification) %in% c("3","4")]
 
 
   # group records using tmp.cip_valid
   x[,
     tmp.cip_valid :=
-      tmp.cip_2daydiff &
-      tmp.cip_transfer &
-      !tmp.cip_exclude &
+      tmp.cip2daydiff &
+      tmp.cipTransfer &
+      !tmp.cipExclude &
       !tmp.regular_attender
   ]
 
@@ -197,28 +211,28 @@ cip_spells <- function(x,
       is.na(tmp.cip_valid), FALSE,
       default = FALSE
     ),
-    by = patient_group_vars
+    by = group_vars
   ]
 
   ## GROUP UP THE TIME CHUNKS ##################################################
-  ## +2 to tmp.win_cmax to allow for up to 2-day window in line with tmp.cip_2daydiff
+  ## +2 to tmp.windowCmax to allow for up to 2-day window in line with tmp.cip2daydiff
 
   x[,
-    tmp.win_next := data.table::fifelse(
+    tmp.windowNext := data.table::fifelse(
       tmp.cip_valid,
-      data.table::shift(tmp.dateNum_start,
+      data.table::shift(tmp.dateNumStart,
                         n=1,type="lead",
-                        fill = data.table::last(tmp.dateNum_start)),
-      (tmp.spell.n+1)^3
+                        fill = data.table::last(tmp.dateNumStart)),
+      (tmp.spellN+1)^3
     ),
-    by = patient_group_vars
+    by = group_vars
   ]
   x[,
-    tmp.win_cmax := data.table::fifelse(
+    tmp.windowCmax := data.table::fifelse(
       tmp.cip_valid,
-      cummax(tmp.dateNum_end),
-      tmp.spell.n),
-    by = patient_group_vars
+      cummax(tmp.dateNumEnd),
+      tmp.spellN),
+    by = group_vars
   ]
 
   x[,
@@ -227,9 +241,9 @@ cip_spells <- function(x,
       ".",
       .N,
       ".",
-      c(0,cumsum(tmp.win_next > tmp.win_cmax))[-.N]
+      c(0,cumsum(tmp.windowNext > tmp.windowCmax))[-.N]
     ),
-    by = patient_group_vars
+    by = group_vars
   ]
 
 
@@ -252,6 +266,3 @@ cip_spells <- function(x,
 
   return(x)
 }
-
-
-

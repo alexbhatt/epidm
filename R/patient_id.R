@@ -25,11 +25,17 @@
 #'
 #' @param x a data.frame or data.table containing the cleaned line list
 #' @param nhs_number a column as a character containing the patient NHS numbers
-#' @param hospital_number a column as a character containing the patient Hospital numbers
-#' @param date_of_birth a column as a date variable containing the patient date of birth in date format
+#' @param hospital_number a column as a character containing the patient
+#'   Hospital numbers
+#' @param date_of_birth a column as a date variable containing the patient
+#'   date of birth in date format
 #' @param sex a column as a character containing the patient sex
-#' @param forename a column as a character containing the patient forename; leave as NONAME if unavailable
-#' @param surname a column as a character containing the patient surname; leave as NONAME if unavailable
+#' @param forename a column as a character containing the patient forename;
+#'   leave as NONAME if unavailable
+#' @param surname a column as a character containing the patient surname;
+#'   leave as NONAME if unavailable
+#' @param .forceCopy default FALSE; TRUE will force data.table to take a copy
+#'   instead of editing the data without reference
 #'
 #' @return A dataframe with two new variables: id a unique patient id, and n_in_id an integer variable with the number of rows in the id
 #'
@@ -75,15 +81,25 @@ uk_patient_id <- function(x,
                           hospital_number,
                           date_of_birth,
                           sex,
-                          forename="NONAME",
-                          surname="NONAME") {
+                          forename = "NONAME",
+                          surname = "NONAME",
+                          .forceCopy = FALSE) {
 
-  ## convert object if its not already
-  if(data.table::is.data.table(x)==FALSE) {
+  ## convert data.frame to data.table or take a copy
+  if(.forceCopy) {
+    x <- data.table::copy(x)
+  } else {
     data.table::setDT(x)
   }
 
   ## setup variables for entry into data.table
+  ## Needed to prevent RCMD Check fails
+  ## recommended by data.table
+  ## https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
+  id <-
+    tmp.valid.nhs <- tmp.valid.hos <- tmp.valid.dob <- tmp.valid.sex <-
+    tmp.valid.n1 <- tmp.valid.n2 <- tmp.valid.ym <-
+    NULL
 
   # apply other validity features
   # use SDcols version to ensure that the column name and argument name work if the same
@@ -91,17 +107,21 @@ uk_patient_id <- function(x,
   ## set id to column 1
   data.table::setcolorder(x,'id')
 
-  x[,tmp.valid.nhs := lapply(.SD,function(x) epidm::valid_nhs(x) == 1),
+  x[,tmp.valid.nhs := lapply(.SD,
+                             function(x) epidm::valid_nhs(x) == 1),
     .SDcols = nhs_number]
   x[,tmp.valid.dob := lapply(.SD,
                              function(x) !x %in% as.Date(c("1900-01-01", NA))),
     .SDcols = date_of_birth
     ]
   x[,tmp.valid.hos := lapply(.SD,
-                             function(x) !x %in% c("UNKNOWN", "NO PATIENT ID", NA)),
+                             function(x) !x %in% c("UNKNOWN",
+                                                   "NO PATIENT ID",
+                                                   NA)),
     .SDcols = hospital_number]
   x[,
-    tmp.valid.sex := lapply(.SD,function(x) grepl("^M|F",x,ignore.case=T)),
+    tmp.valid.sex := lapply(.SD,
+                            function(x) grepl("^M|F",x,ignore.case=T)),
     .SDcols = sex
     ]
   x[,

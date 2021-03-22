@@ -5,15 +5,16 @@
 #' Correcting for missing end dates on HES/SUS episodes
 #'
 #' @import data.table
-#' @importFrom data.table .I .N .GRP ':='
-#'
 #'
 #' @param x a data frame; will be converted to a data.table
-#' @param patient_group_vars a vector containing any variables to be used for record grouping, minimum is a patient identifier
+#' @param group_vars a vector containing any variables to be used for
+#'   record grouping, minimum is a patient identifier
 #' @param spell_start_date Inpatient provider spell or episode admission date
 #' @param spell_end_date Inpatient provider spell or episode discharge  date
 #' @param discharge_destination CDS discharge destination code
-#' @param drop.tmp a logical to drop all tmp values used, default to TRUE
+#' @param .dropTmp default TRUE; a logical to drop all tmp values used
+#' @param .forceCopy default FALSE; TRUE will force data.table to take a copy
+#'   instead of editing the data without reference
 #'
 #' @return a data.table with cleaned start and end dates, and an indicator proxy_missing where the value has changed
 #' @export
@@ -56,26 +57,37 @@
 #'
 #' proxy_episode_dates(
 #'   x=proxy_test,
-#'   patient_group_vars = c('id','provider'),
+#'   group_vars = c('id','provider'),
 #'   spell_start_date = 'spell_start',
 #'   spell_end_date = 'spell_end',
 #'   discharge_destination = 'disdest'
 #' )[]
 
 proxy_episode_dates <- function(x,
-                                patient_group_vars,
+                                group_vars,
                                 spell_start_date,
                                 spell_end_date,
                                 discharge_destination,
-                                drop.tmp = TRUE) {
+                                .dropTmp = TRUE,
+                                .forceCopy = FALSE) {
 
 
-  ## convert object if its not already
-  if(data.table::is.data.table(x)==FALSE) data.table::setDT(x)
+  ## convert data.frame to data.table or take a copy
+  if(.forceCopy) {
+    x <- data.table::copy(x)
+  } else {
+    data.table::setDT(x)
+  }
 
+  ## Needed to prevent RCMD Check fails
+  ## recommended by data.table
+  ## https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
+  proxy_missing <-
+    tmp.spell.N <- tmp.spell.n <- tmp.spell_start <- tmp.spell_end <-
+    NULL
 
   ## just arrange the data
-  data.table::setorderv(x,c(eval(patient_group_vars),spell_start_date))
+  data.table::setorderv(x,c(eval(group_vars),spell_start_date))
 
   ## counter columns to make life easier
   x[,
@@ -89,7 +101,7 @@ proxy_episode_dates <- function(x,
         get(spell_start_date),
         get(spell_end_date)
         ),
-    by = patient_group_vars
+    by = group_vars
   ]
 
     ## DATE CLEANUP ##############################################################
@@ -132,11 +144,11 @@ proxy_episode_dates <- function(x,
         tmp.spell_start
         )
     ),
-    by = patient_group_vars
+    by = group_vars
   ]
 
   ## cleanup and remove temp columns
-  if(drop.tmp==TRUE){
+  if(.dropTmp==TRUE){
     tmpcols <- grep("^tmp.",colnames(x),value=TRUE)
     x[,
       (tmpcols) := NULL

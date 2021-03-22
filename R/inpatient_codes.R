@@ -15,6 +15,8 @@
 #' @param field_strings a vector or string containing the regex for the the columns
 #' @param patient_id_vars a vector containing colnames used to identify a patient episode or spell
 #' @param type a string to denote if the codes are diagnostic or prcedural
+#' @param .forceCopy default FALSE; TRUE will force data.table to take a copy
+#'   instead of editing the data without reference
 #'
 #' @return a separate table with codes and id in long form
 #'
@@ -181,12 +183,20 @@
 inpatient_codes <- function(x,
                             field_strings,
                             patient_id_vars,
-                            type = c('icd9','icd10','opcs')) {
+                            type = c('icd9','icd10','opcs'),
+                            .forceCopy=FALSE) {
 
   ## convert object if its not already
-  if(data.table::is.data.table(x)==FALSE) {
+  if(.forceCopy) {
+    x <- data.table::copy(x)
+  } else {
     data.table::setDT(x)
   }
+
+  ## Needed to prevent RCMD Check fails
+  ## recommended by data.table
+  ## https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
+  order_n <- NULL
 
   ## capture the fields of interest
   ## icd just have the codes

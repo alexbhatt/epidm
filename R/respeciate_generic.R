@@ -3,6 +3,7 @@
 #'
 #' @description
 #' `r lifecycle::badge('stable')`
+#'
 #' Some samples within SGSS are submitted by laboratories as "GENUS SP" or
 #' "GENUS UNNAMED". However, they may also have a fully identified sample taken
 #' from the same site within a recent time period.  This function captures
@@ -46,10 +47,17 @@ respeciate_generic <- function(x,
                                window=c(0:Inf)
                                ) {
 
-  ## make sure the data.frame is data.table compatable
-  if(data.table::is.data.table(x)==FALSE) data.table::setDT(x)
+  ## convert data.frame to data.table or take a copy
+  if(.forceCopy) {
+    x <- data.table::copy(x)
+  } else {
+    data.table::setDT(x)
+  }
 
-  x <- data.table::copy(x)
+  ## Needed to prevent RCMD Check fails
+  ## recommended by data.table
+  ## https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
+  tmp.dayR <- tmp.spFlag <- tmp.respecType <- tmp.genus <- NULL
 
   ## NSE for group_vars
   group_vars <- substitute(group_vars)
