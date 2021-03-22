@@ -36,6 +36,7 @@ a data.table with cleaned start and end dates, and an indicator proxy_missing wh
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Correcting for missing end dates on HES/SUS episodes
 }
 \examples{

@@ -2,6 +2,8 @@
 #'
 #' @description
 #' `r lifecycle::badge('stable')`
+#'
+#'
 #' Groups patient records from multiple isolates with a single integer patientID
 #' by grouping patient identifiers.
 #'
@@ -96,10 +98,10 @@ uk_patient_id <- function(x,
   ## Needed to prevent RCMD Check fails
   ## recommended by data.table
   ## https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
-  id <-
-    tmp.valid.nhs <- tmp.valid.hos <- tmp.valid.dob <- tmp.valid.sex <-
-    tmp.valid.n1 <- tmp.valid.n2 <- tmp.valid.ym <-
-    NULL
+  # id <-
+  #   tmp.valid.nhs <- tmp.valid.hos <- tmp.valid.dob <- tmp.valid.sex <-
+  #   tmp.valid.n1 <- tmp.valid.n2 <- tmp.valid.ym <-
+  #   NULL
 
   # apply other validity features
   # use SDcols version to ensure that the column name and argument name work if the same

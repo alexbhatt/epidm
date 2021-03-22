@@ -20,17 +20,15 @@
 #' @param group_vars in a vector, the all columns used to group records, quoted
 #' @param date_start column containing the start dates for the grouping,
 #'   provided quoted
-#' @param time_intervals must use:
+#' @param intervals must use:
 #' \describe{
-#'   \item {date_end}{column containing the end dates for the interval, quoted}
-#'   }
+#'   \item{`date_end`}{column containing the end dates for the interval, quoted}
+#' }
 #' @param events must use:
-#' \itemize{
-#'   \item {window}{an integer representing a time window in days
-#'     which will be applied to the start date}
-#'   \item {window_type}{character, supplied only for event grouping,
-#'     to determine if a 'rolling' or 'static' grouping method should be used}
-#'   }
+#' \describe{
+#'   \item{`window`}{an integer representing a time window in days which will be applied to the start date}
+#'   \item{`window_type`}{character, supplied only for event grouping, to determine if a 'rolling' or 'static' grouping method should be used}
+#' }
 #' @param indx_varname a character string to set variable name for the
 #'   index column which provides a grouping key; default is indx
 #' @param min_varname a character string to set variable name for the
@@ -123,11 +121,11 @@ group_time <- function(x,
   ## Needed to prevent RCMD Check fails
   ## recommended by data.table
   ## https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
-  indx <-
-    tmp.dateNum <-
-    max_date <- min_date <-
-    tmp.episode <- tmp.windowEnd <- tmp.windowStart <- tmp.windowCmax <-
-    NULL
+  # indx <-
+  #   tmp.dateNum <-
+  #   max_date <- min_date <-
+  #   tmp.episode <- tmp.windowEnd <- tmp.windowStart <- tmp.windowCmax <-
+  #   NULL
 
   ## convert data.frame to data.table or take a copy
   if(.forceCopy) {

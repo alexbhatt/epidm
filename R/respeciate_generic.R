@@ -4,6 +4,7 @@
 #' @description
 #' `r lifecycle::badge('stable')`
 #'
+#'
 #' Some samples within SGSS are submitted by laboratories as "GENUS SP" or
 #' "GENUS UNNAMED". However, they may also have a fully identified sample taken
 #' from the same site within a recent time period.  This function captures
@@ -57,7 +58,7 @@ respeciate_generic <- function(x,
   ## Needed to prevent RCMD Check fails
   ## recommended by data.table
   ## https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
-  tmp.dayR <- tmp.spFlag <- tmp.respecType <- tmp.genus <- NULL
+  # tmp.dayR <- tmp.spFlag <- tmp.respecType <- tmp.genus <- NULL
 
   ## NSE for group_vars
   group_vars <- substitute(group_vars)

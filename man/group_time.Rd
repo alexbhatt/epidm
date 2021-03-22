@@ -37,17 +37,15 @@ period maximum}
 \item{.forceCopy}{default FALSE; TRUE will force data.table to take a copy
 instead of editing the data without reference}
 
-\item{time_intervals}{must use:
+\item{intervals}{must use:
 \describe{
-\item {date_end}{column containing the end dates for the interval, quoted}
+\item{\code{date_end}}{column containing the end dates for the interval, quoted}
 }}
 
 \item{events}{must use:
-\itemize{
-\item {window}{an integer representing a time window in days
-which will be applied to the start date}
-\item {window_type}{character, supplied only for event grouping,
-to determine if a 'rolling' or 'static' grouping method should be used}
+\describe{
+\item{\code{window}}{an integer representing a time window in days which will be applied to the start date}
+\item{\code{window_type}}{character, supplied only for event grouping, to determine if a 'rolling' or 'static' grouping method should be used}
 }}
 }
 \value{

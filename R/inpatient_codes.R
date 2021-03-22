@@ -2,6 +2,8 @@
 #'
 #' @description
 #' `r lifecycle::badge('experimental')`
+#'
+#'
 #' When HES/SUS ICD/OPCS codes are provided in wide format
 #'   you may want to clean them up into long for easier analysis.
 #'   This function helps by reshaping long as a seperate table.
@@ -196,7 +198,7 @@ inpatient_codes <- function(x,
   ## Needed to prevent RCMD Check fails
   ## recommended by data.table
   ## https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
-  order_n <- NULL
+  # order_n <- NULL
 
   ## capture the fields of interest
   ## icd just have the codes

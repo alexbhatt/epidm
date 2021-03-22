@@ -2,6 +2,8 @@
 #'
 #' @description
 #' `r lifecycle::badge('stable')`
+#'
+#'
 #' Correcting for missing end dates on HES/SUS episodes
 #'
 #' @import data.table
@@ -82,9 +84,9 @@ proxy_episode_dates <- function(x,
   ## Needed to prevent RCMD Check fails
   ## recommended by data.table
   ## https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
-  proxy_missing <-
-    tmp.spell.N <- tmp.spell.n <- tmp.spell_start <- tmp.spell_end <-
-    NULL
+  # proxy_missing <-
+  #   tmp.spell.N <- tmp.spell.n <- tmp.spell_start <- tmp.spell_end <-
+  #   NULL
 
   ## just arrange the data
   data.table::setorderv(x,c(eval(group_vars),spell_start_date))
