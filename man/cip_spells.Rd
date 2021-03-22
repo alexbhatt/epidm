@@ -123,7 +123,7 @@ cip_spells(x=cip_test,
   admission_source = 'adm_src',
   spell_end_date = 'spell_end',
   discharge_destination = 'dis_dest'
-)
+)[]
 }
 \seealso{
 http://content.digital.nhs.uk/media/11859/Provider-Spells-Methodology/pdf/Spells_Methodology.pdf
