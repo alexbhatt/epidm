@@ -106,7 +106,7 @@
 #'   admission_source = 'adm_src',
 #'   spell_end_date = 'spell_end',
 #'   discharge_destination = 'dis_dest'
-#' )
+#' )[]
 
 cip_spells <- function(x,
                        group_vars,
