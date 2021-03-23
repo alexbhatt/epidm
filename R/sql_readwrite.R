@@ -1,49 +1,3 @@
-#' Connect to a SQL database
-#'
-#' @description
-#' `r lifecycle::badge('experimental')`
-#'
-#'
-#' An internal function to help setup connections to SQL databases
-#'   acting as a wrapper for the odbc and DBI packages
-#'
-#' @param server a string containing the server connection
-#' @param database a string containing the database name within the data store
-#'
-#' @return a SQL connection object
-#' @keywords internal
-#'
-
-sql_connect <- function(server,
-                        database){
-
-  # get correct driver for ODBC connection
-  if('SQL Server' %in% unique(odbc::odbcListDrivers()$name)) {
-    # windows
-    SQLdriver <- 'SQL Server'
-  } else if('SQL Server' %in% unique(odbc::odbcListDrivers()$name)) {
-    # linux [Debian-flavours]
-    SQLdriver <- 'ODBC Driver 17 for SQL Server'
-  } else {
-    stop("SQL server drivers require installation")
-  }
-
-  conString <- paste0('driver={',SQLdriver,'};',
-                      'server=',server,';',
-                      'database=',database,';',
-                      'trusted_connection=true',
-                      'timeout=120')
-
-  # connect to the database
-  odbcConnect <- odbc::dbConnect(
-    odbc::odbc(),
-    .connection_string = conString
-  )
-
-  return(odbcConnect)
-}
-
-
 #' Read a table from a SQL database
 #'
 #' @description
@@ -52,6 +6,10 @@ sql_connect <- function(server,
 #'
 #' Read a table object to a SQL database. Acts a wrapper for odbc and DBI
 #'   packages.
+#'
+#' @importFrom DBI dbIsValid dbGetQuery dbDisconnect
+#' @importFrom odbc dbConnect odbc
+#' @importFrom epidm sql_clean
 #'
 #' @param server a string containing the server connection
 #' @param database a string containing the database name within the data store
@@ -94,6 +52,9 @@ sql_read <- function(server,
 #' Write a table object to a SQL database. Acts a wrapper for odbc and DBI
 #'   packages with additional checks to ensure upload completes.
 #'
+#' @importFrom DBI dbExistsTable dbGetQuery dbWriteTable
+#' @importFrom odbc dbConnect odbc
+#'
 #' @param x a data.frame/data.table/tibble object
 #' @param server a string containing the server connection
 #' @param database a string containing the database name within the data store
@@ -108,7 +69,7 @@ sql_write <- function(x,
                       tablename){
 
   ## connect to the database
-  odbcConnect <- sql_connect(server = server, database = database)
+  odbcConnect <- epidm::sql_connect(server = server, database = database)
 
   # does the table already exist
   if(DBI::dbExistsTable(odbcConnect,tablename)){
@@ -124,7 +85,7 @@ sql_write <- function(x,
       if(DBI::dbIsValid(odbcConnect)){
         print('connection established')
       } else{
-        odbcConnect <- sql_connect(server = server, database = database)
+        odbcConnect <- epidm::sql_connect(server = server, database = database)
       }
 
       ## upload check to ensure the full dataset is uploaded
@@ -137,25 +98,27 @@ sql_write <- function(x,
         upstart <- Sys.time()
         print(paste('Start data upload',upstart))
 
-        dbWriteTable(conn = odbcConnect,
-                     name = DBI::Id(schema = 'dbo',
-                                    table   = tablename),
-                     value = x,
-                     encoding = 'latin1',
-                     row.names = FALSE,
-                     overwrite = TRUE
+        DBI::dbWriteTable(conn = odbcConnect,
+                          name = DBI::Id(schema = 'dbo',
+                                         table   = tablename),
+                          value = x,
+                          encoding = 'latin1',
+                          row.names = FALSE,
+                          overwrite = TRUE
         )
 
+        ## perform the check after the upload for the while loop
         DBrows <- DBI::dbGetQuery(odbcConnect,check_SQL)[1,1]
 
       }
 
+      ## success!
       upend <- Sys.time()
       print(paste0(nrow(x),
                    ' records written to ',
-                   database,
-                   '.dbo.',tablename,' in ',
-                   round(difftime(upend,upstart,units = 'mins')),'min'))
+                   database,'.dbo.',tablename,' in ',
+                   round(difftime(upend,upstart,units = 'mins')),'min')
+            )
     }else{
       print('data empty')
     }
