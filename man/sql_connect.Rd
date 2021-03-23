@@ -12,7 +12,7 @@ sql_connect(server, database)
 \item{database}{a string containing the database name within the data store}
 }
 \value{
-
+a SQL connection object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

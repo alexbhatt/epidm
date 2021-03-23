@@ -10,7 +10,7 @@
 #' @param server a string containing the server connection
 #' @param database a string containing the database name within the data store
 #'
-#' @return
+#' @return a SQL connection object
 #' @keywords internal
 #'
 
@@ -57,7 +57,7 @@ sql_connect <- function(server,
 #' @param database a string containing the database name within the data store
 #' @param sql a string containing a SQL query or to a .sql/.txt SQL query
 #'
-#' @return
+#' @return a table from a SQL database
 #' @export
 #'
 sql_read <- function(server,
@@ -99,7 +99,7 @@ sql_read <- function(server,
 #' @param database a string containing the database name within the data store
 #' @param tablename a string containing the chosen SQL database table name
 #'
-#' @return
+#' @return writes a data.frame/data.table/tibble to a SQL database
 #' @export
 #'
 sql_write <- function(x,
@@ -107,46 +107,59 @@ sql_write <- function(x,
                       database,
                       tablename){
 
+  ## connect to the database
+  odbcConnect <- sql_connect(server = server, database = database)
 
+  # does the table already exist
+  if(DBI::dbExistsTable(odbcConnect,tablename)){
+    check_SQL <- paste0('SELECT COUNT(*) FROM ',
+                        database,
+                        '.dbo.',
+                        tablename)
+  }
 
-  check_SQL <- paste0('SELECT COUNT(*) FROM ',DLdatabase,'.dbo.HospitalOnset_COVID')
-
-  if(exists('x')){
+  # check the object exists
+  if(exists(quote(x))){
     if(nrow(x)>0){
-      if(DBI::dbIsValid(odbc_datalake)){
+      if(DBI::dbIsValid(odbcConnect)){
         print('connection established')
       } else{
-        source('./R/utilities.R')
+        odbcConnect <- sql_connect(server = server, database = database)
       }
 
       ## upload check to ensure the full dataset is uploaded
-      DBrows <- dbGetQuery(odbc_datalake,check_SQL)[1,1]
-      print(paste0(DBrows,'in DataLake currently'))
+      DBrows <- DBI::dbGetQuery(odbcConnect,check_SQL)[1,1]
+      print(paste(DBrows,'in',database,'currently'))
 
-      while(DBrows!=nrow(hcai)){
+      ## this will ensure that object matches the upload
+      while(DBrows!=nrow(x)){
 
         upstart <- Sys.time()
         print(paste('Start data upload',upstart))
 
-        dbWriteTable(conn = odbc_datalake,
-                     name = DBI::Id(schema  = 'dbo',
+        dbWriteTable(conn = odbcConnect,
+                     name = DBI::Id(schema = 'dbo',
                                     table   = tablename),
-                     value = hcai,
+                     value = x,
                      encoding = 'latin1',
                      row.names = FALSE,
-
-                     overwrite = TRUE,
+                     overwrite = TRUE
         )
 
-        DBrows <- dbGetQuery(odbc_datalake,check_SQL)[1,1]
+        DBrows <- DBI::dbGetQuery(odbcConnect,check_SQL)[1,1]
 
       }
 
-
       upend <- Sys.time()
-      print(paste0(nrow(hcai),' records written to ',
-                   DLdatabase,'.dbo.HospitalOnset_COVID in ',
+      print(paste0(nrow(x),
+                   ' records written to ',
+                   database,
+                   '.dbo.',tablename,' in ',
                    round(difftime(upend,upstart,units = 'mins')),'min'))
-    }else{print('data empty')}
-  }else{print('data does not exists')}
+    }else{
+      print('data empty')
+    }
+  }else{
+    print('data does not exists')
+  }
 }

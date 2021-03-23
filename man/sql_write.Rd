@@ -16,7 +16,7 @@ sql_write(x, server, database, tablename)
 \item{tablename}{a string containing the chosen SQL database table name}
 }
 \value{
-
+writes a data.frame/data.table/tibble to a SQL database
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

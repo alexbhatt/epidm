@@ -14,7 +14,7 @@ sql_read(server, database, sql)
 \item{sql}{a string containing a SQL query or to a .sql/.txt SQL query}
 }
 \value{
-
+a table from a SQL database
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
