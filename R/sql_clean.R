@@ -24,19 +24,22 @@
 #'
 #' @return a cleaned SQL query without comments as a character string
 #' @export
+#'
 
 
 sql_clean <- function(sql) {
 
+  ## a character string
   if(length(sql)==1){
+    ## thats a SQL query stored in a .sql or .txt file
     if(grepl(".(sql|txt)$",sql,ignore.case=TRUE)){
-      # read in
       x <- readr::read_lines(sql)
     } else {
+      ## or just a SQL query as text eg. 'SELECT * FROM TABLE'
       x <- sql
     }
   } else {
-    # read in
+    ## or a list/vector of character strings that need to be put together
     x <- readr::read_lines(sql)
   }
 
