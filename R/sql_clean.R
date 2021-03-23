@@ -27,8 +27,13 @@
 
 
 sql_clean <- function(sql) {
-  # read in
-  x <- readr::read_lines(sql)
+
+  if(length(sql)==1 & !grepl(".(sql|txt)$",sql,ignore.case=TRUE)){
+    x <- sql
+  } else {
+    # read in
+    x <- readr::read_lines(sql)
+  }
 
   # note these gsubs could be combined with the next line separated with |
   # remove comments
