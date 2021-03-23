@@ -14,7 +14,9 @@ Depends:
     R (>= 2.10)
 Imports: 
     data.table,
+    DBI,
     lifecycle,
+    odbc,
     phonics,
     purrr,
     readr,
