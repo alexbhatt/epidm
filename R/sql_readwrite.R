@@ -9,7 +9,6 @@
 #'
 #' @importFrom DBI dbIsValid dbGetQuery dbDisconnect
 #' @importFrom odbc dbConnect odbc
-#' @importFrom epidm sql_clean
 #'
 #' @param server a string containing the server connection
 #' @param database a string containing the database name within the data store
@@ -54,7 +53,7 @@ sql_read <- function(server,
 #' Write a table object to a SQL database. Acts a wrapper for odbc and DBI
 #'   packages with additional checks to ensure upload completes.
 #'
-#' @importFrom DBI dbExistsTable dbGetQuery dbWriteTable
+#' @importFrom DBI dbExistsTable dbGetQuery dbWriteTable dbDisconnect
 #' @importFrom odbc dbConnect odbc
 #'
 #' @param x a data.frame/data.table/tibble object
@@ -127,4 +126,7 @@ sql_write <- function(x,
   }else{
     print('data does not exists')
   }
+
+  # close the connection
+  DBI::dbDisconnect(odbcConnect)
 }

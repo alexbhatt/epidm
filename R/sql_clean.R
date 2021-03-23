@@ -7,10 +7,9 @@
 #' A utility function to read in a SQL query from a character object, clipboard
 #' or text file and remove all comments for use with database query packages
 #'
-#'
-#' @param sql a SQL file or text string
 #' @importFrom readr read_lines
 #'
+#' @param sql a SQL file or text string
 #'
 #' @examples
 #' testSQL <- c(
@@ -25,7 +24,6 @@
 #' @return a cleaned SQL query without comments as a character string
 #' @export
 #'
-
 
 sql_clean <- function(sql) {
 
@@ -64,4 +62,3 @@ sql_clean <- function(sql) {
 
   return(x)
 }
-
