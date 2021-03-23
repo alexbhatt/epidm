@@ -20,4 +20,7 @@ a SQL connection object
 An internal function to help setup connections to SQL databases
 acting as a wrapper for the odbc and DBI packages
 }
+\seealso{
+sql_clean sql_read sql_write
+}
 \keyword{internal}

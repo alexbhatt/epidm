@@ -22,3 +22,6 @@ a table from a SQL database
 Read a table object to a SQL database. Acts a wrapper for odbc and DBI
 packages.
 }
+\seealso{
+sql_clean sql_connect
+}

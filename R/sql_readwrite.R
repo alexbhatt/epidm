@@ -15,6 +15,8 @@
 #' @param database a string containing the database name within the data store
 #' @param sql a string containing a SQL query or to a .sql/.txt SQL query
 #'
+#' @seealso sql_clean sql_connect
+#'
 #' @return a table from a SQL database
 #' @export
 #'
@@ -22,7 +24,7 @@ sql_read <- function(server,
                      database,
                      sql){
 
-  odbcConnect <- sql_connect(server = server, database = database)
+  odbcConnect <- epidm::sql_connect(server = server, database = database)
 
   # test the connection is valid
   if(DBI::dbIsValid(odbcConnect)){
