@@ -28,8 +28,13 @@
 
 sql_clean <- function(sql) {
 
-  if(length(sql)==1 & !grepl(".(sql|txt)$",sql,ignore.case=TRUE)){
-    x <- sql
+  if(length(sql)==1){
+    if(grepl(".(sql|txt)$",sql,ignore.case=TRUE)){
+      # read in
+      x <- readr::read_lines(sql)
+    } else {
+      x <- sql
+    }
   } else {
     # read in
     x <- readr::read_lines(sql)
