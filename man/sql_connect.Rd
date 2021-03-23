@@ -7,7 +7,8 @@
 sql_connect(server, database)
 }
 \arguments{
-\item{server}{a string containing the server connection}
+\item{server}{a string containing the server connection;
+note that servers may require the use of double backslash \verb{\\\\}}
 
 \item{database}{a string containing the database name within the data store}
 }
@@ -17,10 +18,10 @@ a SQL connection object
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-An internal function to help setup connections to SQL databases
-acting as a wrapper for the odbc and DBI packages
+An function to help setup connections to SQL databases
+acting as a wrapper for the odbc and DBI packages. Used by other sql_*
+tools within epidm.
 }
 \seealso{
 sql_clean sql_read sql_write
 }
-\keyword{internal}

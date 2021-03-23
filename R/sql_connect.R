@@ -4,19 +4,22 @@
 #' `r lifecycle::badge('experimental')`
 #'
 #'
-#' An internal function to help setup connections to SQL databases
-#'   acting as a wrapper for the odbc and DBI packages
+#' An function to help setup connections to SQL databases
+#'   acting as a wrapper for the odbc and DBI packages. Used by other sql_*
+#'   tools within epidm.
 #'
 #' @importFrom odbc odbcListDrivers dbConnect odbc
 #' @importFrom DBI dbIsValid
 #'
-#' @param server a string containing the server connection
+#' @param server a string containing the server connection;
+#'   note that servers may require the use of double backslash `\\`
 #' @param database a string containing the database name within the data store
 #'
 #' @seealso sql_clean sql_read sql_write
 #'
 #' @return a SQL connection object
-#' @keywords internal
+#'
+#' @export
 #'
 
 sql_connect <- function(server,
