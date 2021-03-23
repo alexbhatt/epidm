@@ -25,6 +25,8 @@ sql_read <- function(server,
 
   odbcConnect <- epidm::sql_connect(server = server, database = database)
 
+  timeStart <- Sys.time()
+
   # test the connection is valid
   if(DBI::dbIsValid(odbcConnect)){
 
@@ -34,6 +36,10 @@ sql_read <- function(server,
     tableResult <- DBI::dbGetQuery(conn = odbcConnect,
                                    statement = sqlQuery)
   }
+
+  ## success!
+  print(paste0('Data imported in ',
+               round(difftime(Sys.time(),timeStart,units = 'mins')),'min'))
 
   return(tableResult)
 
@@ -72,16 +78,11 @@ sql_write <- function(x,
   ## connect to the database
   odbcConnect <- epidm::sql_connect(server = server, database = database)
 
-  # does the table already exist
-  if(DBI::dbExistsTable(odbcConnect,tablename)){
-    check_SQL <- paste0('SELECT COUNT(*) FROM ',
-                        database,
-                        '.dbo.',
-                        tablename)
-  }
+  # used to check if the table outputs upload
+  checkSQL <- paste0('SELECT COUNT(*) FROM ',database,'.dbo.',tablename)
 
   # check the object exists
-  if(exists(quote(x))){
+  if(exists('x')){
     if(nrow(x)>0){
       if(DBI::dbIsValid(odbcConnect)){
         print('connection established')
@@ -90,14 +91,22 @@ sql_write <- function(x,
       }
 
       ## upload check to ensure the full dataset is uploaded
-      DBrows <- DBI::dbGetQuery(odbcConnect,check_SQL)[1,1]
-      print(paste(DBrows,'in',database,'currently'))
+      if(DBI::dbExistsTable(odbcConnect,tablename)){
+        DBrows <- DBI::dbGetQuery(odbcConnect,checkSQL)[1,1]
+        print(paste0(DBrows,' records in [',
+                     database,'].[dbo].[',tablename,'] currently'))
+      } else {
+        DBrows <- 0
+        print(paste0('[',database,'].[dbo].[',tablename,
+                     '] does not exist; creating table.'))
+      }
+
+      timeStart <- Sys.time()
 
       ## this will ensure that object matches the upload
       while(DBrows!=nrow(x)){
 
-        upstart <- Sys.time()
-        print(paste('Start data upload',upstart))
+        print(paste('Start data upload',timeStart))
 
         DBI::dbWriteTable(conn = odbcConnect,
                           name = DBI::Id(schema = 'dbo',
@@ -109,16 +118,15 @@ sql_write <- function(x,
         )
 
         ## perform the check after the upload for the while loop
-        DBrows <- DBI::dbGetQuery(odbcConnect,check_SQL)[1,1]
+        DBrows <- DBI::dbGetQuery(odbcConnect,checkSQL)[1,1]
 
       }
 
       ## success!
-      upend <- Sys.time()
       print(paste0(nrow(x),
-                   ' records written to ',
-                   database,'.dbo.',tablename,' in ',
-                   round(difftime(upend,upstart,units = 'mins')),'min')
+                   ' records written to [',
+                   database,'].[dbo].[',tablename,'] in ',
+                   round(difftime(Sys.time(),timeStart,units = 'mins')),'min')
             )
     }else{
       print('data empty')
