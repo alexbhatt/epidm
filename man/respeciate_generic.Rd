@@ -16,16 +16,22 @@ respeciate_generic(
 \arguments{
 \item{x}{a data.frame or data.table object}
 
-\item{group_vars}{the minimum grouping set of variables for like samples in a character vector; suggest c('patient_id','specimen_type','genus')}
+\item{group_vars}{the minimum grouping set of variables for like samples in
+a character vector; suggest c('patient_id','specimen_type','genus')}
 
-\item{species}{a character containing the column with the organism species name}
+\item{species}{a character containing the column with the organism species
+name}
 
 \item{date}{a character containing the column with the specimen/sample date}
 
-\item{window}{an integer representing the number of days for which you will allow a sample to be respeciated}
+\item{window}{an integer representing the number of days for which you will
+allow a sample to be respeciated}
+
+\item{.forceCopy}{default FALSE; TRUE will force data.table to take a copy
+instead of editing the data without reference}
 }
 \value{
-a data.table with a recharacterised specimen column
+a data.table with a recharacterised \code{species} column
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

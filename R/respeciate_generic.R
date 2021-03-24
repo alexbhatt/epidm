@@ -13,14 +13,18 @@
 #' @import data.table
 #' @importFrom stringr str_detect
 #'
-#'
 #' @param x a data.frame or data.table object
-#' @param group_vars the minimum grouping set of variables for like samples in a character vector; suggest c('patient_id','specimen_type','genus')
-#' @param species a character containing the column with the organism species name
+#' @param group_vars the minimum grouping set of variables for like samples in
+#'   a character vector; suggest c('patient_id','specimen_type','genus')
+#' @param species a character containing the column with the organism species
+#'   name
 #' @param date a character containing the column with the specimen/sample date
-#' @param window an integer representing the number of days for which you will allow a sample to be respeciated
+#' @param window an integer representing the number of days for which you will
+#'   allow a sample to be respeciated
+#' @param .forceCopy default FALSE; TRUE will force data.table to take a copy
+#'   instead of editing the data without reference
 #'
-#' @return a data.table with a recharacterised specimen column
+#' @return a data.table with a recharacterised `species` column
 #'
 #' @examples
 #' df <- data.frame(
