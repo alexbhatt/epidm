@@ -22,7 +22,7 @@ processing of epidemiological data in the UK. Key data assets this focuses on in
 
 ### Infection data
 
-The [Second Generation Surveillance System (SGSS)](https://sgss.phe.org.uk/) is a data asset held by the National Institute of Public Health (formerly Public Health England) which routinely and automatically collects laboratory data from across England.
+The [Second Generation Surveillance System (SGSS)](https://sgss.phe.org.uk/) is a data asset held by the [UK Health Security Agency](https://www.gov.uk/government/publications/securing-our-health-the-uk-health-security-agency/securing-our-health-the-uk-health-security-agency) (formerly Public Health England) which routinely and automatically collects laboratory data from across England.
 
 Laboratories return data on organisms isolated from samples such as the organism species, specimen type, sampling date and antimicrobial susceptibility testing results. These data are routinely used for public health surveillance and epidemiology in England. 
 

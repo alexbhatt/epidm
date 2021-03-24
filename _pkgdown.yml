@@ -24,3 +24,10 @@ reference:
   - group_time
   - respeciate_generic
   - inpatient_codes
+- title: "Lookup tables"
+  desc: >
+    Lookup tables used to reclassify, regroup, or translate data
+- contents:
+  - genus_gram_stain
+  - respeciate_organism
+  - specimen_type_grouping
