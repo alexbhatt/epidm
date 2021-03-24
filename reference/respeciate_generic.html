@@ -141,11 +141,13 @@ species  from another sample within X-days of an unspeciated isolate.</p>
     </tr>
     <tr>
       <th>group_vars</th>
-      <td><p>the minimum grouping set of variables for like samples in a character vector; suggest c('patient_id','specimen_type','genus')</p></td>
+      <td><p>the minimum grouping set of variables for like samples in
+a character vector; suggest c('patient_id','specimen_type','genus')</p></td>
     </tr>
     <tr>
       <th>species</th>
-      <td><p>a character containing the column with the organism species name</p></td>
+      <td><p>a character containing the column with the organism species
+name</p></td>
     </tr>
     <tr>
       <th>date</th>
@@ -153,13 +155,19 @@ species  from another sample within X-days of an unspeciated isolate.</p>
     </tr>
     <tr>
       <th>window</th>
-      <td><p>an integer representing the number of days for which you will allow a sample to be respeciated</p></td>
+      <td><p>an integer representing the number of days for which you will
+allow a sample to be respeciated</p></td>
+    </tr>
+    <tr>
+      <th>.forceCopy</th>
+      <td><p>default FALSE; TRUE will force data.table to take a copy
+instead of editing the data without reference</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a data.table with a recharacterised specimen column</p>
+    <p>a data.table with a recharacterised <code>species</code> column</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
