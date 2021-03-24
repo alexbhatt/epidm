@@ -6,14 +6,14 @@
 
 The goal of `epidm` is provide standard methods for the management and transformation of UK Public Health data.
 
+[The full function guide can be found here](https://alexbhatt.github.io/epidm/)
+
 ## Installation
 
 Currently this is only available via [GitHub](https://github.com/alexbhatt/epidm)
 
 ``` r
-
 devtools::install_github("alexbhatt/epidm")
-
 ```
 ## Purpose
 
