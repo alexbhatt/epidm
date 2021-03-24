@@ -44,7 +44,7 @@
 Some samples within SGSS are submitted by laboratories as &quot;GENUS SP&quot; or
 &quot;GENUS UNNAMED&quot;. However, they may also have a fully identified sample taken
 from the same site within a recent time period.  This function captures
-species  from another sample within X-days of an unspeciated isolate." />
+species_col  from another sample within X-days of an unspeciated isolate." />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="@alexbhatt" />
 <meta name="twitter:site" content="@alexbhatt" />
@@ -79,7 +79,7 @@ species  from another sample within X-days of an unspeciated isolate." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">epidm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.0011</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.0012</span>
       </span>
     </div>
 
@@ -120,14 +120,14 @@ species  from another sample within X-days of an unspeciated isolate." />
 <p>Some samples within SGSS are submitted by laboratories as "GENUS SP" or
 "GENUS UNNAMED". However, they may also have a fully identified sample taken
 from the same site within a recent time period.  This function captures
-species  from another sample within X-days of an unspeciated isolate.</p>
+species_col  from another sample within X-days of an unspeciated isolate.</p>
     </div>
 
     <pre class="usage"><span class='fu'>respeciate_generic</span><span class='op'>(</span>
   <span class='va'>x</span>,
   <span class='va'>group_vars</span>,
-  <span class='va'>species</span>,
-  <span class='va'>date</span>,
+  <span class='va'>species_col</span>,
+  <span class='va'>date_col</span>,
   window <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>:</span><span class='cn'>Inf</span><span class='op'>)</span>,
   .forceCopy <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
@@ -145,13 +145,13 @@ species  from another sample within X-days of an unspeciated isolate.</p>
 a character vector; suggest c('patient_id','specimen_type','genus')</p></td>
     </tr>
     <tr>
-      <th>species</th>
-      <td><p>a character containing the column with the organism species
+      <th>species_col</th>
+      <td><p>a character containing the column with the organism species_col
 name</p></td>
     </tr>
     <tr>
-      <th>date</th>
-      <td><p>a character containing the column with the specimen/sample date</p></td>
+      <th>date_col</th>
+      <td><p>a character containing the column with the specimen/sample date_col</p></td>
     </tr>
     <tr>
       <th>window</th>
@@ -167,7 +167,7 @@ instead of editing the data without reference</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a data.table with a recharacterised <code>species</code> column</p>
+    <p>a data.table with a recharacterised <code>species_col</code> column</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
@@ -178,15 +178,15 @@ spec <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/
                 <span class='st'>"KLEBEIELLA OXYTOCA"</span><span class='op'>)</span>,
               <span class='fl'>25</span>,replace <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span>,
 type <span class='op'>=</span> <span class='st'>"BLOOD"</span>,
-date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/seq.Date.html'>seq.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>-</span><span class='fl'>21</span>,<span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span><span class='op'>(</span><span class='op'>)</span>,<span class='st'>"day"</span><span class='op'>)</span>,<span class='fl'>25</span>,replace <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span>
+specdate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'>seq.date_col</span><span class='op'>(</span><span class='fu'>Sys.date_col</span><span class='op'>(</span><span class='op'>)</span><span class='op'>-</span><span class='fl'>21</span>,<span class='fu'>Sys.date_col</span><span class='op'>(</span><span class='op'>)</span>,<span class='st'>"day"</span><span class='op'>)</span>,<span class='fl'>25</span>,replace <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span>
 <span class='op'>)</span>
-
+</div><div class='output co'>#&gt; <span class='error'>Error in seq.date_col(Sys.date_col() - 21, Sys.date_col(), "day"): could not find function "seq.date_col"</span></div><div class='input'>
 <span class='fu'>respeciate_generic</span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>df</span>,
                    group_vars<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'ptid'</span>,<span class='st'>'type'</span><span class='op'>)</span>,
-                   species<span class='op'>=</span><span class='st'>'spec'</span>,
-                   date<span class='op'>=</span><span class='st'>'date'</span>,
+                   species_col<span class='op'>=</span><span class='st'>'spec'</span>,
+                   date_col<span class='op'>=</span><span class='st'>'specdate'</span>,
                    window <span class='op'>=</span> <span class='fl'>14</span><span class='op'>)</span><span class='op'>[</span><span class='op'>]</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in get(date): invalid first argument</span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='error'>Error in data.table::setDT(x): Argument 'x' to 'setDT' should be a 'list', 'data.frame' or 'data.table'</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
