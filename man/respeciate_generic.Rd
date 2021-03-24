@@ -4,7 +4,14 @@
 \alias{respeciate_generic}
 \title{Respeciate unspecified samples}
 \usage{
-respeciate_generic(x, group_vars, species, date, window = c(0:Inf))
+respeciate_generic(
+  x,
+  group_vars,
+  species,
+  date,
+  window = c(0:Inf),
+  .forceCopy = FALSE
+)
 }
 \arguments{
 \item{x}{a data.frame or data.table object}
@@ -45,4 +52,5 @@ respeciate_generic(x=df,
                    species='spec',
                    date='date',
                    window = 14)[]
+
 }

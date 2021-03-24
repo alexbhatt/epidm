@@ -21,7 +21,6 @@
 #' @param window an integer representing the number of days for which you will allow a sample to be respeciated
 #'
 #' @return a data.table with a recharacterised specimen column
-#' @export
 #'
 #' @examples
 #' df <- data.frame(
@@ -40,12 +39,16 @@
 #'                    species='spec',
 #'                    date='date',
 #'                    window = 14)[]
+#'
+#' @export
+#'
 
 respeciate_generic <- function(x,
                                group_vars,
                                species,
                                date,
-                               window=c(0:Inf)
+                               window=c(0:Inf),
+                               .forceCopy = FALSE
                                ) {
 
   ## convert data.frame to data.table or take a copy
