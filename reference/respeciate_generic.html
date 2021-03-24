@@ -123,7 +123,14 @@ from the same site within a recent time period.  This function captures
 species  from another sample within X-days of an unspeciated isolate.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>respeciate_generic</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>group_vars</span>, <span class='va'>species</span>, <span class='va'>date</span>, window <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>:</span><span class='cn'>Inf</span><span class='op'>)</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>respeciate_generic</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>group_vars</span>,
+  <span class='va'>species</span>,
+  <span class='va'>date</span>,
+  window <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>:</span><span class='cn'>Inf</span><span class='op'>)</span>,
+  .forceCopy <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,7 +178,8 @@ date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/
                    species<span class='op'>=</span><span class='st'>'spec'</span>,
                    date<span class='op'>=</span><span class='st'>'date'</span>,
                    window <span class='op'>=</span> <span class='fl'>14</span><span class='op'>)</span><span class='op'>[</span><span class='op'>]</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in respeciate_generic(x = df, group_vars = c("ptid", "type"), species = "spec",     date = "date", window = 14): object '.forceCopy' not found</span></div></pre>
+</div><div class='output co'>#&gt; <span class='error'>Error in get(date): invalid first argument</span></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
