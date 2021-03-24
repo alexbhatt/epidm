@@ -1,36 +1,42 @@
 
-# Epidemiological Data Management (EPIDM)
+# Epidemiological Data Management (epidm)
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of EPIDM is provide standard methods for the management and transformation of UK Public Health data.
+The goal of `epidm` is provide standard methods for the management and transformation of UK Public Health data.
 
 ## Installation
 
-Currently this is only avaiable via [GitHub](https://github.com/alexbhatt/epidm)
+Currently this is only available via [GitHub](https://github.com/alexbhatt/epidm)
 
 ``` r
 
 devtools::install_github("alexbhatt/epidm")
 
 ```
+## Purpose
 
-## Functions 
+The `epidm` package has been developed to share standard methods for the 
+processing of epidemiological data in the UK. Key data assets this focuses on include
 
-### Utilities 
+### Infection data
 
- + __clean_sql__: import a SQL query, and remove out any comments, including multi line ones
- + __csv_from_zip__: pointing to a zip file from the web, extract a csv or xlsx; NHS/ODS files are often available in this format, user choice of reader after extraction
- + __lookup_recode__: a fast method of using two column lookups to recode data
- + __valid_nhs__: the UK NHS checksum algorithm to validate an NHS number
- 
-### Data management
+The [Second Generation Surveillance System (SGSS)](https://sgss.phe.org.uk/) is a data asset held by the National Institute of Public Health (formerly Public Health England) which routinely and automatically collects laboratory data from across England.
 
- + __uk_patient_id__: a multistage deterministic algorithm for grouping patient records using common UK patient identifiers
- + __continuous_inpatient_spells__: grouping of episodes/spells from HES/SUS following the NHSD methodology
- + __group_time__: grouping of time events where they overlap; applies to both rolling infection windows (eg. all samples within 14-days of the last) or overlapping time intervals (eg. HES/SUS mega spells)
- + __proxy_episode_dates__: cleanup of dates for inpatient spells when they are missing or not yet discharged
- + __inpatient_codes__: cleanup for inpatient ICD9/10 or OPCS codes for analysis
- + __infection_episode__: grouping of single point time events where they overlap given a window (in days) using either a static or rolling window; primarily used for infection episodes to deduplicate multiple positive tests
- + __respeciate_generic__: allows for the respeciation of unspecified isolates within a time window
+Laboratories return data on organisms isolated from samples such as the organism species, specimen type, sampling date and antimicrobial susceptibility testing results. These data are routinely used for public health surveillance and epidemiology in England. 
+
+### Hospital data
+
+The functions for dealing with hospital data within `epidm` are designed to help clean, process, and link the hospital in a meaningful way. These methods have been used to help understand [Healthcare Associated COVID-19 in England](https://www.medrxiv.org/content/10.1101/2021.02.16.21251625v1).
+
+#### [Emergency Care Data Set (ECDS)](https://digital.nhs.uk/data-and-information/data-collections-and-data-sets/data-sets/emergency-care-data-set-ecds)
+ECDS is the national data set for urgent and emergency care and is reported daily by NHS Trusts.
+
+#### [Secondary Use Services (SUS)](https://digital.nhs.uk/services/secondary-uses-service-sus)
+SUS is the single, comprehensive repository for healthcare data in England which enables a range of reporting and analyses to support the NHS in the delivery of healthcare services.
+SUS is reported monthly, by the 21st of each month for the previous months data.
+
+#### [Hospital Episode Statistics (HES)](https://digital.nhs.uk/data-and-information/data-tools-and-services/data-services/hospital-episode-statistics)
+HES is a data warehouse containing details of all admissions, outpatient appointments and A and E attendances at NHS hospitals in England.
+Hes is reported quarterly, and is a 'cleaned' version of SUS and ECDS.
