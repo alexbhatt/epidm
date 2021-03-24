@@ -8,7 +8,7 @@
 #' Some samples within SGSS are submitted by laboratories as "GENUS SP" or
 #' "GENUS UNNAMED". However, they may also have a fully identified sample taken
 #' from the same site within a recent time period.  This function captures
-#' species  from another sample within X-days of an unspeciated isolate.
+#' species_col  from another sample within X-days of an unspeciated isolate.
 #'
 #' @import data.table
 #' @importFrom stringr str_detect
@@ -16,15 +16,15 @@
 #' @param x a data.frame or data.table object
 #' @param group_vars the minimum grouping set of variables for like samples in
 #'   a character vector; suggest c('patient_id','specimen_type','genus')
-#' @param species a character containing the column with the organism species
+#' @param species_col a character containing the column with the organism species_col
 #'   name
-#' @param date a character containing the column with the specimen/sample date
+#' @param date_col a character containing the column with the specimen/sample date_col
 #' @param window an integer representing the number of days for which you will
 #'   allow a sample to be respeciated
 #' @param .forceCopy default FALSE; TRUE will force data.table to take a copy
 #'   instead of editing the data without reference
 #'
-#' @return a data.table with a recharacterised `species` column
+#' @return a data.table with a recharacterised `species_col` column
 #'
 #' @examples
 #' df <- data.frame(
@@ -35,13 +35,13 @@
 #'                 "KLEBEIELLA OXYTOCA"),
 #'               25,replace = T),
 #' type = "BLOOD",
-#' date = sample(seq.Date(Sys.Date()-21,Sys.Date(),"day"),25,replace = T)
+#' specdate = sample(seq.date_col(Sys.date_col()-21,Sys.date_col(),"day"),25,replace = T)
 #' )
 #'
 #' respeciate_generic(x=df,
 #'                    group_vars=c('ptid','type'),
-#'                    species='spec',
-#'                    date='date',
+#'                    species_col='spec',
+#'                    date_col='specdate',
 #'                    window = 14)[]
 #'
 #' @export
@@ -49,8 +49,8 @@
 
 respeciate_generic <- function(x,
                                group_vars,
-                               species,
-                               date,
+                               species_col,
+                               date_col,
                                window=c(0:Inf),
                                .forceCopy = FALSE
                                ) {
@@ -76,9 +76,9 @@ respeciate_generic <- function(x,
       'tmp.genus',
       'tmp.spFlag'
       ) := .(
-        gsub("([A-Za-z]+).*", "\\1", get(species)),
+        gsub("([A-Za-z]+).*", "\\1", get(species_col)),
         data.table::fifelse(
-          stringr::str_detect(get(species), " SP$|UNNAMED$|SPECIES$"),
+          stringr::str_detect(get(species_col), " SP$|UNNAMED$|species_col$"),
           1,
           0)
       )
@@ -86,7 +86,7 @@ respeciate_generic <- function(x,
 
 
   ## set a static key and order for the table
-  data.table::setorderv(x, c(eval(group_vars),date))
+  data.table::setorderv(x, c(eval(group_vars),date_col))
 
 
   ## loop counters
@@ -104,13 +104,13 @@ respeciate_generic <- function(x,
         'tmp.spFlag'
       ) := .(
         as.numeric(difftime(
-          get(date),
-          data.table::shift(get(date),type="lag"),
+          get(date_col),
+          data.table::shift(get(date_col),type="lag"),
           units="days")
           ),
         data.table::fifelse(
-          stringr::str_detect(get(species),
-                              " SP$|UNNAMED$|SPECIES$"),
+          stringr::str_detect(get(species_col),
+                              " SP$|UNNAMED$|species_col$"),
           1,0)
 
       ),
@@ -131,12 +131,12 @@ respeciate_generic <- function(x,
 
     ## okay; recode the organism based on the flags
     x[,
-      c(species) := .(
+      c(species_col) := .(
         data.table::fcase(
-          tmp.spFlag==0,  get(species),
-          tmp.spFlag==1 & tmp.respecType==1, data.table::shift(get(species),type="lag"),
-          tmp.spFlag==1 & tmp.respecType==2, data.table::shift(get(species),type="lead"),
-          default = get(species)[1]
+          tmp.spFlag==0,  get(species_col),
+          tmp.spFlag==1 & tmp.respecType==1, data.table::shift(get(species_col),type="lag"),
+          tmp.spFlag==1 & tmp.respecType==2, data.table::shift(get(species_col),type="lead"),
+          default = get(species_col)[1]
         )
       )
     ]

@@ -7,8 +7,8 @@
 respeciate_generic(
   x,
   group_vars,
-  species,
-  date,
+  species_col,
+  date_col,
   window = c(0:Inf),
   .forceCopy = FALSE
 )
@@ -19,10 +19,10 @@ respeciate_generic(
 \item{group_vars}{the minimum grouping set of variables for like samples in
 a character vector; suggest c('patient_id','specimen_type','genus')}
 
-\item{species}{a character containing the column with the organism species
+\item{species_col}{a character containing the column with the organism species_col
 name}
 
-\item{date}{a character containing the column with the specimen/sample date}
+\item{date_col}{a character containing the column with the specimen/sample date_col}
 
 \item{window}{an integer representing the number of days for which you will
 allow a sample to be respeciated}
@@ -31,7 +31,7 @@ allow a sample to be respeciated}
 instead of editing the data without reference}
 }
 \value{
-a data.table with a recharacterised \code{species} column
+a data.table with a recharacterised \code{species_col} column
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
@@ -39,7 +39,7 @@ a data.table with a recharacterised \code{species} column
 Some samples within SGSS are submitted by laboratories as "GENUS SP" or
 "GENUS UNNAMED". However, they may also have a fully identified sample taken
 from the same site within a recent time period.  This function captures
-species  from another sample within X-days of an unspeciated isolate.
+species_col  from another sample within X-days of an unspeciated isolate.
 }
 \examples{
 df <- data.frame(
@@ -50,13 +50,13 @@ spec = sample(c("KLEBSIELLA SP",
                 "KLEBEIELLA OXYTOCA"),
               25,replace = T),
 type = "BLOOD",
-date = sample(seq.Date(Sys.Date()-21,Sys.Date(),"day"),25,replace = T)
+specdate = sample(seq.date_col(Sys.date_col()-21,Sys.date_col(),"day"),25,replace = T)
 )
 
 respeciate_generic(x=df,
                    group_vars=c('ptid','type'),
-                   species='spec',
-                   date='date',
+                   species_col='spec',
+                   date_col='specdate',
                    window = 14)[]
 
 }
