@@ -47,8 +47,7 @@
 #'     3367170666,5185293519,5185293519,5185293519,8082318562,NA,NA,NA
 #'   ),
 #'   hosp_n = c(
-#'     '13','13','13','UNKNOWN','13','13','13','31','31','96','96',NA,'96',
-#'   ),
+#'     '13','13','13','UNKNOWN','13','13','13','31','31','96','96',NA,'96'),
 #'   sex = c('M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'F', 'U', 'U', 'F'),
 #'   dateofbirth = as.Date(
 #'     c(
@@ -66,14 +65,14 @@
 #'     'Mouse','Mouse','Frog','FROG','Frug','Frog'
 #'   )
 #' )
-#' id_test <- uk_patient_id(x = id_test,
-#'                    nhs_number = 'nhs_n',
-#'                    hospital_number = 'hosp_n',
-#'                    forename = 'firstname',
-#'                    surname = 'lastname',
-#'                    sex = 'sex',
-#'                    date_of_birth = 'dateofbirth')
-#' print(id_test)
+#' uk_patient_id(x = id_test,
+#'               nhs_number = 'nhs_n',
+#'               hospital_number = 'hosp_n',
+#'               forename = 'firstname',
+#'               surname = 'lastname',
+#'               sex = 'sex',
+#'               date_of_birth = 'dateofbirth')[]
+#'
 #'
 #' @export
 
