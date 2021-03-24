@@ -20,7 +20,6 @@
 #'
 #'
 #' @import data.table
-#' @importFrom data.table .N ':='
 #' @importFrom phonics soundex
 #' @importFrom stringr word
 #' @importFrom stringi stri_trans_general stri_trans_toupper

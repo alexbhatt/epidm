@@ -1,0 +1,26 @@
+home:
+  title: Epidmiological Data Management [epidm]
+  description: Tools for handling, managing and transforming UK public health data for epidemiogical analysis
+template:
+  opengraph:
+    twitter:
+      creator: "@alexbhatt"
+reference:
+- title: "Utility Functions"
+  desc: >
+    Functions for reading or writing data from various sources
+- contents:
+  - starts_with("sql_")
+  - csv_from_zip
+  - lookup_recode
+- title: "Data Management Functions"
+  desc: >
+    Functions for handling, cleaning and processing public health data
+- contents:
+  - valid_nhs
+  - uk_patient_id
+  - proxy_episode_dates
+  - cip_spells
+  - group_time
+  - respeciate_generic
+  - inpatient_codes

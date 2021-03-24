@@ -1,6 +1,6 @@
 Package: epidm
 Title: UK Epidemiological Data Management
-Version: 0.0.1.0010
+Version: 0.0.1.0011
 Authors@R: 
     person(given = "Alex",
            family = "Bhattacharya",
@@ -21,6 +21,7 @@ Imports:
     purrr,
     readr,
     stringi,
+    tibble,
     stringr,
     utils
 Encoding: UTF-8
