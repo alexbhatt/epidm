@@ -49,8 +49,13 @@ instead of editing the data without reference}
 }}
 }
 \value{
-a data.table with 3 new variables: indx, a grouping flag;
-and new start and end dates
+the original data.frame as a data.table
+with the following new fields:
+\describe{
+\item{\code{indx}; renamed using \code{indx_varname}}{an id field for the new aggregated events/intervals}
+\item{\code{min_date}; renamed using \code{min_varname}}{the start date for the aggregated events/intervals}
+\item{\code{max_date}; renamed using \code{max_varname}}{the end date for the aggregated events/intervals}
+}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

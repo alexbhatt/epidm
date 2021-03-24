@@ -2,7 +2,7 @@
 % Please edit documentation in R/continuous_inpatient_spells.R
 \name{cip_spells}
 \alias{cip_spells}
-\title{Continuous Inpatient Spells}
+\title{Continuous Inpatient (CIP) Spells}
 \usage{
 cip_spells(
   x,
@@ -38,13 +38,23 @@ record grouping, minimum is a patient identifier}
 instead of editing the data without reference}
 }
 \value{
-a data.table with cleaned start and end dates, a cip_indx
-and new cip window dates
+the original data.frame as a data.table
+with the following new fields:
+\describe{
+\item{\code{cip_indx}}{an id field for the CIP spell}
+\item{\code{cip_spell_start}}{the start date for the CIP spell}
+\item{\code{cip_spell_end}}{the end date for the CIP spell}
+}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
-A continuous inpatient (CIP) spell is a continuous period of care within the NHS, regardless of any transfers which may take place. It can therefore be made up of one or more provider spells. A CIP spell starts when a decision has been made to admit the patient, and a consultant has taken responsibility for their care. The spell ends when the patient dies or is discharged from hospital
+A continuous inpatient (CIP) spell is a continuous period of care
+within the NHS, which does allow specific types of transfers
+to take place. It can therefore be made up of one or more provider
+spells. A CIP spell starts when a decision has been made to admit
+the patient, and a consultant has taken responsibility for their care.
+The spell ends when the patient dies or is discharged from hospital.
 }
 \examples{
 
@@ -124,7 +134,8 @@ cip_spells(x=cip_test,
   spell_end_date = 'spell_end',
   discharge_destination = 'dis_dest'
 )[]
+
 }
 \seealso{
-http://content.digital.nhs.uk/media/11859/Provider-Spells-Methodology/pdf/Spells_Methodology.pdf
+\href{http://content.digital.nhs.uk/media/11859/Provider-Spells-Methodology/pdf/Spells_Methodology.pdf}{NHSD CIP Spell Methodology}
 }

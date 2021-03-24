@@ -1,17 +1,20 @@
 
-#' Continuous Inpatient Spells
+#' Continuous Inpatient (CIP) Spells
 #'
 #' @description
 #' `r lifecycle::badge('stable')`
 #'
 #'
-#' A continuous inpatient (CIP) spell is a continuous period of care within the NHS, regardless of any transfers which may take place. It can therefore be made up of one or more provider spells. A CIP spell starts when a decision has been made to admit the patient, and a consultant has taken responsibility for their care. The spell ends when the patient dies or is discharged from hospital
+#' A continuous inpatient (CIP) spell is a continuous period of care
+#'   within the NHS, which does allow specific types of transfers
+#'   to take place. It can therefore be made up of one or more provider
+#'   spells. A CIP spell starts when a decision has been made to admit
+#'   the patient, and a consultant has taken responsibility for their care.
+#'   The spell ends when the patient dies or is discharged from hospital.
 #'
-#' @seealso http://content.digital.nhs.uk/media/11859/Provider-Spells-Methodology/pdf/Spells_Methodology.pdf
+#' @seealso \href{http://content.digital.nhs.uk/media/11859/Provider-Spells-Methodology/pdf/Spells_Methodology.pdf}{NHSD CIP Spell Methodology}
 #'
 #' @import data.table
-#' @importFrom data.table .I .N .GRP ':='
-#'
 #'
 #' @param x a data frame; will be converted to a data.table
 #' @param group_vars a vector containing any variables to be used for
@@ -25,9 +28,13 @@
 #' @param .forceCopy default FALSE; TRUE will force data.table to take a copy
 #'   instead of editing the data without reference
 #'
-#' @return a data.table with cleaned start and end dates, a cip_indx
-#'   and new cip window dates
-#' @export
+#' @return the original data.frame as a data.table
+#'   with the following new fields:
+#' \describe{
+#'   \item{`cip_indx`}{an id field for the CIP spell}
+#'   \item{`cip_spell_start`}{the start date for the CIP spell}
+#'   \item{`cip_spell_end`}{the end date for the CIP spell}
+#'   }
 #'
 #' @examples
 #'
@@ -107,6 +114,9 @@
 #'   spell_end_date = 'spell_end',
 #'   discharge_destination = 'dis_dest'
 #' )[]
+#'
+#' @export
+#'
 
 cip_spells <- function(x,
                        group_vars,

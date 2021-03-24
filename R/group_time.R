@@ -9,12 +9,7 @@
 #'  overlapping time intervals, with defined start and end dates,
 #'  or events within a static/fixed or rolling window of time.
 #'
-#' @return a data.table with 3 new variables: indx, a grouping flag;
-#'   and new start and end dates
-#'
 #' @import data.table
-#' @importFrom data.table .I .N .GRP ':='
-#'
 #'
 #' @param x data frame, this will be converted to a data.table
 #' @param group_vars in a vector, the all columns used to group records, quoted
@@ -37,6 +32,14 @@
 #'   period maximum
 #' @param .forceCopy default FALSE; TRUE will force data.table to take a copy
 #'   instead of editing the data without reference
+#'
+#' @return the original data.frame as a data.table
+#'   with the following new fields:
+#' \describe{
+#'   \item{`indx`; renamed using `indx_varname`}{an id field for the new aggregated events/intervals}
+#'   \item{`min_date`; renamed using `min_varname`}{the start date for the aggregated events/intervals}
+#'   \item{`max_date`; renamed using `max_varname`}{the end date for the aggregated events/intervals}
+#'   }
 #'
 #' @examples
 #' episode_test <- structure(
