@@ -50,7 +50,8 @@ NHS number &amp;amp; Hospital Number
 Date of Birth &amp;amp; Surname IF nhs unknown
 Sex &amp;amp; Date of Birth &amp;amp; Fuzzy Name
 
-" />
+
+Identifiers are copied over where they are missing or invalid" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="@alexbhatt" />
 <meta name="twitter:site" content="@alexbhatt" />
@@ -133,6 +134,7 @@ by grouping patient identifiers.</p>
 <li><p>Sex &amp; Date of Birth &amp; Fuzzy Name</p></li>
 </ol>
 
+<p>Identifiers are copied over where they are missing or invalid</p>
     </div>
 
     <pre class="usage"><span class='fu'>uk_patient_id</span><span class='op'>(</span>
@@ -140,9 +142,10 @@ by grouping patient identifiers.</p>
   <span class='va'>nhs_number</span>,
   <span class='va'>hospital_number</span>,
   <span class='va'>date_of_birth</span>,
-  <span class='va'>sex</span>,
+  <span class='va'>sex_mfu</span>,
   forename <span class='op'>=</span> <span class='st'>"NONAME"</span>,
   surname <span class='op'>=</span> <span class='st'>"NONAME"</span>,
+  <span class='va'>.sortOrder</span>,
   .forceCopy <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
@@ -168,8 +171,10 @@ Hospital numbers</p></td>
 date of birth in date format</p></td>
     </tr>
     <tr>
-      <th>sex</th>
-      <td><p>a column as a character containing the patient sex</p></td>
+      <th>sex_mfu</th>
+      <td><p>column as a character containing the patient sex;
+NOTE only works if coded only as character versions of Male/Female/Unknown;
+does not currently work with additional options <code>#future update</code></p></td>
     </tr>
     <tr>
       <th>forename</th>
@@ -182,6 +187,11 @@ leave as NONAME if unavailable</p></td>
 leave as NONAME if unavailable</p></td>
     </tr>
     <tr>
+      <th>.sortOrder</th>
+      <td><p>optional; a column as a character to allow a sorting
+order on the id generation</p></td>
+    </tr>
+    <tr>
       <th>.forceCopy</th>
       <td><p>default FALSE; TRUE will force data.table to take a copy
 instead of editing the data without reference</p></td>
@@ -190,8 +200,11 @@ instead of editing the data without reference</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>patientID grouping variable addedd to the data.frame</p>
-<p>A dataframe with two new variables: id a unique patient id, and n_in_id an integer variable with the number of rows in the id</p>
+    <p>A dataframe with one new variable:</p><dl>
+<dt><code>id</code></dt><dd><p>a unique patient id</p></dd>
+
+</dl>
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>id_test</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
@@ -201,7 +214,7 @@ instead of editing the data without reference</p></td>
   <span class='op'>)</span>,
   hosp_n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>
     <span class='st'>'13'</span>,<span class='st'>'13'</span>,<span class='st'>'13'</span>,<span class='st'>'UNKNOWN'</span>,<span class='st'>'13'</span>,<span class='st'>'13'</span>,<span class='st'>'13'</span>,<span class='st'>'31'</span>,<span class='st'>'31'</span>,<span class='st'>'96'</span>,<span class='st'>'96'</span>,<span class='cn'>NA</span>,<span class='st'>'96'</span><span class='op'>)</span>,
-  sex <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'M'</span>, <span class='st'>'M'</span>, <span class='st'>'M'</span>, <span class='st'>'M'</span>, <span class='st'>'M'</span>, <span class='st'>'M'</span>, <span class='st'>'M'</span>, <span class='st'>'M'</span>, <span class='st'>'M'</span>, <span class='st'>'F'</span>, <span class='st'>'U'</span>, <span class='st'>'U'</span>, <span class='st'>'F'</span><span class='op'>)</span>,
+  sex <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>'F'</span>,<span class='fl'>6</span><span class='op'>)</span>,<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>'Male'</span>,<span class='fl'>4</span><span class='op'>)</span>, <span class='st'>'U'</span>, <span class='st'>'U'</span>, <span class='st'>'M'</span><span class='op'>)</span>,
   dateofbirth <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span>
     <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>
       <span class='st'>'1988-10-06'</span>,<span class='st'>'1988-06-10'</span>,<span class='st'>'1900-01-01'</span>,<span class='st'>'1988-10-06'</span>,<span class='st'>'1988-10-06'</span>,
@@ -223,22 +236,22 @@ instead of editing the data without reference</p></td>
               hospital_number <span class='op'>=</span> <span class='st'>'hosp_n'</span>,
               forename <span class='op'>=</span> <span class='st'>'firstname'</span>,
               surname <span class='op'>=</span> <span class='st'>'lastname'</span>,
-              sex <span class='op'>=</span> <span class='st'>'sex'</span>,
+              sex_mfu <span class='op'>=</span> <span class='st'>'sex'</span>,
               date_of_birth <span class='op'>=</span> <span class='st'>'dateofbirth'</span><span class='op'>)</span><span class='op'>[</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;     id      nhs_n  hosp_n sex dateofbirth firstname lastname
-#&gt;  1:  1 9434765919      13   M  1988-10-06    DANGER    MOUSE
-#&gt;  2:  1 9434765919      13   M  1988-06-10    DANGER    MAUSE
-#&gt;  3:  1 9434765919      13   M  1900-01-01    DENGER    MOUSE
-#&gt;  4:  1         NA UNKNOWN   M  1988-10-06    DANGER    MOOSE
-#&gt;  5:  1         NA      13   M  1988-10-06    DANGER    MOOSE
-#&gt;  6:  1 3367170666      13   M  1988-10-06    DANGER    MOUSE
-#&gt;  7:  1 5185293519      13   M  1988-10-06    DANGER    MOUSE
-#&gt;  8:  7 5185293519      31   M  1988-10-06    DANGER    MOUSE
-#&gt;  9:  7 5185293519      31   M  1988-10-06    DANGER    MOUSE
-#&gt; 10: 10 8082318562      96   F  2020-01-28     CRAZY     FROG
-#&gt; 11: 10         NA      96   U  2020-01-28     CRAZY     FROG
-#&gt; 12: 12         NA    &lt;NA&gt;   U  2020-01-28     KRAZY     FRUG
-#&gt; 13: 10         NA      96   F  2020-01-28         C     FROG</div><div class='input'>
+</div><div class='output co'>#&gt;     id      nhs_n hosp_n sex dateofbirth firstname lastname
+#&gt;  1:  1 9434765919     13   F  1988-10-06    DANGER    MOUSE
+#&gt;  2:  1 9434765919     13   F  1988-06-10    DANGER    MAUSE
+#&gt;  3:  1 9434765919     13   F  1900-01-01    DENGER    MOUSE
+#&gt;  4:  1 9434765919     13   F  1988-10-06    DANGER    MOOSE
+#&gt;  5:  1 9434765919     13   F  1988-10-06    DANGER    MOOSE
+#&gt;  6:  1 3367170666     13   F  1988-10-06    DANGER    MOUSE
+#&gt;  7:  1 5185293519     13   M  1988-10-06    DANGER    MOUSE
+#&gt;  8:  7 5185293519     31   M  1988-10-06    DANGER    MOUSE
+#&gt;  9:  7 5185293519     31   M  1988-10-06    DANGER    MOUSE
+#&gt; 10: 10 8082318562     96   M  2020-01-28     CRAZY     FROG
+#&gt; 11: 10 8082318562     96   M  2020-01-28     CRAZY     FROG
+#&gt; 12: 12         NA   &lt;NA&gt;   U  2020-01-28     KRAZY     FRUG
+#&gt; 13: 10 8082318562     96   M  2020-01-28         C     FROG</div><div class='input'>
 
 </div></pre>
   </div>
