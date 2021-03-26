@@ -50,7 +50,7 @@ spec = sample(c("KLEBSIELLA SP",
                 "KLEBEIELLA OXYTOCA"),
               25,replace = T),
 type = "BLOOD",
-specdate = sample(seq.date_col(Sys.date_col()-21,Sys.date_col(),"day"),25,replace = T)
+specdate = sample(seq.Date(Sys.Date()-21,Sys.Date(),"day"),25,replace = T)
 )
 
 respeciate_generic(x=df,
