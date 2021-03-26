@@ -9,9 +9,10 @@ uk_patient_id(
   nhs_number,
   hospital_number,
   date_of_birth,
-  sex,
+  sex_mfu,
   forename = "NONAME",
   surname = "NONAME",
+  .sortOrder,
   .forceCopy = FALSE
 )
 }
@@ -26,7 +27,9 @@ Hospital numbers}
 \item{date_of_birth}{a column as a date variable containing the patient
 date of birth in date format}
 
-\item{sex}{a column as a character containing the patient sex}
+\item{sex_mfu}{column as a character containing the patient sex;
+NOTE only works if coded only as character versions of Male/Female/Unknown;
+does not currently work with additional options \verb{#future update}}
 
 \item{forename}{a column as a character containing the patient forename;
 leave as NONAME if unavailable}
@@ -34,13 +37,17 @@ leave as NONAME if unavailable}
 \item{surname}{a column as a character containing the patient surname;
 leave as NONAME if unavailable}
 
+\item{.sortOrder}{optional; a column as a character to allow a sorting
+order on the id generation}
+
 \item{.forceCopy}{default FALSE; TRUE will force data.table to take a copy
 instead of editing the data without reference}
 }
 \value{
-patientID grouping variable addedd to the data.frame
-
-A dataframe with two new variables: id a unique patient id, and n_in_id an integer variable with the number of rows in the id
+A dataframe with one new variable:
+\describe{
+\item{\code{id}}{a unique patient id}
+}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
@@ -56,6 +63,8 @@ Grouping is based on five stages:
 \item Date of Birth & Surname IF nhs unknown
 \item Sex & Date of Birth & Fuzzy Name
 }
+
+Identifiers are copied over where they are missing or invalid
 }
 \examples{
 id_test <- data.frame(
@@ -65,7 +74,7 @@ id_test <- data.frame(
   ),
   hosp_n = c(
     '13','13','13','UNKNOWN','13','13','13','31','31','96','96',NA,'96'),
-  sex = c('M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'F', 'U', 'U', 'F'),
+  sex = c(rep('F',6),rep('Male',4), 'U', 'U', 'M'),
   dateofbirth = as.Date(
     c(
       '1988-10-06','1988-06-10','1900-01-01','1988-10-06','1988-10-06',
@@ -87,7 +96,7 @@ uk_patient_id(x = id_test,
               hospital_number = 'hosp_n',
               forename = 'firstname',
               surname = 'lastname',
-              sex = 'sex',
+              sex_mfu = 'sex',
               date_of_birth = 'dateofbirth')[]
 
 

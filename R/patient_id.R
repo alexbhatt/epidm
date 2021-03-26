@@ -117,9 +117,10 @@ uk_patient_id <- function(x,
   # apply other validity features
   # use SDcols version to ensure that the column name and argument name work if the same
   x[,id := seq_len(.N)]
+  x[,tmp.idN := 1L]
 
   ## set id to column 1
-  data.table::setcolorder(x,'id')
+  data.table::setcolorder(x,c('id','tmp.idN'))
 
   x[,tmp.valid.nhs := lapply(.SD,
                              function(x) epidm::valid_nhs(x) == 1),
@@ -180,6 +181,9 @@ uk_patient_id <- function(x,
       nhs_number,
       date_of_birth
       )
+  ][
+    ,tmp.idN := .N,
+    by = 'id'
   ]
 
 
@@ -193,6 +197,9 @@ uk_patient_id <- function(x,
       hospital_number,
       date_of_birth
       )
+  ][
+    ,tmp.idN := .N,
+    by = 'id'
   ]
 
   ## S3: NHS + HOS ###########################################################
@@ -205,6 +212,9 @@ uk_patient_id <- function(x,
       nhs_number,
       hospital_number
       )
+  ][
+    ,tmp.idN := .N,
+    by = 'id'
   ]
 
   if(surname!="NONAME"){
@@ -231,6 +241,9 @@ uk_patient_id <- function(x,
         surname,
         forename
         )
+    ][
+      ,tmp.idN := .N,
+      by = 'id'
     ]
 
 
@@ -250,6 +263,9 @@ uk_patient_id <- function(x,
         'tmp.fuzz.n1',
         'tmp.fuzz.n2'
       )
+    ][
+      ,tmp.idN := .N,
+      by = 'id'
     ]
 
   }
