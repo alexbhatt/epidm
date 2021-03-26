@@ -93,7 +93,8 @@ uk_patient_id <- function(x,
                           forename = "NONAME",
                           surname = "NONAME",
                           .sortOrder,
-                          .forceCopy = FALSE) {
+                          .forceCopy = FALSE,
+                          .experimental = FALSE) {
 
   ## convert data.frame to data.table or take a copy
   if(.forceCopy) {
@@ -144,24 +145,6 @@ uk_patient_id <- function(x,
     .SDcols = sex_mfu
     ]
 
-  ## set types for the columns; and clear out the invalid results
-  ## we will bring the results together later
-  x[,
-    c(nhs_number) := .(
-      data.table::fifelse(tmp.valid.nhs,
-                          as.numeric(get(nhs_number)),
-                          NA_integer_)
-    )
-    ]
-
-  x[,
-    c(hospital_number) := .(
-      data.table::fifelse(tmp.valid.hos,
-                          as.character(get(hospital_number)),
-                          NA_character_)
-      )
-  ]
-
   x[,
     c(sex_mfu) := .(
       data.table::fifelse(tmp.valid.sex,
@@ -184,7 +167,7 @@ uk_patient_id <- function(x,
       date_of_birth
       )
   ][
-    ,tmp.idN := .N,
+    ,tmp.idN := .GRP,
     by = 'id'
   ]
 
@@ -200,7 +183,7 @@ uk_patient_id <- function(x,
       date_of_birth
       )
   ][
-    ,tmp.idN := .N,
+    ,tmp.idN := .GRP,
     by = 'id'
   ]
 
@@ -215,7 +198,7 @@ uk_patient_id <- function(x,
       hospital_number
       )
   ][
-    ,tmp.idN := .N,
+    ,tmp.idN := .GRP,
     by = 'id'
   ]
 
@@ -244,7 +227,7 @@ uk_patient_id <- function(x,
         forename
         )
     ][
-      ,tmp.idN := .N,
+      ,tmp.idN := .GRP,
       by = 'id'
     ]
 
@@ -266,19 +249,43 @@ uk_patient_id <- function(x,
         'tmp.fuzz.n2'
       )
     ][
-      ,tmp.idN := .N,
+      ,tmp.idN := .GRP,
       by = 'id'
     ]
 
   }
 
-  ## cleanup and remove temporary vars
-  tmpcols <- grep("^tmp.",colnames(x),value=TRUE)
+
+  if(.experimental){
+  ## capture legit IDs where NA or invalid
+
+  ## set types for the columns; and clear out the invalid results
+  ## we will bring the results together later
+
   x[,
-    (tmpcols) := NULL
+    c(nhs_number) := .(
+      data.table::fifelse(tmp.valid.hos,
+                          as.numeric(get(nhs_number)),
+                          NA_integer_)
+    )
     ]
 
-  ## capture legit IDs where NA or invalid
+  x[,
+    c(hospital_number) := .(
+      data.table::fifelse(tmp.valid.hos,
+                          as.character(get(hospital_number)),
+                          NA_character_)
+    )
+  ]
+
+  x[,
+    c(date_of_birth) := .(
+      data.table::fifelse(tmp.valid.dob,
+                          as.character(get(date_of_birth)),
+                          NA_character_)
+    )
+  ]
+
 
   copyid <- c(nhs_number,hospital_number,date_of_birth,sex_mfu)
 
@@ -313,7 +320,8 @@ uk_patient_id <- function(x,
                           "U",
                           get(sex_mfu))
       )
-    ]
+  ]
+  }
 
   ## order the final results
   if(!missing(.sortOrder)){
@@ -321,6 +329,12 @@ uk_patient_id <- function(x,
   } else {
     setorder(x,'id')
   }
+
+  ## cleanup and remove temporary vars
+  tmpcols <- grep("^tmp.",colnames(x),value=TRUE)
+  x[,
+    (tmpcols) := NULL
+  ]
 
   return(x)
 
