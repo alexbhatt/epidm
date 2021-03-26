@@ -58,7 +58,7 @@
 #'   sex = c(rep('F',6),rep('Male',4), 'U', 'U', 'M'),
 #'   dateofbirth = as.Date(
 #'     c(
-#'       '1988-10-06','1988-06-10','1900-01-01','1988-10-06','1988-10-06',
+#'       '1988-10-06','1988-10-06','1900-01-01','1988-10-06','1988-10-06',
 #'       '1988-10-06','1988-10-06','1988-10-06','1988-10-06','2020-01-28',
 #'       '2020-01-28','2020-01-28','2020-01-28'
 #'     )
@@ -70,7 +70,8 @@
 #'   lastname = c(
 #'     'Mouse','Mause','Mouse','Moose','Moose','Mouse','MOUSe',
 #'     'Mouse','Mouse','Frog','FROG','Frug','Frog'
-#'   )
+#'   ),
+#'   testdate = sample(seq.Date(Sys.Date()-21,Sys.Date(),"day"),13,replace = T)
 #' )
 #' uk_patient_id(x = id_test,
 #'               nhs_number = 'nhs_n',
@@ -78,10 +79,11 @@
 #'               forename = 'firstname',
 #'               surname = 'lastname',
 #'               sex_mfu = 'sex',
-#'               date_of_birth = 'dateofbirth')[]
+#'               date_of_birth = 'dateofbirth',
+#'               .sortOrder = 'testdate')[]
 #'
 #' @export
-#'
+
 
 uk_patient_id <- function(x,
                           nhs_number,
@@ -102,7 +104,7 @@ uk_patient_id <- function(x,
 
   ## allow a forced sort order; but not necessary
   if(!missing(.sortOrder)){
-    setorder(x,.sortOrder)
+    setorderv(x,c(.sortOrder))
   }
 
   ## setup variables for entry into data.table
@@ -313,6 +315,12 @@ uk_patient_id <- function(x,
       )
     ]
 
+  ## order the final results
+  if(!missing(.sortOrder)){
+    setorderv(x,c('id',.sortOrder))
+  } else {
+    setorder(x,'id')
+  }
 
   return(x)
 
