@@ -162,7 +162,7 @@ uk_patient_id <- function(x,
   x[,
     c(sex_mfu) := .(
       data.table::fifelse(tmp.valid.sex,
-                          toupper(substr(as.character(get(sex_mfu),1,1))),
+                          toupper(substr(as.character(get(sex_mfu)),1,1)),
                           NA_character_)
       )
   ]
@@ -181,18 +181,6 @@ uk_patient_id <- function(x,
       date_of_birth
       )
   ]
-  x[,
-    tmp.match := data.table::fifelse(
-      tmp.valid.nhs & tmp.valid.dob,
-      TRUE,
-      FALSE
-    ),
-    by = c(
-      nhs_number,
-      date_of_birth
-      )
-  ]
-
 
 
   ## S2: HOS + DOB ###########################################################
