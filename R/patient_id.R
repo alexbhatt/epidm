@@ -16,8 +16,8 @@
 #' \item Sex & Date of Birth & Fuzzy Name
 #' }
 #'
-#' @return patientID grouping variable addedd to the data.frame
-#'
+#' Identifiers are copied over where they are missing or invalid to the grouped
+#' records.
 #'
 #' @import data.table
 #' @importFrom phonics soundex
@@ -30,15 +30,22 @@
 #'   Hospital numbers
 #' @param date_of_birth a column as a date variable containing the patient
 #'   date of birth in date format
-#' @param sex a column as a character containing the patient sex
+#' @param sex_mfu column as a character containing the patient sex;
+#'   NOTE only works if coded only as character versions of Male/Female/Unknown;
+#'   does not currently work with additional options `#future update`
 #' @param forename a column as a character containing the patient forename;
 #'   leave as NONAME if unavailable
 #' @param surname a column as a character containing the patient surname;
 #'   leave as NONAME if unavailable
+#' @param .sortOrder optional; a column as a character to allow a sorting
+#'   order on the id generation
 #' @param .forceCopy default FALSE; TRUE will force data.table to take a copy
 #'   instead of editing the data without reference
 #'
-#' @return A dataframe with two new variables: id a unique patient id, and n_in_id an integer variable with the number of rows in the id
+#' @return A dataframe with one new variable:
+#' \describe{
+#'   \item{`id`}{a unique patient id}
+#' }
 #'
 #' @examples
 #' id_test <- data.frame(
@@ -48,7 +55,7 @@
 #'   ),
 #'   hosp_n = c(
 #'     '13','13','13','UNKNOWN','13','13','13','31','31','96','96',NA,'96'),
-#'   sex = c('M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'F', 'U', 'U', 'F'),
+#'   sex = c(rep('F',6),rep('Male',4), 'U', 'U', 'M'),
 #'   dateofbirth = as.Date(
 #'     c(
 #'       '1988-10-06','1988-06-10','1900-01-01','1988-10-06','1988-10-06',
@@ -70,19 +77,20 @@
 #'               hospital_number = 'hosp_n',
 #'               forename = 'firstname',
 #'               surname = 'lastname',
-#'               sex = 'sex',
+#'               sex_mfu = 'sex',
 #'               date_of_birth = 'dateofbirth')[]
 #'
-#'
 #' @export
+#'
 
 uk_patient_id <- function(x,
                           nhs_number,
                           hospital_number,
                           date_of_birth,
-                          sex,
+                          sex_mfu,
                           forename = "NONAME",
                           surname = "NONAME",
+                          .sortOrder,
                           .forceCopy = FALSE) {
 
   ## convert data.frame to data.table or take a copy
@@ -90,6 +98,11 @@ uk_patient_id <- function(x,
     x <- data.table::copy(x)
   } else {
     data.table::setDT(x)
+  }
+
+  ## allow a forced sort order; but not necessary
+  if(!missing(.sortOrder)){
+    setorder(x,.sortOrder)
   }
 
   ## setup variables for entry into data.table
@@ -103,7 +116,8 @@ uk_patient_id <- function(x,
 
   # apply other validity features
   # use SDcols version to ensure that the column name and argument name work if the same
-  x[,id := seq(1:.N)]
+  x[,id := seq_len(.N)]
+
   ## set id to column 1
   data.table::setcolorder(x,'id')
 
@@ -111,7 +125,9 @@ uk_patient_id <- function(x,
                              function(x) epidm::valid_nhs(x) == 1),
     .SDcols = nhs_number]
   x[,tmp.valid.dob := lapply(.SD,
-                             function(x) !x %in% as.Date(c("1900-01-01", NA))),
+                             function(x) !x %in% as.Date(c("1900-01-01",
+                                                           "1800-01-01",
+                                                           NA))),
     .SDcols = date_of_birth
     ]
   x[,tmp.valid.hos := lapply(.SD,
@@ -121,14 +137,44 @@ uk_patient_id <- function(x,
     .SDcols = hospital_number]
   x[,
     tmp.valid.sex := lapply(.SD,
-                            function(x) grepl("^M|F",x,ignore.case=T)),
-    .SDcols = sex
+                            function(x) grepl("^(M|F)",x,ignore.case=TRUE)),
+    .SDcols = sex_mfu
     ]
   x[,
-    c(sex) := .(
-      data.table::fifelse(tmp.valid.sex,toupper(substr(sex,1,1)),"U")
+    c(sex_mfu) := .(
+      data.table::fifelse(tmp.valid.sex,
+                          toupper(substr(get(sex_mfu),1,1)),
+                          "U")
     )
   ]
+
+  ## set types for the columns; and clear out the invalid results
+  ## we will bring the results together later
+  x[,
+    c(nhs_number) := .(
+      data.table::fifelse(tmp.valid.nhs,
+                          as.numeric(get(nhs_number)),
+                          NA_integer_)
+    )
+    ]
+
+  x[,
+    c(hospital_number) := .(
+      data.table::fifelse(tmp.valid.hos,
+                          as.character(get(hospital_number)),
+                          NA_character_)
+      )
+  ]
+
+  x[,
+    c(sex_mfu) := .(
+      data.table::fifelse(tmp.valid.sex,
+                          as.character(get(sex_mfu)),
+                          NA_character_)
+      )
+  ]
+
+
 
   ## S1: NHS + DOB ###########################################################
   x[,
@@ -142,6 +188,18 @@ uk_patient_id <- function(x,
       date_of_birth
       )
   ]
+  x[,
+    tmp.match := data.table::fifelse(
+      tmp.valid.nhs & tmp.valid.dob,
+      TRUE,
+      FALSE
+    ),
+    by = c(
+      nhs_number,
+      date_of_birth
+      )
+  ]
+
 
 
   ## S2: HOS + DOB ###########################################################
@@ -206,7 +264,7 @@ uk_patient_id <- function(x,
         id[1],
         id),
       by = c(
-        sex,
+        sex_mfu,
         'tmp.fuzz.ym',
         'tmp.fuzz.n1',
         'tmp.fuzz.n2'
@@ -221,6 +279,42 @@ uk_patient_id <- function(x,
     (tmpcols) := NULL
     ]
 
+  ## capture legit IDs where NA or invalid
+
+  copyid <- c(nhs_number,hospital_number,date_of_birth,sex_mfu)
+
+  ## capture the most common value aka. mode, but for numeric or characters
+  na_replace_mode <- function(x){
+
+    ## get the mode
+    len <- length(x)
+    uni <- unique(na.omit(x))
+    mode <- uni[which.max(table(match(x, uni)))]
+    vec <- rep(mode,len)
+
+    ## where the group only has 1 entry, and its NA
+    if(length(vec)==0){
+      return(NA)
+    } else {
+      res <- data.table::fcoalesce(x,vec)
+      return(res)
+    }
+  }
+
+  x[,
+    (copyid) := lapply(.SD,na_replace_mode),
+    by = 'id',
+    .SDcols = copyid
+  ]
+
+
+  x[,
+    c(sex_mfu) := .(
+      data.table::fifelse(is.na(get(sex_mfu)),
+                          "U",
+                          get(sex_mfu))
+      )
+    ]
 
 
   return(x)
