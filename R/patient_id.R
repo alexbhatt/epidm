@@ -140,13 +140,6 @@ uk_patient_id <- function(x,
                             function(x) grepl("^(M|F)",x,ignore.case=TRUE)),
     .SDcols = sex_mfu
     ]
-  x[,
-    c(sex_mfu) := .(
-      data.table::fifelse(tmp.valid.sex,
-                          toupper(substr(get(sex_mfu),1,1)),
-                          "U")
-    )
-  ]
 
   ## set types for the columns; and clear out the invalid results
   ## we will bring the results together later
@@ -169,7 +162,7 @@ uk_patient_id <- function(x,
   x[,
     c(sex_mfu) := .(
       data.table::fifelse(tmp.valid.sex,
-                          as.character(get(sex_mfu)),
+                          toupper(substr(as.character(get(sex_mfu),1,1))),
                           NA_character_)
       )
   ]
