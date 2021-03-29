@@ -105,7 +105,7 @@ uk_patient_id <- function(x,
 
   ## allow a forced sort order; but not necessary
   if(!missing(.sortOrder)){
-    setorderv(x,c(.sortOrder))
+    data.table::setorderv(x,c(.sortOrder))
   }
 
   ## setup variables for entry into data.table
@@ -153,6 +153,10 @@ uk_patient_id <- function(x,
       )
   ]
 
+  ## cleanup as some codes have massive leading or lagging whitespace
+  x[,
+    c(hospital_number) := .(trimws(get(hospital_number)))
+    ]
 
 
   ## S1: NHS + DOB ###########################################################
@@ -325,13 +329,13 @@ uk_patient_id <- function(x,
 
   ## order the final results
   if(!missing(.sortOrder)){
-    setorderv(x,c('id',.sortOrder))
+    data.table::setorderv(x,c('id',.sortOrder))
   } else {
-    setorder(x,'id')
+    data.table::setorder(x,'id')
   }
 
   ## cleanup and remove temporary vars
-  tmpcols <- grep("^tmp.",colnames(x),value=TRUE)
+  tmpcols <- grep("^tmp.",names(x),value=TRUE)
   x[,
     (tmpcols) := NULL
   ]
