@@ -4,16 +4,16 @@ Base SQL query for a standard ECDS feed
 Data is submitted daily by NHS Trusts
 
 Values
-::DATABASE::
-::ECDS_VIEW::
+::DBN:: The database you storing the tables
+::TBLVIEW:: The table or view containing ECDS
 
 Recommend
 WHERE clause
 eg. WHERE ECDS.ArrivalDate >= '2021-01-01'
 
 or
-INNER JOIN [::DATABASE2::].[dbo].[::PIITABLE::] 
-	ON [::PIITABLE].NHSNumber = ECDS.NhsNumber
+INNER JOIN [::DBN2::].[dbo].[::PIITBL::] 
+	ON [::PIITBL::].NHSNumber = ECDS.NhsNumber
 
 JOIN METHOD can be combined with UNION
 to combine multiple identifiers
@@ -34,5 +34,5 @@ SELECT DISTINCT
 	ECDS.EmergencyCareStatusCode,
 	ECDS.EmergencyCareDestinationCode,
 	ECDS.EmergencyCareChiefComplaintCode
-FROM [::DATABASE::].[dbo].[::ECDS_VIEW::] ECDS
+FROM [::DBN::].[dbo].[::TBLVIEW::] ECDS
 

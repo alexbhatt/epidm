@@ -5,16 +5,17 @@ Data is submitted by the 21st of each month
 for the preceeding months data.
 
 Values
-::DATABASE::
-::VIEW::
+::DBN:: The database you storing the tables
+::TBLVIEW:: The table or view containing SUS
+::PIITBL:: The table contiaining PII for linking
 
 Recommend
 WHERE clause
 eg. WHERE SUS.[Episode End Date] >= '2021-01-01'
 
 or
-INNER JOIN [::DATABASE2::].[dbo].[::PIITABLE::]
-        ON [::PIITABLE].NHSNumber = SUS.NhsNumber
+INNER JOIN [::DBN2::].[dbo].[::PIITABLE::]
+        ON [::PIITBL::].NHSNumber = SUS.NhsNumber
 
 	JOIN METHOD can be combined with UNION
 	to combine multiple identifiers
@@ -106,6 +107,6 @@ SELECT DISTINCT
 	,SUS.[Secondary Procedure Code 12]
 	,SUS.[Secondary Procedure Date 12]
 	,SUS.[UploadDate]
-FROM [::DATABASE::].[dbo].[::TBLVIEW::] SUS 
----- INNER JOIN [::DATABASE2::].[dbo].[::PIITABLE::] ON [::PIITABLE].NHSNumber = SUS.NhsNumber
+FROM [::DBN::].[dbo].[::TBLVIEW::] SUS 
+---- INNER JOIN [::DBN2::].[dbo].[::PIITABLE::] ON [::PIITABLE].NHSNumber = SUS.NhsNumber
 ---- WHERE	SUS.[End Date (Hospital Provider Spell)] >= '20191201'
