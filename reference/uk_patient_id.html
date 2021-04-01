@@ -148,6 +148,7 @@ records.</p>
   forename <span class='op'>=</span> <span class='st'>"NONAME"</span>,
   surname <span class='op'>=</span> <span class='st'>"NONAME"</span>,
   <span class='va'>.sortOrder</span>,
+  .keepValidNHS <span class='op'>=</span> <span class='cn'>FALSE</span>,
   .forceCopy <span class='op'>=</span> <span class='cn'>FALSE</span>,
   .experimental <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
@@ -195,8 +196,13 @@ leave as NONAME if unavailable</p></td>
 order on the id generation</p></td>
     </tr>
     <tr>
+      <th>.keepValidNHS</th>
+      <td><p>optional, default FALSE; set TRUE if you wish to retain
+the column with the NHS checksum result stored as a BOOLEAN</p></td>
+    </tr>
+    <tr>
       <th>.forceCopy</th>
-      <td><p>default FALSE; TRUE will force data.table to take a copy
+      <td><p>optional, default FALSE; TRUE will force data.table to take a copy
 instead of editing the data without reference</p></td>
     </tr>
     </table>
@@ -205,6 +211,8 @@ instead of editing the data without reference</p></td>
 
     <p>A dataframe with one new variable:</p><dl>
 <dt><code>id</code></dt><dd><p>a unique patient id</p></dd>
+<dt><code>valid_nhs</code></dt><dd><p>if retained using argument <code>.keepValidNHS=TRUE</code>, a
+BOOLEAN containing the result of the NHS checksum validation</p></dd>
 
 </dl>
 
@@ -244,19 +252,19 @@ instead of editing the data without reference</p></td>
               date_of_birth <span class='op'>=</span> <span class='st'>'dateofbirth'</span>,
               .sortOrder <span class='op'>=</span> <span class='st'>'testdate'</span><span class='op'>)</span><span class='op'>[</span><span class='op'>]</span>
 </div><div class='output co'>#&gt;     id      nhs_n  hosp_n  sex dateofbirth firstname lastname   testdate
-#&gt;  1:  1 9434765919      13    F  1900-01-01    DENGER    MOUSE 2021-03-10
-#&gt;  2:  1 9434765919      13    F  1988-10-06    DANGER    MOUSE 2021-03-12
-#&gt;  3:  1 9434765919      13    F  1988-10-06    DANGER    MAUSE 2021-03-15
-#&gt;  4:  1         NA UNKNOWN    F  1988-10-06    DANGER    MOOSE 2021-03-16
-#&gt;  5:  1         NA      13    F  1988-10-06    DANGER    MOOSE 2021-03-17
-#&gt;  6:  2         NA    &lt;NA&gt; &lt;NA&gt;  2020-01-28     KRAZY     FRUG 2021-03-11
-#&gt;  7:  3 5185293519      13    M  1988-10-06    DANGER    MOUSE 2021-03-17
-#&gt;  8:  3 3367170666      13    F  1988-10-06    DANGER    MOUSE 2021-03-27
-#&gt;  9:  4 5185293519      31    M  1988-10-06    DANGER    MOUSE 2021-03-14
-#&gt; 10:  4 5185293519      31    M  1988-10-06    DANGER    MOUSE 2021-03-21
-#&gt; 11: 10 8082318562      96    M  2020-01-28     CRAZY     FROG 2021-03-21
-#&gt; 12: 10         NA      96    M  2020-01-28         C     FROG 2021-03-21
-#&gt; 13: 10         NA      96 &lt;NA&gt;  2020-01-28     CRAZY     FROG 2021-03-29</div><div class='input'>
+#&gt;  1:  1 9434765919      13    F  1900-01-01    DENGER    MOUSE 2021-03-12
+#&gt;  2:  1 9434765919      13    F  1988-10-06    DANGER    MOUSE 2021-03-14
+#&gt;  3:  1 9434765919      13    F  1988-10-06    DANGER    MAUSE 2021-03-17
+#&gt;  4:  1         NA UNKNOWN    F  1988-10-06    DANGER    MOOSE 2021-03-18
+#&gt;  5:  1         NA      13    F  1988-10-06    DANGER    MOOSE 2021-03-19
+#&gt;  6:  2         NA    &lt;NA&gt; &lt;NA&gt;  2020-01-28     KRAZY     FRUG 2021-03-13
+#&gt;  7:  3 5185293519      13    M  1988-10-06    DANGER    MOUSE 2021-03-19
+#&gt;  8:  3 3367170666      13    F  1988-10-06    DANGER    MOUSE 2021-03-29
+#&gt;  9:  4 5185293519      31    M  1988-10-06    DANGER    MOUSE 2021-03-16
+#&gt; 10:  4 5185293519      31    M  1988-10-06    DANGER    MOUSE 2021-03-23
+#&gt; 11: 10 8082318562      96    M  2020-01-28     CRAZY     FROG 2021-03-23
+#&gt; 12: 10         NA      96    M  2020-01-28         C     FROG 2021-03-23
+#&gt; 13: 10         NA      96 &lt;NA&gt;  2020-01-28     CRAZY     FROG 2021-03-31</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
