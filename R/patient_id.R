@@ -37,14 +37,18 @@
 #'   leave as NONAME if unavailable
 #' @param surname a column as a character containing the patient surname;
 #'   leave as NONAME if unavailable
+#' @param .keepValidNHS optional, default FALSE; set TRUE if you wish to retain
+#'   the column with the NHS checksum result stored as a BOOLEAN
 #' @param .sortOrder optional; a column as a character to allow a sorting
 #'   order on the id generation
-#' @param .forceCopy default FALSE; TRUE will force data.table to take a copy
+#' @param .forceCopy optional, default FALSE; TRUE will force data.table to take a copy
 #'   instead of editing the data without reference
 #'
 #' @return A dataframe with one new variable:
 #' \describe{
 #'   \item{`id`}{a unique patient id}
+#'   \item{`valid_nhs`}{if retained using argument `.keepValidNHS=TRUE`, a
+#'     BOOLEAN containing the result of the NHS checksum validation}
 #' }
 #'
 #' @examples
@@ -93,6 +97,7 @@ uk_patient_id <- function(x,
                           forename = "NONAME",
                           surname = "NONAME",
                           .sortOrder,
+                          .keepValidNHS = FALSE,
                           .forceCopy = FALSE,
                           .experimental = FALSE) {
 
@@ -333,6 +338,10 @@ uk_patient_id <- function(x,
   } else {
     data.table::setorder(x,'id')
   }
+
+  if(.keepValidNHS){
+    data.table::setnames(x,'tmp.valid.nhs','valid_nhs')
+    }
 
   ## cleanup and remove temporary vars
   tmpcols <- grep("^tmp.",names(x),value=TRUE)

@@ -13,6 +13,7 @@ uk_patient_id(
   forename = "NONAME",
   surname = "NONAME",
   .sortOrder,
+  .keepValidNHS = FALSE,
   .forceCopy = FALSE,
   .experimental = FALSE
 )
@@ -41,13 +42,18 @@ leave as NONAME if unavailable}
 \item{.sortOrder}{optional; a column as a character to allow a sorting
 order on the id generation}
 
-\item{.forceCopy}{default FALSE; TRUE will force data.table to take a copy
+\item{.keepValidNHS}{optional, default FALSE; set TRUE if you wish to retain
+the column with the NHS checksum result stored as a BOOLEAN}
+
+\item{.forceCopy}{optional, default FALSE; TRUE will force data.table to take a copy
 instead of editing the data without reference}
 }
 \value{
 A dataframe with one new variable:
 \describe{
 \item{\code{id}}{a unique patient id}
+\item{\code{valid_nhs}}{if retained using argument \code{.keepValidNHS=TRUE}, a
+BOOLEAN containing the result of the NHS checksum validation}
 }
 }
 \description{
