@@ -35,7 +35,7 @@
 #'                 "KLEBEIELLA OXYTOCA"),
 #'               25,replace = T),
 #' type = "BLOOD",
-#' specdate = sample(seq.Date(Sys.Date()-21,Sys.Date(),"day"),25,replace = T)
+#' specdate = sample(seq.Date(Sys.Date()-21,Sys.Date(),"day"),25,replace = TRUE)
 #' )
 #'
 #' respeciate_generic(x=df,

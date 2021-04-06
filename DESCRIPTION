@@ -1,6 +1,6 @@
 Package: epidm
 Title: UK Epidemiological Data Management
-Version: 0.1.05
+Version: 0.1.06
 Authors@R: 
     person(given = "Alex",
            family = "Bhattacharya",

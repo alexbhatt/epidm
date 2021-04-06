@@ -36,9 +36,13 @@
 #' @return the original data.frame as a data.table
 #'   with the following new fields:
 #' \describe{
-#'   \item{`indx`; renamed using `indx_varname`}{an id field for the new aggregated events/intervals}
-#'   \item{`min_date`; renamed using `min_varname`}{the start date for the aggregated events/intervals}
-#'   \item{`max_date`; renamed using `max_varname`}{the end date for the aggregated events/intervals}
+#'   \item{`indx`; renamed using `indx_varname`}{an id field for the new
+#'     aggregated events/intervals; note that where the `date_start` is NA, an
+#'     `indx` value will also be NA}
+#'   \item{`min_date`; renamed using `min_varname`}{the start date for the
+#'     aggregated events/intervals}
+#'   \item{`max_date`; renamed using `max_varname`}{the end date for the
+#'     aggregated events/intervals}
 #'   }
 #'
 #' @examples
@@ -148,6 +152,12 @@ group_time <- function(x,
   if(missing(date_start)){
     stop("date_start must be supplied as a quoted column name from x")
   }
+
+  ## seperate out the two halfs if there are missing events/intervals
+  ## records in y will not be assigned an indx since there is no event
+  y <- x[is.na(get(date_start)), ]
+  x <- x[!is.na(get(date_start)), ]
+
 
   ## static + window methods only ##############################################
   ## bring the static window function in so its all a one stop shop for ease
@@ -332,6 +342,12 @@ group_time <- function(x,
   x[,
     (tmpcols) := NULL
   ]
+
+  ## rejoin on the missing section
+  x <- data.table::rbindlist(
+    list(x,y),
+    fill = TRUE
+  )
 
   return(x)
 

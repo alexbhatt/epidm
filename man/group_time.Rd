@@ -52,9 +52,13 @@ instead of editing the data without reference}
 the original data.frame as a data.table
 with the following new fields:
 \describe{
-\item{\code{indx}; renamed using \code{indx_varname}}{an id field for the new aggregated events/intervals}
-\item{\code{min_date}; renamed using \code{min_varname}}{the start date for the aggregated events/intervals}
-\item{\code{max_date}; renamed using \code{max_varname}}{the end date for the aggregated events/intervals}
+\item{\code{indx}; renamed using \code{indx_varname}}{an id field for the new
+aggregated events/intervals; note that where the \code{date_start} is NA, an
+\code{indx} value will also be NA}
+\item{\code{min_date}; renamed using \code{min_varname}}{the start date for the
+aggregated events/intervals}
+\item{\code{max_date}; renamed using \code{max_varname}}{the end date for the
+aggregated events/intervals}
 }
 }
 \description{
