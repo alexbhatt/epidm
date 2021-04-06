@@ -78,7 +78,7 @@ or events within a static/fixed or rolling window of time." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">epidm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.05</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.06</span>
       </span>
     </div>
 
@@ -191,9 +191,13 @@ instead of editing the data without reference</p></td>
 
     <p>the original data.frame as a data.table
 with the following new fields:</p><dl>
-<dt><code>indx</code>; renamed using <code>indx_varname</code></dt><dd><p>an id field for the new aggregated events/intervals</p></dd>
-<dt><code>min_date</code>; renamed using <code>min_varname</code></dt><dd><p>the start date for the aggregated events/intervals</p></dd>
-<dt><code>max_date</code>; renamed using <code>max_varname</code></dt><dd><p>the end date for the aggregated events/intervals</p></dd>
+<dt><code>indx</code>; renamed using <code>indx_varname</code></dt><dd><p>an id field for the new
+aggregated events/intervals; note that where the <code>date_start</code> is NA, an
+<code>indx</code> value will also be NA</p></dd>
+<dt><code>min_date</code>; renamed using <code>min_varname</code></dt><dd><p>the start date for the
+aggregated events/intervals</p></dd>
+<dt><code>max_date</code>; renamed using <code>max_varname</code></dt><dd><p>the end date for the
+aggregated events/intervals</p></dd>
 
 </dl>
 
@@ -277,19 +281,19 @@ with the following new fields:</p><dl>
            min_varname <span class='op'>=</span> <span class='st'>'spell_min_date'</span>,
            max_varname <span class='op'>=</span> <span class='st'>'spell_max_date'</span><span class='op'>)</span><span class='op'>[</span><span class='op'>]</span>
 </div><div class='output co'>#&gt;     id provider spell_start  spell_end spell_id spell_min_date spell_max_date
-#&gt;  1:  3      YZX        &lt;NA&gt;       &lt;NA&gt;    1.3.0           &lt;NA&gt;           &lt;NA&gt;
-#&gt;  2:  3      YZX        &lt;NA&gt;       &lt;NA&gt;    1.3.1           &lt;NA&gt;           &lt;NA&gt;
-#&gt;  3: 88      XYZ  2019-12-25 2020-01-02    2.4.0     2019-12-25     2020-04-20
-#&gt;  4: 88      XYZ  2020-01-01 2020-01-23    2.4.0     2019-12-25     2020-04-20
-#&gt;  5:  3      YZX  2020-01-01 2020-01-01    1.3.2     2020-01-01     2020-01-01
-#&gt;  6: 88      XYZ  2020-01-12 2020-03-30    2.4.0     2019-12-25     2020-04-20
-#&gt;  7: 99      ZXY  2020-02-08 2020-05-22    3.5.0     2020-02-08     2020-05-22
-#&gt;  8: 99      YXZ  2020-03-01 2020-03-10    4.1.0     2020-03-01     2020-03-10
-#&gt;  9: 99      ZXY  2020-03-15 2020-05-20    3.5.0     2020-02-08     2020-05-22
-#&gt; 10: 88      XYZ  2020-03-28 2020-04-20    2.4.0     2019-12-25     2020-04-20
-#&gt; 11: 99      ZXY  2020-04-28 2020-04-30    3.5.0     2020-02-08     2020-05-22
-#&gt; 12: 99      ZXY  2020-07-01 2020-07-08    3.5.1     2020-07-01     2020-07-26
-#&gt; 13: 99      ZXY  2020-07-07 2020-07-26    3.5.1     2020-07-01     2020-07-26</div><div class='input'>
+#&gt;  1: 88      XYZ  2019-12-25 2020-01-02    1.4.0     2019-12-25     2020-04-20
+#&gt;  2: 88      XYZ  2020-01-01 2020-01-23    1.4.0     2019-12-25     2020-04-20
+#&gt;  3:  3      YZX  2020-01-01 2020-01-01    2.1.0     2020-01-01     2020-01-01
+#&gt;  4: 88      XYZ  2020-01-12 2020-03-30    1.4.0     2019-12-25     2020-04-20
+#&gt;  5: 99      ZXY  2020-02-08 2020-05-22    3.5.0     2020-02-08     2020-05-22
+#&gt;  6: 99      YXZ  2020-03-01 2020-03-10    4.1.0     2020-03-01     2020-03-10
+#&gt;  7: 99      ZXY  2020-03-15 2020-05-20    3.5.0     2020-02-08     2020-05-22
+#&gt;  8: 88      XYZ  2020-03-28 2020-04-20    1.4.0     2019-12-25     2020-04-20
+#&gt;  9: 99      ZXY  2020-04-28 2020-04-30    3.5.0     2020-02-08     2020-05-22
+#&gt; 10: 99      ZXY  2020-07-01 2020-07-08    3.5.1     2020-07-01     2020-07-26
+#&gt; 11: 99      ZXY  2020-07-07 2020-07-26    3.5.1     2020-07-01     2020-07-26
+#&gt; 12:  3      YZX        &lt;NA&gt;       &lt;NA&gt;     &lt;NA&gt;           &lt;NA&gt;           &lt;NA&gt;
+#&gt; 13:  3      YZX        &lt;NA&gt;       &lt;NA&gt;     &lt;NA&gt;           &lt;NA&gt;           &lt;NA&gt;</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
