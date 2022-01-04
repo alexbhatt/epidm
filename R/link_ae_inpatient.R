@@ -1,3 +1,32 @@
+#' Link A&E to Inpatient records
+#'
+#' @description
+#' `r lifecycle::badge('experimental')`
+#'
+#'
+#' Link together ECDS A&E records to HES/SUS inpatient records on
+#'   NHS number, Hospital Number and Date of Birth.
+#'
+#' @import data.table
+#'
+#' @param ae_data the ECDS A&E dataset
+#' @param ae_in the ECDS arrival date
+#' @param ae_out the ECDS discharge date
+#' @param inpatient_data the HES/SUS inpatient dataset
+#' @param spell_id the HES/SUS spell id
+#' @param nhs_number a vector containing the columns for the NHS numbers
+#' @param hospital_number a vector containing the columns for the Hospital numbers
+#' @param patient_dob a vector containing the columns for the date of birth
+#' @param organisation_code a vector containing the columns for the organisation codes
+#' @param .forceCopy a boolean to control if you want to copy the dataset before
+#'   linking together
+#'
+#' @seealso group_time continuous_inpatient_spells
+#'
+#' @return a patient level linked hospital record
+#' @export
+#'
+#'
 link_ae_inpatient <- function(
   ae_data,
   ae_in,
