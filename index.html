@@ -22,6 +22,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -34,18 +36,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">epidm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.06</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.06</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -62,49 +58,49 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="epidemiological-data-management-epidm" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#epidemiological-data-management-epidm" class="anchor"></a>Epidemiological Data Management (epidm)</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="epidemiological-data-management-epidm">Epidemiological Data Management (epidm)<a class="anchor" aria-label="anchor" href="#epidemiological-data-management-epidm"></a>
+</h1></div>
 <!-- badges: start -->
 <!-- badges: end -->
 <p>The goal of <code>epidm</code> is provide standard methods for the management and transformation of UK Public Health data.</p>
-<p><a href="https://alexbhatt.github.io/epidm/">The full function guide can be found here</a></p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>Currently this is only available via <a href="https://github.com/alexbhatt/epidm">GitHub</a></p>
+<p><a href="https://alexbhatt.github.io/epidm/" class="external-link">The full function guide can be found here</a></p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>Currently this is only available via <a href="https://github.com/alexbhatt/epidm" class="external-link">GitHub</a></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"alexbhatt/epidm"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="purpose" class="section level2">
-<h2 class="hasAnchor">
-<a href="#purpose" class="anchor"></a>Purpose</h2>
+<div class="section level2">
+<h2 id="purpose">Purpose<a class="anchor" aria-label="anchor" href="#purpose"></a>
+</h2>
 <p>The <code>epidm</code> package has been developed to share standard methods for the processing of epidemiological data in the UK. Key data assets this focuses on include</p>
-<div id="infection-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#infection-data" class="anchor"></a>Infection data</h3>
-<p>The <a href="https://sgss.phe.org.uk/">Second Generation Surveillance System (SGSS)</a> is a data asset held by the <a href="https://www.gov.uk/government/publications/securing-our-health-the-uk-health-security-agency/securing-our-health-the-uk-health-security-agency">UK Health Security Agency</a> (formerly Public Health England) which routinely and automatically collects laboratory data from across England.</p>
+<div class="section level3">
+<h3 id="infection-data">Infection data<a class="anchor" aria-label="anchor" href="#infection-data"></a>
+</h3>
+<p>The <a href="https://sgss.phe.org.uk/" class="external-link">Second Generation Surveillance System (SGSS)</a> is a data asset held by the <a href="https://www.gov.uk/government/publications/securing-our-health-the-uk-health-security-agency/securing-our-health-the-uk-health-security-agency" class="external-link">UK Health Security Agency</a> (formerly Public Health England) which routinely and automatically collects laboratory data from across England.</p>
 <p>Laboratories return data on organisms isolated from samples such as the organism species, specimen type, sampling date and antimicrobial susceptibility testing results. These data are routinely used for public health surveillance and epidemiology in England.</p>
 </div>
-<div id="hospital-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#hospital-data" class="anchor"></a>Hospital data</h3>
-<p>The functions for dealing with hospital data within <code>epidm</code> are designed to help clean, process, and link the hospital in a meaningful way. These methods have been used to help understand <a href="https://www.medrxiv.org/content/10.1101/2021.02.16.21251625v1">Healthcare Associated COVID-19 in England</a>.</p>
-<div id="emergency-care-data-set-ecds" class="section level4">
-<h4 class="hasAnchor">
-<a href="#emergency-care-data-set-ecds" class="anchor"></a><a href="https://digital.nhs.uk/data-and-information/data-collections-and-data-sets/data-sets/emergency-care-data-set-ecds">Emergency Care Data Set (ECDS)</a>
+<div class="section level3">
+<h3 id="hospital-data">Hospital data<a class="anchor" aria-label="anchor" href="#hospital-data"></a>
+</h3>
+<p>The functions for dealing with hospital data within <code>epidm</code> are designed to help clean, process, and link the hospital in a meaningful way. These methods have been used to help understand <a href="https://www.medrxiv.org/content/10.1101/2021.02.16.21251625v1" class="external-link">Healthcare Associated COVID-19 in England</a>.</p>
+<div class="section level4">
+<h4 id="emergency-care-data-set-ecds">
+<a href="https://digital.nhs.uk/data-and-information/data-collections-and-data-sets/data-sets/emergency-care-data-set-ecds" class="external-link">Emergency Care Data Set (ECDS)</a><a class="anchor" aria-label="anchor" href="#emergency-care-data-set-ecds"></a>
 </h4>
 <p>ECDS is the national data set for urgent and emergency care and is reported daily by NHS Trusts.</p>
 </div>
-<div id="secondary-use-services-sus" class="section level4">
-<h4 class="hasAnchor">
-<a href="#secondary-use-services-sus" class="anchor"></a><a href="https://digital.nhs.uk/services/secondary-uses-service-sus">Secondary Use Services (SUS)</a>
+<div class="section level4">
+<h4 id="secondary-use-services-sus">
+<a href="https://digital.nhs.uk/services/secondary-uses-service-sus" class="external-link">Secondary Use Services (SUS)</a><a class="anchor" aria-label="anchor" href="#secondary-use-services-sus"></a>
 </h4>
 <p>SUS is the single, comprehensive repository for healthcare data in England which enables a range of reporting and analyses to support the NHS in the delivery of healthcare services. SUS is reported monthly, by the 21st of each month for the previous months data.</p>
 </div>
-<div id="hospital-episode-statistics-hes" class="section level4">
-<h4 class="hasAnchor">
-<a href="#hospital-episode-statistics-hes" class="anchor"></a><a href="https://digital.nhs.uk/data-and-information/data-tools-and-services/data-services/hospital-episode-statistics">Hospital Episode Statistics (HES)</a>
+<div class="section level4">
+<h4 id="hospital-episode-statistics-hes">
+<a href="https://digital.nhs.uk/data-and-information/data-tools-and-services/data-services/hospital-episode-statistics" class="external-link">Hospital Episode Statistics (HES)</a><a class="anchor" aria-label="anchor" href="#hospital-episode-statistics-hes"></a>
 </h4>
 <p>HES is a data warehouse containing details of all admissions, outpatient appointments and A and E attendances at NHS hospitals in England. Hes is reported quarterly, and is a ‘cleaned’ version of SUS and ECDS.</p>
 </div>
@@ -115,29 +111,42 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
-<div class="developers">
-<h2>Developers</h2>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li>Alex Bhattacharya <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-3000-2771" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html#citation">Citing epidm</a></li>
 </ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Alex Bhattacharya <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-3000-2771" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+</ul>
+</div>
+
+
 
   </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Alex Bhattacharya.</p>
+  <p></p>
+<p>Developed by Alex Bhattacharya.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -145,6 +154,8 @@
 
   
 
+
+  
 
   </body>
 </html>
