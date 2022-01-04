@@ -24,6 +24,7 @@ reference:
   - group_time
   - respeciate_generic
   - inpatient_codes
+  - link_ae_inpatient
 - title: "Lookup tables"
   desc: >
     Lookup tables used to reclassify, regroup, or translate data
