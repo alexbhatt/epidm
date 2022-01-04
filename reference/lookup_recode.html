@@ -21,7 +21,7 @@ and a manual mode."><meta name="twitter:card" content="summary"><meta name="twit
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">epidm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.06</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.07</span>
       </span>
     </div>
 
@@ -86,45 +86,32 @@ values for another lookup table existing in the environment</p></dd>
 <span class="r-in"><span class="va">df</span><span class="op">$</span><span class="va">species</span> <span class="op">&lt;-</span> <span class="fu">lookup_recode</span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">sp</span>,<span class="st">'species'</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">df</span><span class="op">$</span><span class="va">grp</span> <span class="op">&lt;-</span> <span class="fu">lookup_recode</span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">ty</span>,<span class="st">'specimen'</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">df</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                          sp</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8                                  ALCALIGENES XYLOSOXIDANS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9                                     ANAEROCOCCUS PREVOTII</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10                                         ESCHERICHIA COLI</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7      PSEUDOMONAS PAUCIMOBILIS (SPHINGOMONAS PAUCIMOBILIS)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11                                               SARS-COV-2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                              TETRATHIOBACTER KASHMIRENSIS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                            HANIA PARALVEI</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                     STREPTOCOCCUS GROUP D</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12                                           CANDIDA AUREUS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                        EUBACTERIUM LENTUM</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  PSYCHROBACTER PHENYLPYRUVICUS (MORAXELLA PHENYLPYRUVICA)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                  FLAVIMONAS ORYZIHABITANS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                               ty         dt                       species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8                      DRAINSITE 2021-01-05    ACHROMOBACTER XYLOSOXIDANS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9                         SPLEEN 2021-02-01   PEPTOSTREPTOCOCCUS PREVOTII</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10                          SWAB 2021-04-27              ESCHERICHIA COLI</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7                          STOOL 2021-07-07     SPHINGOMONAS PAUCIMOBILIS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11                     UMBILICUS 2021-09-12                    SARS-COV-2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                          BLOOD 2021-09-14        ADVENELLA KASHMIRENSIS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6        UPPER RESPIRATORY TRACT 2021-09-18                  HAVNIA ALVEI</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                      ULCER-NOS 2021-11-07         ENTEROCOCCUS FAECALIS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12                     DIALYSATE 2021-11-25                CANDIDA AUREUS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                            LIP 2021-11-27             EGGERTHELLA LENTA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                ALVEOLAR LAVAGE 2021-12-18 PSYCHROBACTER PHENYLPYRUVICUS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  UPPER GASTRO-INTESTINAL TRACT 2022-01-02     PSEUDOMONAS ORYZIHABITANS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                        grp</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8                   Fluids</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9                  Tissues</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10           Swabs-General</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7        Faeces &amp; Lowergut</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11           Swabs-General</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                    Blood</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6            URT/Mouth/Ear</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4            Swabs-General</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12            Urine/Kidney</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1            Swabs-General</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  Lower Respiratory Tract</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                  Tissues</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                             sp                    ty         dt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                             STOMATOCOCCUS SP                PLEURA 2021-02-10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                  PEPTOSTREPTOCOCCUS PREVOTII     HEART/HEART VALVE 2021-02-21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11                                  SARS-COV-2           BREAST MILK 2021-02-28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                            ESCHERICHIA COLI                   BAL 2021-04-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                              CANDIDA AUREUS                  NOSE 2021-06-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                        CALYMMATOBACTERIUM SP      WOUND (SURGICAL) 2021-08-31</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       EGGERTHELLA LENTA (EUBACTERIUM LENTUM)              APPENDIX 2021-09-25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  DELFTIA ACIDOVORANS (COMAMONAS ACIDOVORANS)                   EYE 2021-10-21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                     ENTEROBACTER AGGLOMERANS               GITRACT 2021-10-24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                 WAUTERSIA SP CARDIOVASCULAR SYSTEM 2021-11-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                 TETRATHIOBACTER KASHMIRENSIS                  SWAB 2021-11-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                      FLAVOBACTERIUM ODORATUM                   SPA 2021-12-26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   species                     grp</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4               ROTHIA SP Lower Respiratory Tract</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   ANAEROCOCCUS PREVOTII                 Tissues</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11             SARS-COV-2                  Fluids</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10       ESCHERICHIA COLI Lower Respiratory Tract</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12         CANDIDA AUREUS           Swabs-General</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           KLEBSIELLA SP             Wound Swabs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       EGGERTHELLA LENTA                 Tissues</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     DELFTIA ACIDOVORANS           Swabs-General</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9     PANTOEA AGGLOMERANS       Faeces &amp; Lowergut</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          CUPRIAVIDUS SP                 Tissues</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  ADVENELLA KASHMIRENSIS           Swabs-General</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8       MYROIDES ODORATUS            Urine/Kidney</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># for a tidyverse use</span></span>
 <span class="r-in"><span class="co"># df %&gt;% mutate(sp=lookup_recode(sp,'species))</span></span>

@@ -20,7 +20,7 @@ tools within epidm."><meta name="twitter:card" content="summary"><meta name="twi
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">epidm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.06</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.07</span>
       </span>
     </div>
 
@@ -43,7 +43,7 @@ tools within epidm."><meta name="twitter:card" content="summary"><meta name="twi
     </div>
 
     <div class="ref-description">
-    <p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a></p>
+    <p><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="figures/lifecycle-stable.svg" alt="[Stable]"></a></p>
 <p>An function to help setup connections to SQL databases
 acting as a wrapper for the odbc and DBI packages. Used by other sql_*
 tools within epidm.</p>
@@ -70,6 +70,18 @@ note that servers may require the use of double backslash <code>\\</code></p></d
     <div class="dont-index"><p>sql_clean sql_read sql_write</p></div>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">sql</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span class="r-in">  sgss <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ser <span class="op">=</span> <span class="st">'sgssdb.phe.gov.uk'</span>,</span>
+<span class="r-in">              dbn <span class="op">=</span> <span class="st">'SGSSDW'</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">sgss_con</span> <span class="op">=</span> <span class="fu">sql_connect</span><span class="op">(</span>server <span class="op">=</span> <span class="va">sql</span><span class="op">$</span><span class="va">sgss</span><span class="op">$</span><span class="va">ser</span>, database <span class="op">=</span> <span class="va">sql</span><span class="op">$</span><span class="va">sgss</span><span class="op">$</span><span class="va">dbn</span><span class="op">)</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in sql_connect(server = sql$sgss$ser, database = sql$sgss$dbn):</span> object 'odbcConnect' not found</span>
+<span class="r-in"></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
