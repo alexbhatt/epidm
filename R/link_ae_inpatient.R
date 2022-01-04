@@ -24,9 +24,8 @@
 #' @seealso group_time continuous_inpatient_spells
 #'
 #' @return a patient level linked hospital record
-#' @export
 #'
-#'
+
 link_ae_inpatient <- function(
   ae_data,
   ae_in,
