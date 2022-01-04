@@ -16,11 +16,20 @@ note that servers may require the use of double backslash \verb{\\\\}}
 a SQL connection object
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
 An function to help setup connections to SQL databases
 acting as a wrapper for the odbc and DBI packages. Used by other sql_*
 tools within epidm.
+}
+\examples{
+sql <- list(
+  sgss = list(ser = 'sgssdb.phe.gov.uk',
+              dbn = 'SGSSDW')
+)
+
+sgss_con = sql_connect(server = sql$sgss$ser, database = sql$sgss$dbn)
+
 }
 \seealso{
 sql_clean sql_read sql_write

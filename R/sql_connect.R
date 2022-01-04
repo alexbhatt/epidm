@@ -3,7 +3,6 @@
 #' @description
 #' `r lifecycle::badge('stable')`
 #'
-#'
 #' An function to help setup connections to SQL databases
 #'   acting as a wrapper for the odbc and DBI packages. Used by other sql_*
 #'   tools within epidm.
@@ -24,6 +23,7 @@
 #'   sgss = list(ser = 'sgssdb.phe.gov.uk',
 #'               dbn = 'SGSSDW')
 #' )
+#'
 #' sgss_con = sql_connect(server = sql$sgss$ser, database = sql$sgss$dbn)
 #'
 #' @export
