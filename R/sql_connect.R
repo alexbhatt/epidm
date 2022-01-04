@@ -1,7 +1,7 @@
 #' Connect to a SQL database
 #'
 #' @description
-#' `r lifecycle::badge('experimental')`
+#' `r lifecycle::badge('stable')`
 #'
 #'
 #' An function to help setup connections to SQL databases
@@ -18,6 +18,13 @@
 #' @seealso sql_clean sql_read sql_write
 #'
 #' @return a SQL connection object
+#'
+#' @examples
+#' sql <- list(
+#'   sgss = list(ser = 'sgssdb.phe.gov.uk',
+#'               dbn = 'SGSSDW')
+#' )
+#' sgss_con = sql_connect(server = sql$sgss$ser, database = sql$sgss$dbn)
 #'
 #' @export
 #'
