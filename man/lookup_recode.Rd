@@ -27,23 +27,38 @@ and a manual mode.
 }
 \examples{
 df <- data.frame(
-  sp = c(
-    sample(respeciate_organism$previous_organism_name,9),
+  spec = c(
+    sample(grep(")",
+                respeciate_organism$previous_organism_name,
+                value=TRUE,
+                invert = TRUE),
+           9),
     "ESCHERICHIA COLI","SARS-COV-2","CANDIDA AUREUS"),
-  ty = sample(specimen_type_grouping$specimen_type,12),
-  dt = sample(seq.Date(from = Sys.Date()-365,
-                       to = Sys.Date(),
-                       by = "day"),12)
+  type = sample(specimen_type_grouping$specimen_type,12),
+  date = sample(seq.Date(from = Sys.Date()-365,
+                         to = Sys.Date(),
+                         by = "day"),12)
 )
-df <- df[order(df$dt),]
+df <- df[order(df$date),]
 
-df$species <- lookup_recode(df$sp,'species')
-df$grp <- lookup_recode(df$ty,'specimen')
+# show the data before the changes
 df
 
-# for a tidyverse use
-# df \%>\% mutate(sp=lookup_recode(sp,'species))
+# check the lookup tables
+# observe the changes
+head(respeciate_organism[1:2])
+df$species <- lookup_recode(df$spec,'species')
+df[,c('spec','species','date')]
 
+head(specimen_type_grouping)
+df$grp <- lookup_recode(df$type,'specimen')
+df[,c('species','type','grp','date')]
+
+# for a tidyverse use
+# df \%>\% mutate(spec=lookup_recode(spec,'species))
+
+# manual input of your own lookup
+# .import=list(new,old)
 lookup_recode(
   "ALCALIGENES DENITRIFICANS",
   type = 'manual',
