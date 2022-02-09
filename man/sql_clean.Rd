@@ -28,7 +28,5 @@ testSQL <- c(
 "FROM DATASET ","-- output here")
 sql_clean(testSQL)
 
-readr::read_lines('./inst/sql/sus.sql')
-sql_clean('./inst/sql/sus.sql')
 
 }

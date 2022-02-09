@@ -21,8 +21,6 @@
 #' "FROM DATASET ","-- output here")
 #' sql_clean(testSQL)
 #'
-#' readr::read_lines('./inst/sql/sus.sql')
-#' sql_clean('./inst/sql/sus.sql')
 #'
 #' @return a cleaned SQL query without comments as a character string
 #' @export
