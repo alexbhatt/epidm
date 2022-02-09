@@ -48,7 +48,7 @@ the column with the NHS checksum result stored as a BOOLEAN}
 \item{.forceCopy}{optional, default FALSE; TRUE will force data.table to take a copy
 instead of editing the data without reference}
 
-\item{.experimenal}{optional, default FALSE; TRUE will enable the
+\item{.experimental}{optional, default FALSE; TRUE will enable the
 experimental features for recoding NA values based on the mode}
 }
 \value{
