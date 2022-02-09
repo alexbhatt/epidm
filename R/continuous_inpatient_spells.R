@@ -1,4 +1,3 @@
-
 #' Continuous Inpatient (CIP) Spells
 #'
 #' @description
@@ -11,8 +10,8 @@
 #'   spells. A CIP spell starts when a decision has been made to admit
 #'   the patient, and a consultant has taken responsibility for their care.
 #'   The spell ends when the patient dies or is discharged from hospital.
-#'
-#' @seealso \href{http://content.digital.nhs.uk/media/11859/Provider-Spells-Methodology/pdf/Spells_Methodology.pdf}{NHSD CIP Spell Methodology}
+#'   This follows the NHS Digital Provider Spells Methodology:
+#'   http://content.digital.nhs.uk/media/11859/Provider-Spells-Methodology/pdf/Spells_Methodology.pdf}{NHSD CIP Spell Methodology}
 #'
 #' @import data.table
 #'
