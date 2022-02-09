@@ -89,19 +89,19 @@ values for another lookup table existing in the environment</p></dd>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># show the data before the changes</span></span>
 <span class="r-in"><span class="va">df</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                        spec                                 type       date</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8            HANIA PARALVEI                   PUS SOURCE UNKNOWN 2021-03-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2           VIBRIO HOLLISAE                                  LVS 2021-03-17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  ALCALIGENES XYLOSOXIDANS                         ENDOCERVICAL 2021-05-24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        EUBACTERIUM LENTUM                                LIVER 2021-07-18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    ALCALIGENES PIECHAUDII                            GROIN-NOS 2021-07-23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12           CANDIDA AUREUS                               VAGINA 2021-07-28</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11               SARS-COV-2                    UNASSIGNED PARENT 2021-08-31</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5     STREPTOCOCCUS GROUP D                               SALIVA 2021-09-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10         ESCHERICHIA COLI                                  EMU 2021-09-15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   FLAVOBACTERIUM ODORATUM FAECES/LOWER GASTRO-INTESTINAL TRACT 2021-09-28</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6       PANTOEA AGGLOMERANS                                MOUTH 2022-01-24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7           CHRYSEOMONAS SP                ENDOTRACHEAL ASPIRATE 2022-01-25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                     spec                 type       date</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7              ALCALIGENES DENITRIFICANS                VULVA 2021-05-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         LEPTOSPIRA ICTEROHAEMORRHAGIAE PUS (SOURCE UNKNOWN) 2021-05-19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                 ACTINOBACULUM SCHAALII             DUODENUM 2021-05-21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                      EGGERTHELLA LENTA                  NPA 2021-06-30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                 STREPTOCOCCUS FAECALIS      BARTHOLIN GLAND 2021-07-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3               MORAXELLA PHENYLPYRUVICA         GALL BLADDER 2021-08-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                 ALCALIGENES PIECHAUDII           CORD BLOOD 2021-08-11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                   CHRYSEOMONAS LUTEOLA              UNKNOWN 2021-08-20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                      ESCHERICHIA COLI        SINUS (NASAL) 2021-09-20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                        CANDIDA AUREUS             NECKLINE 2021-11-16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  ALCALIGENES XYLOSOXIDANS XYLOSOXIDANS       SYNOVIAL FLUID 2021-12-24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11                            SARS-COV-2       UMBILICAL CORD 2022-01-06</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># check the lookup tables</span></span>
 <span class="r-in"><span class="co"># observe the changes</span></span>
@@ -115,19 +115,32 @@ values for another lookup table existing in the environment</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6          TETRATHIOBACTER KASHMIRENSIS      ADVENELLA KASHMIRENSIS</span>
 <span class="r-in"><span class="va">df</span><span class="op">$</span><span class="va">species</span> <span class="op">&lt;-</span> <span class="fu">lookup_recode</span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">spec</span>,<span class="st">'species'</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">df</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'spec'</span>,<span class="st">'species'</span>,<span class="st">'date'</span><span class="op">)</span><span class="op">]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                        spec                    species       date</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8            HANIA PARALVEI               HAVNIA ALVEI 2021-03-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2           VIBRIO HOLLISAE         GRIMONTIA HOLLISAE 2021-03-17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  ALCALIGENES XYLOSOXIDANS ACHROMOBACTER XYLOSOXIDANS 2021-05-24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        EUBACTERIUM LENTUM          EGGERTHELLA LENTA 2021-07-18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    ALCALIGENES PIECHAUDII   ACHROMOBACTER PIECHAUDII 2021-07-23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12           CANDIDA AUREUS             CANDIDA AUREUS 2021-07-28</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11               SARS-COV-2                 SARS-COV-2 2021-08-31</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5     STREPTOCOCCUS GROUP D      ENTEROCOCCUS FAECALIS 2021-09-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10         ESCHERICHIA COLI           ESCHERICHIA COLI 2021-09-15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   FLAVOBACTERIUM ODORATUM          MYROIDES ODORATUS 2021-09-28</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6       PANTOEA AGGLOMERANS        PANTOEA AGGLOMERANS 2022-01-24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7           CHRYSEOMONAS SP             PSEUDOMONAS SP 2022-01-25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                     spec                       species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7              ALCALIGENES DENITRIFICANS   ACHROMOBACTER DENITRIFICANS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         LEPTOSPIRA ICTEROHAEMORRHAGIAE        LEPTOSPIRA INTERROGANS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                 ACTINOBACULUM SCHAALII         ACTINOTIGNUM SCHAALII</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                      EGGERTHELLA LENTA             EGGERTHELLA LENTA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                 STREPTOCOCCUS FAECALIS         ENTEROCOCCUS FAECALIS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3               MORAXELLA PHENYLPYRUVICA PSYCHROBACTER PHENYLPYRUVICUS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                 ALCALIGENES PIECHAUDII      ACHROMOBACTER PIECHAUDII</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                   CHRYSEOMONAS LUTEOLA           PSEUDOMONAS LUTEOLA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                      ESCHERICHIA COLI              ESCHERICHIA COLI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                        CANDIDA AUREUS                CANDIDA AUREUS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  ALCALIGENES XYLOSOXIDANS XYLOSOXIDANS    ACHROMOBACTER XYLOSOXIDANS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11                            SARS-COV-2                    SARS-COV-2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          date</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  2021-05-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2021-05-19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2021-05-21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2021-06-30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2021-07-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2021-08-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2021-08-11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2021-08-20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2021-09-20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 2021-11-16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2021-12-24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 2022-01-06</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">specimen_type_grouping</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      specimen_type specimen_group</span>
@@ -139,32 +152,32 @@ values for another lookup table existing in the environment</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 JOINT PROSTHESIS Bones &amp; Joints</span>
 <span class="r-in"><span class="va">df</span><span class="op">$</span><span class="va">grp</span> <span class="op">&lt;-</span> <span class="fu">lookup_recode</span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">type</span>,<span class="st">'specimen'</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">df</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'species'</span>,<span class="st">'type'</span>,<span class="st">'grp'</span>,<span class="st">'date'</span><span class="op">)</span><span class="op">]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                       species                                 type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8                HAVNIA ALVEI                   PUS SOURCE UNKNOWN</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          GRIMONTIA HOLLISAE                                  LVS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  ACHROMOBACTER XYLOSOXIDANS                         ENDOCERVICAL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4           EGGERTHELLA LENTA                                LIVER</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    ACHROMOBACTER PIECHAUDII                            GROIN-NOS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12             CANDIDA AUREUS                               VAGINA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11                 SARS-COV-2                    UNASSIGNED PARENT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5       ENTEROCOCCUS FAECALIS                               SALIVA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10           ESCHERICHIA COLI                                  EMU</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9           MYROIDES ODORATUS FAECES/LOWER GASTRO-INTESTINAL TRACT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6         PANTOEA AGGLOMERANS                                MOUTH</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7              PSEUDOMONAS SP                ENDOTRACHEAL ASPIRATE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  grp       date</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8             Fluids 2021-03-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2            Genital 2021-03-17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3            Genital 2021-05-24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4            Tissues 2021-07-18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1      Swabs-General 2021-07-23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12           Genital 2021-07-28</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11     Swabs-General 2021-08-31</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5      URT/Mouth/Ear 2021-09-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10      Urine/Kidney 2021-09-15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  Faeces &amp; Lowergut 2021-09-28</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6      URT/Mouth/Ear 2022-01-24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7      URT/Mouth/Ear 2022-01-25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                          species                 type               grp</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7    ACHROMOBACTER DENITRIFICANS                VULVA           Genital</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         LEPTOSPIRA INTERROGANS PUS (SOURCE UNKNOWN)            Fluids</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          ACTINOTIGNUM SCHAALII             DUODENUM Faeces &amp; Lowergut</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2              EGGERTHELLA LENTA                  NPA     URT/Mouth/Ear</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          ENTEROCOCCUS FAECALIS      BARTHOLIN GLAND           Genital</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  PSYCHROBACTER PHENYLPYRUVICUS         GALL BLADDER Faeces &amp; Lowergut</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9       ACHROMOBACTER PIECHAUDII           CORD BLOOD             Blood</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8            PSEUDOMONAS LUTEOLA              UNKNOWN     Swabs-General</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10              ESCHERICHIA COLI        SINUS (NASAL)     URT/Mouth/Ear</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                CANDIDA AUREUS             NECKLINE     Swabs-General</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     ACHROMOBACTER XYLOSOXIDANS       SYNOVIAL FLUID    Bones &amp; Joints</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11                    SARS-COV-2       UMBILICAL CORD     Swabs-General</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          date</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  2021-05-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2021-05-19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2021-05-21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2021-06-30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2021-07-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2021-08-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2021-08-11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2021-08-20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2021-09-20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 2021-11-16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2021-12-24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 2022-01-06</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># for a tidyverse use</span></span>
 <span class="r-in"><span class="co"># df %&gt;% mutate(spec=lookup_recode(spec,'species))</span></span>
