@@ -14,6 +14,7 @@
 #' values for another lookup table existing in the environment
 #'
 #' @importFrom purrr imap
+#' @importFrom stats na.omit setNames
 #'
 #'
 #' @return a list object of the recoded field
@@ -96,7 +97,7 @@ lookup_recode <- function(src,
   } else if (type == 'manual') {
 
     lk <- as.list(
-      setNames(
+      stats::setNames(
         .import[[1]],
         .import[[2]]
       )
