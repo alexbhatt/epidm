@@ -91,7 +91,7 @@ respeciate_generic <- function(x,
 
   ## loop counters
   i <- 1
-  respecCount <- sum(x$tmp.spFlag,na.rm=T)
+  respecCount <- sum(x$tmp.spFlag,na.rm=TRUE)
 
   while(respecCount!=0) {
 
@@ -141,7 +141,7 @@ respeciate_generic <- function(x,
       )
     ]
 
-    respecCount <- sum(x$tmp.respecType %in% c(1,2),na.rm=T)
+    respecCount <- sum(x$tmp.respecType %in% c(1,2),na.rm=TRUE)
 
     print(paste0(window,
                  "-day round ",i,": ",respecCount,

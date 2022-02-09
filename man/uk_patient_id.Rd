@@ -101,7 +101,7 @@ id_test <- data.frame(
     'Mouse','Mause','Mouse','Moose','Moose','Mouse','MOUSe',
     'Mouse','Mouse','Frog','FROG','Frug','Frog'
   ),
-  testdate = sample(seq.Date(Sys.Date()-21,Sys.Date(),"day"),13,replace = T)
+  testdate = sample(seq.Date(Sys.Date()-21,Sys.Date(),"day"),13,replace = TRUE)
 )
 uk_patient_id(x = id_test,
               nhs_number = 'nhs_n',

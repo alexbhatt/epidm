@@ -20,7 +20,7 @@ csv_from_zip <- function(x) {
   td <- tempdir()
   tf <- tempfile(tmpdir=td, fileext=".zip")
   utils::download.file(loc.url, tf)
-  fname <- unzip(tf, list=TRUE)$Name[grep("csv|xls",unzip(tf,list=T)$Name)]
+  fname <- unzip(tf, list=TRUE)$Name[grep("csv|xls",unzip(tf,list=TRUE)$Name)]
   utils::unzip(tf, files=fname, exdir=td,overwrite=TRUE)
   fpath <- file.path(td, fname)
   return(fpath)

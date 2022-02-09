@@ -203,14 +203,14 @@ inpatient_codes <- function(x,
   ## capture the fields of interest
   ## icd just have the codes
   if(type %in% c('icd9','icd10')){
-    fields <- grep(field_strings[1],colnames(x),ignore.case=T,value=T)
+    fields <- grep(field_strings[1],colnames(x),ignore.case=TRUE,value=TRUE)
     sel <- c(patient_id_vars,fields)
   }
 
   ## opcs have a date and a procedural code
   if(type=='opcs'){
-    fields <- grep(field_strings[1],colnames(x),ignore.case=T,value=T)
-    dates <- grep(field_strings[2],colnames(x),ignore.case=T,value=T)
+    fields <- grep(field_strings[1],colnames(x),ignore.case=TRUE,value=TRUE)
+    dates <- grep(field_strings[2],colnames(x),ignore.case=TRUE,value=TRUE)
     sel <- c(patient_id_vars,fields,dates)
   }
 
