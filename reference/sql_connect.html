@@ -74,13 +74,14 @@ note that servers may require the use of double backslash <code>\\</code></p></d
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">sql</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">  sgss <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ser <span class="op">=</span> <span class="st">'sgssdb.phe.gov.uk'</span>,</span>
-<span class="r-in">              dbn <span class="op">=</span> <span class="st">'SGSSDW'</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in"><span class="va">sql</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span class="r-in">  dsn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ser <span class="op">=</span> <span class="st">'covid.ukhsa.gov.uk'</span>,</span>
+<span class="r-in">             dbn <span class="op">=</span> <span class="st">'infections'</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">sgss_con</span> <span class="op">=</span> <span class="fu">sql_connect</span><span class="op">(</span>server <span class="op">=</span> <span class="va">sql</span><span class="op">$</span><span class="va">sgss</span><span class="op">$</span><span class="va">ser</span>, database <span class="op">=</span> <span class="va">sql</span><span class="op">$</span><span class="va">sgss</span><span class="op">$</span><span class="va">dbn</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in sql_connect(server = sql$sgss$ser, database = sql$sgss$dbn):</span> object 'odbcConnect' not found</span>
+<span class="r-in"><span class="va">sgss_con</span> <span class="op">=</span> <span class="fu">sql_connect</span><span class="op">(</span>server <span class="op">=</span> <span class="va">sql</span><span class="op">$</span><span class="va">dsn</span><span class="op">$</span><span class="va">ser</span>, database <span class="op">=</span> <span class="va">sql</span><span class="op">$</span><span class="va">dsn</span><span class="op">$</span><span class="va">dbn</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">}</span></span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
