@@ -17,7 +17,8 @@
 #' @param nhs_number a vector containing the columns for the NHS numbers
 #' @param hospital_number a vector containing the columns for the Hospital numbers
 #' @param patient_dob a vector containing the columns for the date of birth
-#' @param organisation_code a vector containing the columns for the organisation codes
+#' @param org_code a vector containing the columns for the organisation codes
+#' @param admission_date a vector containing the inpatient (HES/SUS) admission date
 #' @param .forceCopy a boolean to control if you want to copy the dataset before
 #'   linking together
 #'

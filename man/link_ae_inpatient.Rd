@@ -27,6 +27,8 @@ link_ae_inpatient(
 
 \item{inpatient_data}{the HES/SUS inpatient dataset}
 
+\item{admission_date}{a vector containing the inpatient (HES/SUS) admission date}
+
 \item{spell_id}{the HES/SUS spell id}
 
 \item{nhs_number}{a vector containing the columns for the NHS numbers}
@@ -35,10 +37,10 @@ link_ae_inpatient(
 
 \item{patient_dob}{a vector containing the columns for the date of birth}
 
+\item{org_code}{a vector containing the columns for the organisation codes}
+
 \item{.forceCopy}{a boolean to control if you want to copy the dataset before
 linking together}
-
-\item{organisation_code}{a vector containing the columns for the organisation codes}
 }
 \value{
 a patient level linked hospital record
