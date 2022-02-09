@@ -20,12 +20,14 @@
 #' @return a SQL connection object
 #'
 #' @examples
+#' \dontrun{
 #' sql <- list(
-#'   sgss = list(ser = 'sgssdb.phe.gov.uk',
-#'               dbn = 'SGSSDW')
+#'   dsn = list(ser = 'covid.ukhsa.gov.uk',
+#'              dbn = 'infections')
 #' )
 #'
-#' sgss_con = sql_connect(server = sql$sgss$ser, database = sql$sgss$dbn)
+#' sgss_con = sql_connect(server = sql$dsn$ser, database = sql$dsn$dbn)
+#' }
 #'
 #' @export
 #'

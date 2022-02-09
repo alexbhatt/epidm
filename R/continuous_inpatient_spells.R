@@ -11,7 +11,7 @@
 #'   the patient, and a consultant has taken responsibility for their care.
 #'   The spell ends when the patient dies or is discharged from hospital.
 #'   This follows the NHS Digital Provider Spells Methodology:
-#'   http://content.digital.nhs.uk/media/11859/Provider-Spells-Methodology/pdf/Spells_Methodology.pdf}{NHSD CIP Spell Methodology}
+#'   http://content.digital.nhs.uk/media/11859/Provider-Spells-Methodology/pdf/Spells_Methodology.pdf
 #'
 #' @import data.table
 #'
