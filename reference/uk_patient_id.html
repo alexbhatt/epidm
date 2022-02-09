@@ -111,7 +111,7 @@ the column with the NHS checksum result stored as a BOOLEAN</p></dd>
 <dt>.forceCopy</dt>
 <dd><p>optional, default FALSE; TRUE will force data.table to take a copy
 instead of editing the data without reference</p></dd>
-<dt>.experimenal</dt>
+<dt>.experimental</dt>
 <dd><p>optional, default FALSE; TRUE will enable the
 experimental features for recoding NA values based on the mode</p></dd>
 </dl></div>
@@ -163,19 +163,19 @@ BOOLEAN containing the result of the NHS checksum validation</p></dd>
 <span class="r-in">              date_of_birth <span class="op">=</span> <span class="st">'dateofbirth'</span>,</span>
 <span class="r-in">              .sortOrder <span class="op">=</span> <span class="st">'testdate'</span><span class="op">)</span><span class="op">[</span><span class="op">]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     id      nhs_n  hosp_n  sex dateofbirth firstname lastname   testdate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:  1         NA      13    F  1988-10-06    DANGER    MOOSE 2022-01-21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  1 9434765919      13    F  1988-10-06    DANGER    MOUSE 2022-01-27</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:  1 5185293519      13    M  1988-10-06    DANGER    MOUSE 2022-01-27</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:  1 9434765919      13    F  1900-01-01    DENGER    MOUSE 2022-01-28</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  1 3367170666      13    F  1988-10-06    DANGER    MOUSE 2022-01-28</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  1         NA UNKNOWN    F  1988-10-06    DANGER    MOOSE 2022-02-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:  1 9434765919      13    F  1988-10-06    DANGER    MAUSE 2022-02-08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  2         NA    &lt;NA&gt; &lt;NA&gt;  2020-01-28     KRAZY     FRUG 2022-01-23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  3         NA      96 &lt;NA&gt;  2020-01-28     CRAZY     FROG 2022-01-24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:  3         NA      96    M  2020-01-28         C     FROG 2022-01-30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11:  3 8082318562      96    M  2020-01-28     CRAZY     FROG 2022-02-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12:  5 5185293519      31    M  1988-10-06    DANGER    MOUSE 2022-02-08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13:  5 5185293519      31    M  1988-10-06    DANGER    MOUSE 2022-02-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:  1         NA      96 &lt;NA&gt;  2020-01-28     CRAZY     FROG 2022-01-19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  1         NA      96    M  2020-01-28         C     FROG 2022-01-27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:  1 8082318562      96    M  2020-01-28     CRAZY     FROG 2022-02-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:  2 5185293519      13    M  1988-10-06    DANGER    MOUSE 2022-01-21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  2 3367170666      13    F  1988-10-06    DANGER    MOUSE 2022-01-24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  2 5185293519      31    M  1988-10-06    DANGER    MOUSE 2022-01-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:  2         NA UNKNOWN    F  1988-10-06    DANGER    MOOSE 2022-02-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  2 5185293519      31    M  1988-10-06    DANGER    MOUSE 2022-02-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  2         NA      13    F  1988-10-06    DANGER    MOOSE 2022-02-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:  4         NA    &lt;NA&gt; &lt;NA&gt;  2020-01-28     KRAZY     FRUG 2022-01-24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:  7 9434765919      13    F  1900-01-01    DENGER    MOUSE 2022-01-30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:  7 9434765919      13    F  1988-10-06    DANGER    MAUSE 2022-02-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13:  7 9434765919      13    F  1988-10-06    DANGER    MOUSE 2022-02-07</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>

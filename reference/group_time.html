@@ -71,6 +71,14 @@ or events within a static/fixed or rolling window of time.</p>
 <dt>date_start</dt>
 <dd><p>column containing the start dates for the grouping,
 provided quoted</p></dd>
+<dt>date_end</dt>
+<dd><p>column containing the end dates for the <em>interval</em>, quoted</p></dd>
+<dt>window</dt>
+<dd><p>an integer representing a time window in days which will be
+applied to the start date for grouping <em>events</em></p></dd>
+<dt>window_type</dt>
+<dd><p>character, to determine if a 'rolling' or 'static'
+grouping method should be used when grouping <em>events</em></p></dd>
 <dt>group_vars</dt>
 <dd><p>in a vector, the all columns used to group records, quoted</p></dd>
 <dt>indx_varname</dt>
@@ -85,21 +93,6 @@ period maximum</p></dd>
 <dt>.forceCopy</dt>
 <dd><p>default FALSE; TRUE will force data.table to take a copy
 instead of editing the data without reference</p></dd>
-<dt>intervals</dt>
-<dd><p>must use:</p><dl><dt><code>date_end</code></dt>
-<dd><p>column containing the end dates for the interval, quoted</p></dd>
-
-
-</dl></dd>
-<dt>events</dt>
-<dd><p>must use:</p><dl><dt><code>window</code></dt>
-<dd><p>an integer representing a time window in days which will be applied to the start date</p></dd>
-
-<dt><code>window_type</code></dt>
-<dd><p>character, supplied only for event grouping, to determine if a 'rolling' or 'static' grouping method should be used</p></dd>
-
-
-</dl></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
