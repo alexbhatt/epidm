@@ -15,15 +15,14 @@
 #' @param group_vars in a vector, the all columns used to group records, quoted
 #' @param date_start column containing the start dates for the grouping,
 #'   provided quoted
-#' @param intervals must use:
-#' \describe{
-#'   \item{`date_end`}{column containing the end dates for the interval, quoted}
-#' }
-#' @param events must use:
-#' \describe{
-#'   \item{`window`}{an integer representing a time window in days which will be applied to the start date}
-#'   \item{`window_type`}{character, supplied only for event grouping, to determine if a 'rolling' or 'static' grouping method should be used}
-#' }
+#'
+#' @param date_end column containing the end dates for the *interval*, quoted
+#'
+#' @param window an integer representing a time window in days which will be
+#'   applied to the start date for grouping *events*
+#' @param window_type character, to determine if a 'rolling' or 'static'
+#'   grouping method should be used when grouping *events*
+#'
 #' @param indx_varname a character string to set variable name for the
 #'   index column which provides a grouping key; default is indx
 #' @param min_varname a character string to set variable name for the

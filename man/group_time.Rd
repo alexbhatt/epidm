@@ -23,6 +23,14 @@ group_time(
 \item{date_start}{column containing the start dates for the grouping,
 provided quoted}
 
+\item{date_end}{column containing the end dates for the \emph{interval}, quoted}
+
+\item{window}{an integer representing a time window in days which will be
+applied to the start date for grouping \emph{events}}
+
+\item{window_type}{character, to determine if a 'rolling' or 'static'
+grouping method should be used when grouping \emph{events}}
+
 \item{group_vars}{in a vector, the all columns used to group records, quoted}
 
 \item{indx_varname}{a character string to set variable name for the
@@ -36,17 +44,6 @@ period maximum}
 
 \item{.forceCopy}{default FALSE; TRUE will force data.table to take a copy
 instead of editing the data without reference}
-
-\item{intervals}{must use:
-\describe{
-\item{\code{date_end}}{column containing the end dates for the interval, quoted}
-}}
-
-\item{events}{must use:
-\describe{
-\item{\code{window}}{an integer representing a time window in days which will be applied to the start date}
-\item{\code{window_type}}{character, supplied only for event grouping, to determine if a 'rolling' or 'static' grouping method should be used}
-}}
 }
 \value{
 the original data.frame as a data.table
