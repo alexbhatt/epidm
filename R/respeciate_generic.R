@@ -33,7 +33,7 @@
 #'                 "KLEBSIELLA UNNAMED",
 #'                 "KLEBSIELLA PNEUMONIAE",
 #'                 "KLEBEIELLA OXYTOCA"),
-#'               25,replace = T),
+#'               25,replace = TRUE),
 #' type = "BLOOD",
 #' specdate = sample(seq.Date(Sys.Date()-21,Sys.Date(),"day"),25,replace = TRUE)
 #' )
