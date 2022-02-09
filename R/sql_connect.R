@@ -45,6 +45,7 @@ sql_connect <- function(server,
   # }
 
   ## cycle through the available drivers on the machine to find the right one
+  ## this is helpful if you're on a linux system/container and not Windows
   for(driver in unique(odbc::odbcListDrivers()$name)){
 
     ## uses Active Directory credentials

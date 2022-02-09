@@ -13,13 +13,16 @@
 #'
 #' @examples
 #' testSQL <- c(
-#' "/*********",
-#' "INTRO HEADER COMMENTS",
-#' "*********/","  SELECT ",
+#' "/********* INTRO HEADER COMMENTS",
+#' "*********/",
+#' "  SELECT ",
 #' "  [VAR 1]  -- with comments",
-#' ",[VAR 2]",",[VAR 3]","FROM DATASET ",
-#' "-- output here")
+#' ",[VAR 2]",",[VAR 3]",
+#' "FROM DATASET ","-- output here")
 #' sql_clean(testSQL)
+#'
+#' readr::read_lines('./inst/sql/sus.sql')
+#' sql_clean('./inst/sql/sus.sql')
 #'
 #' @return a cleaned SQL query without comments as a character string
 #' @export
@@ -38,7 +41,7 @@ sql_clean <- function(sql) {
     }
   } else {
     ## or a list/vector of character strings that need to be put together
-    x <- readr::read_lines(sql)
+    x <- sql
   }
 
   # note these gsubs could be combined with the next line separated with |
@@ -55,10 +58,11 @@ sql_clean <- function(sql) {
   x <- gsub("/\\*(.|\n)*?\\*/","",x)
 
   # whitespace cleanup
+  x <- trimws(x)
+
   while(grepl("  ",x)){
     x <- gsub("  "," ",x)
   }
-  x <- trimws(x)
 
   return(x)
 }

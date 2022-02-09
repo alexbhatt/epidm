@@ -20,12 +20,15 @@ or text file and remove all comments for use with database query packages
 }
 \examples{
 testSQL <- c(
-"/*********",
-"INTRO HEADER COMMENTS",
-"*********/","  SELECT ",
+"/********* INTRO HEADER COMMENTS",
+"*********/",
+"  SELECT ",
 "  [VAR 1]  -- with comments",
-",[VAR 2]",",[VAR 3]","FROM DATASET ",
-"-- output here")
+",[VAR 2]",",[VAR 3]",
+"FROM DATASET ","-- output here")
 sql_clean(testSQL)
+
+readr::read_lines('./inst/sql/sus.sql')
+sql_clean('./inst/sql/sus.sql')
 
 }

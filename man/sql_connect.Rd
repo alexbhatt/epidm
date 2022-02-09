@@ -20,7 +20,8 @@ a SQL connection object
 
 An function to help setup connections to SQL databases
 acting as a wrapper for the odbc and DBI packages. Used by other sql_*
-tools within epidm.
+tools within epidm. This uses the credential manager within the system and
+assumes you are using a trusted connection.
 }
 \examples{
 sql <- list(
