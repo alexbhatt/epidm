@@ -55,6 +55,8 @@ to take place. It can therefore be made up of one or more provider
 spells. A CIP spell starts when a decision has been made to admit
 the patient, and a consultant has taken responsibility for their care.
 The spell ends when the patient dies or is discharged from hospital.
+This follows the NHS Digital Provider Spells Methodology:
+http://content.digital.nhs.uk/media/11859/Provider-Spells-Methodology/pdf/Spells_Methodology.pdf
 }
 \examples{
 
@@ -135,7 +137,4 @@ cip_spells(x=cip_test,
   discharge_destination = 'dis_dest'
 )[]
 
-}
-\seealso{
-\href{http://content.digital.nhs.uk/media/11859/Provider-Spells-Methodology/pdf/Spells_Methodology.pdf}{NHSD CIP Spell Methodology}
 }
