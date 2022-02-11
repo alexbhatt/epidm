@@ -6,8 +6,8 @@
 #'
 #' When HES/SUS ICD/OPCS codes are provided in wide format
 #'   you may want to clean them up into long for easier analysis.
-#'   This function helps by reshaping long as a seperate table.
-#'   Ensuring they're seperate allows you to retain source data, and aggregate
+#'   This function helps by reshaping long as a separate table.
+#'   Ensuring they're separate allows you to retain source data, and aggregate
 #'   appropriately later.
 #'
 #' @import data.table
@@ -16,7 +16,7 @@
 #' @param x a data.frame or data.table containing inpatient data
 #' @param field_strings a vector or string containing the regex for the the columns
 #' @param patient_id_vars a vector containing colnames used to identify a patient episode or spell
-#' @param type a string to denote if the codes are diagnostic or prcedural
+#' @param type a string to denote if the codes are diagnostic or procedural
 #' @param .forceCopy default FALSE; TRUE will force data.table to take a copy
 #'   instead of editing the data without reference
 #'
