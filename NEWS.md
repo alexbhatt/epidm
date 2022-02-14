@@ -1,7 +1,11 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
-# epidm 1.0.1.9000
+# epidm 1.0.2
 
+*remove <a href> links from Description field
+
+
+# epidm 1.0.2
 *remove <a href> links from Description field
 
 
