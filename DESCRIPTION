@@ -9,16 +9,11 @@ Authors@R:
 Description: Contains utilities and functions for the cleaning, processing and 
     management of patient level public health data for surveillance 
     and analysis held by the UK Health Security Agency, UKHSA. 
-    These functions contribute to the surveillance of 
-    <a href="https://pubmed.ncbi.nlm.nih.gov/34474055/">Hospital Onset COVID-19</a>
-    and implement the 
-    <a href="http://content.digital.nhs.uk/media/11859/provider-spells-methodology/pdf/spells_methodology.pdf/">
-    NHS Digital CIP and Provider Care Spell methodology</a>.
 URL: https://github.com/alexbhatt/epidm
 BugReports: https://github.com/alexbhatt/epidm/issues
 License: GPL (>= 3)
 Depends: 
-    R (>= 2.10)
+    R (>= 3.1)
 Imports: 
     data.table,
     DBI,
