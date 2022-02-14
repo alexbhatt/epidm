@@ -5,10 +5,6 @@
 *remove <a href> links from Description field
 
 
-# epidm 1.0.2
-*remove <a href> links from Description field
-
-
 # epidm 1.0.1
 
 * Edits for CRAN submission to change print() to message() to prevent writing to console.
