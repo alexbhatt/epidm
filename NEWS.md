@@ -2,7 +2,7 @@
 
 # epidm 1.0.2
 
-*remove <a href> links from Description field
+*remove a href links from Description field
 
 
 # epidm 1.0.1
