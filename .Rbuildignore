@@ -9,3 +9,5 @@
 ^docs$
 ^pkgdown$
 ^\.github$
+^revdep$
+^cran-comments\.md$
