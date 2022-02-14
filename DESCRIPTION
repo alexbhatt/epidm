@@ -1,5 +1,5 @@
 Package: epidm
-Version: 1.0.0
+Version: 1.0.1
 Title: UK Epidemiological Data Management
 Authors@R: 
     person("Alex", "Bhattacharya", 
@@ -8,6 +8,8 @@ Authors@R:
            comment = c(ORCID = "0000-0003-3000-2771"))
 Description: Contains utilties and functions for the cleaning, processing and 
     management of UK public health data held by UKHSA.
+URL: https://github.com/alexbhatt/epidm
+BugReports: https://github.com/alexbhatt/epidm/issues
 License: GPL (>= 3)
 Depends: 
     R (>= 2.10)
