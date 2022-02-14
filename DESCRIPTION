@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-3000-2771"))
 Description: Contains utilities and functions for the cleaning, processing and 
-    management of patient level public health data for surveilllance 
+    management of patient level public health data for surveillance 
     and analysis held by the UK Health Security Agency, UKHSA. 
     These functions contribute to the surveillance of 
     <a href="https://pubmed.ncbi.nlm.nih.gov/34474055/">Hospital Onset COVID-19</a>
