@@ -143,7 +143,7 @@ respeciate_generic <- function(x,
 
     respecCount <- sum(x$tmp.respecType %in% c(1,2),na.rm=TRUE)
 
-    print(paste0(window,
+    message(paste0(window,
                  "-day round ",i,": ",respecCount,
                  " SP or UNNAMMED isolates respeciated"))
 

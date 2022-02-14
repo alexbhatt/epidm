@@ -38,7 +38,7 @@ sql_read <- function(server,
   }
 
   ## success!
-  print(paste0('Data imported in ',
+  message(paste0('Data imported in ',
                round(difftime(Sys.time(),timeStart,units = 'mins')),'min'))
 
   return(tableResult)
@@ -85,7 +85,7 @@ sql_write <- function(x,
   if(exists('x')){
     if(nrow(x)>0){
       if(DBI::dbIsValid(odbcConnect)){
-        print('connection established')
+        message('connection established')
       } else{
         odbcConnect <- epidm::sql_connect(server = server, database = database)
       }
@@ -93,11 +93,11 @@ sql_write <- function(x,
       ## upload check to ensure the full dataset is uploaded
       if(DBI::dbExistsTable(odbcConnect,tablename)){
         DBrows <- DBI::dbGetQuery(odbcConnect,checkSQL)[1,1]
-        print(paste0(DBrows,' records in [',
+        message(paste0(DBrows,' records in [',
                      database,'].[dbo].[',tablename,'] currently'))
       } else {
         DBrows <- 0
-        print(paste0('[',database,'].[dbo].[',tablename,
+        message(paste0('[',database,'].[dbo].[',tablename,
                      '] does not exist; creating table.'))
       }
 
@@ -106,7 +106,7 @@ sql_write <- function(x,
       ## this will ensure that object matches the upload
       while(DBrows!=nrow(x)){
 
-        print(paste('Start data upload',timeStart))
+        message(paste('Start data upload',timeStart))
 
         DBI::dbWriteTable(conn = odbcConnect,
                           name = DBI::Id(schema = 'dbo',
@@ -123,16 +123,16 @@ sql_write <- function(x,
       }
 
       ## success!
-      print(paste0(nrow(x),
+      message(paste0(nrow(x),
                    ' records written to [',
                    database,'].[dbo].[',tablename,'] in ',
                    round(difftime(Sys.time(),timeStart,units = 'mins')),'min')
             )
     }else{
-      print('data empty')
+      message('data empty')
     }
   }else{
-    print('data does not exists')
+    message('data does not exists')
   }
 
   # close the connection
