@@ -10,9 +10,10 @@ The goal of `epidm` is provide standard methods for the management and transform
 
 ## Installation
 
-Currently this is only available via [GitHub](https://github.com/alexbhatt/epidm)
+Available via CRAN or you can download the development version via [GitHub](https://github.com/alexbhatt/epidm)
 
-``` r
+``` R
+install.packages("epidm")
 devtools::install_github("alexbhatt/epidm")
 ```
 ## Purpose
