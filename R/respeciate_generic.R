@@ -95,6 +95,11 @@ respeciate_generic <- function(x,
 
   while(respecCount!=0) {
 
+    ## Save respecs to check if we are in infinite loop
+    if(i > 1){
+      xCheck <- sum(x$tmp.respecType %in% c(1,2),na.rm=T)
+    }
+
     ## check for unspeciated samples X days of either side
 
     ## calculate days and if it needs to be amended
@@ -146,6 +151,14 @@ respeciate_generic <- function(x,
     message(paste0(window,
                  "-day round ",i,": ",respecCount,
                  " SP or UNNAMMED isolates respeciated"))
+
+    ## Check previous respec vs current
+    if(i > 1){
+      if(all.equal(xCheck,respecCount)==TRUE){
+        respecCount <- 0
+        break
+      }
+    }
 
     ## next loop
     i <- i + 1
