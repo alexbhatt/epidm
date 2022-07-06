@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# epidm 1.0.2.9000
+
+* SCarnall fix for the infinite while loop case
+*added pkgdown URL
+*remove <a href> links from Description field
+
+
 # epidm 1.0.2
 
 *remove a href links from Description field
