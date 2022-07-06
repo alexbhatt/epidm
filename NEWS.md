@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# epidm 1.1.0
+
+- Same as previous version.
+
+
 # epidm 1.0.2.9000
 
 * SCarnall fix for the infinite while loop case
