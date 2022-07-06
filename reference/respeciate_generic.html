@@ -61,89 +61,102 @@ species_col  from another sample within X-days of an unspeciated isolate.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">respeciate_generic</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">group_vars</span>,
-  <span class="va">species_col</span>,
-  <span class="va">date_col</span>,
-  window <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="cn">Inf</span><span class="op">)</span>,
-  .forceCopy <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">respeciate_generic</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">group_vars</span>,</span>
+<span>  <span class="va">species_col</span>,</span>
+<span>  <span class="va">date_col</span>,</span>
+<span>  window <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="cn">Inf</span><span class="op">)</span>,</span>
+<span>  .forceCopy <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>a data.frame or data.table object</p></dd>
+
+
 <dt>group_vars</dt>
 <dd><p>the minimum grouping set of variables for like samples in
 a character vector; suggest c('patient_id','specimen_type','genus')</p></dd>
+
+
 <dt>species_col</dt>
 <dd><p>a character containing the column with the organism species_col
 name</p></dd>
+
+
 <dt>date_col</dt>
 <dd><p>a character containing the column with the specimen/sample date_col</p></dd>
+
+
 <dt>window</dt>
 <dd><p>an integer representing the number of days for which you will
 allow a sample to be respeciated</p></dd>
+
+
 <dt>.forceCopy</dt>
 <dd><p>default FALSE; TRUE will force data.table to take a copy
 instead of editing the data without reference</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a data.table with a recharacterised <code>species_col</code> column</p>
+    
+
+<p>a data.table with a recharacterised <code>species_col</code> column</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">ptid <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">25</span>,<span class="fl">1</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">spec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"KLEBSIELLA SP"</span>,</span>
-<span class="r-in">                <span class="st">"KLEBSIELLA UNNAMED"</span>,</span>
-<span class="r-in">                <span class="st">"KLEBSIELLA PNEUMONIAE"</span>,</span>
-<span class="r-in">                <span class="st">"KLEBEIELLA OXYTOCA"</span><span class="op">)</span>,</span>
-<span class="r-in">              <span class="fl">25</span>,replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span class="r-in">type <span class="op">=</span> <span class="st">"BLOOD"</span>,</span>
-<span class="r-in">specdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.Date.html" class="external-link">seq.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">-</span><span class="fl">21</span>,<span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>,<span class="st">"day"</span><span class="op">)</span>,<span class="fl">25</span>,replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">respeciate_generic</span><span class="op">(</span>x<span class="op">=</span><span class="va">df</span>,</span>
-<span class="r-in">                   group_vars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'ptid'</span>,<span class="st">'type'</span><span class="op">)</span>,</span>
-<span class="r-in">                   species_col<span class="op">=</span><span class="st">'spec'</span>,</span>
-<span class="r-in">                   date_col<span class="op">=</span><span class="st">'specdate'</span>,</span>
-<span class="r-in">                   window <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">[</span><span class="op">]</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 14-day round 1: 8 SP or UNNAMMED isolates respeciated</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 14-day round 2: 1 SP or UNNAMMED isolates respeciated</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>ptid <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">25</span>,<span class="fl">1</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>spec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"KLEBSIELLA SP"</span>,</span></span>
+<span class="r-in"><span>                <span class="st">"KLEBSIELLA UNNAMED"</span>,</span></span>
+<span class="r-in"><span>                <span class="st">"KLEBSIELLA PNEUMONIAE"</span>,</span></span>
+<span class="r-in"><span>                <span class="st">"KLEBEIELLA OXYTOCA"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>              <span class="fl">25</span>,replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>type <span class="op">=</span> <span class="st">"BLOOD"</span>,</span></span>
+<span class="r-in"><span>specdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.Date.html" class="external-link">seq.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">-</span><span class="fl">21</span>,<span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>,<span class="st">"day"</span><span class="op">)</span>,<span class="fl">25</span>,replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">respeciate_generic</span><span class="op">(</span>x<span class="op">=</span><span class="va">df</span>,</span></span>
+<span class="r-in"><span>                   group_vars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'ptid'</span>,<span class="st">'type'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                   species_col<span class="op">=</span><span class="st">'spec'</span>,</span></span>
+<span class="r-in"><span>                   date_col<span class="op">=</span><span class="st">'specdate'</span>,</span></span>
+<span class="r-in"><span>                   window <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">[</span><span class="op">]</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 14-day round 1: 10 SP or UNNAMMED isolates respeciated</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 14-day round 2: 2 SP or UNNAMMED isolates respeciated</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 14-day round 3: 0 SP or UNNAMMED isolates respeciated</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     ptid                  spec  type   specdate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:    2 KLEBSIELLA PNEUMONIAE BLOOD 2022-02-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:    2 KLEBSIELLA PNEUMONIAE BLOOD 2022-02-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:    2    KLEBEIELLA OXYTOCA BLOOD 2022-02-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:    2    KLEBEIELLA OXYTOCA BLOOD 2022-02-08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:    2 KLEBSIELLA PNEUMONIAE BLOOD 2022-02-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:    2    KLEBEIELLA OXYTOCA BLOOD 2022-02-14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:    2    KLEBEIELLA OXYTOCA BLOOD 2022-02-17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:    2 KLEBSIELLA PNEUMONIAE BLOOD 2022-02-20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:    2    KLEBEIELLA OXYTOCA BLOOD 2022-02-22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:    3 KLEBSIELLA PNEUMONIAE BLOOD 2022-02-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11:    3 KLEBSIELLA PNEUMONIAE BLOOD 2022-02-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12:    3 KLEBSIELLA PNEUMONIAE BLOOD 2022-02-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13:    3 KLEBSIELLA PNEUMONIAE BLOOD 2022-02-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14:    3 KLEBSIELLA PNEUMONIAE BLOOD 2022-02-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15:    3    KLEBEIELLA OXYTOCA BLOOD 2022-02-08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16:    3    KLEBEIELLA OXYTOCA BLOOD 2022-02-11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17:    4 KLEBSIELLA PNEUMONIAE BLOOD 2022-02-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18:    4 KLEBSIELLA PNEUMONIAE BLOOD 2022-02-10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19:    4 KLEBSIELLA PNEUMONIAE BLOOD 2022-02-11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20:    4 KLEBSIELLA PNEUMONIAE BLOOD 2022-02-19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21:    4 KLEBSIELLA PNEUMONIAE BLOOD 2022-02-21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22:    4 KLEBSIELLA PNEUMONIAE BLOOD 2022-02-22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23:    5 KLEBSIELLA PNEUMONIAE BLOOD 2022-02-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24:    5 KLEBSIELLA PNEUMONIAE BLOOD 2022-02-13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25:    5    KLEBEIELLA OXYTOCA BLOOD 2022-02-20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:    1    KLEBEIELLA OXYTOCA BLOOD 2022-06-17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:    1    KLEBEIELLA OXYTOCA BLOOD 2022-06-25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:    1    KLEBEIELLA OXYTOCA BLOOD 2022-07-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:    1    KLEBEIELLA OXYTOCA BLOOD 2022-07-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:    2    KLEBEIELLA OXYTOCA BLOOD 2022-06-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:    2 KLEBSIELLA PNEUMONIAE BLOOD 2022-06-17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:    2 KLEBSIELLA PNEUMONIAE BLOOD 2022-06-22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:    2 KLEBSIELLA PNEUMONIAE BLOOD 2022-06-23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:    2 KLEBSIELLA PNEUMONIAE BLOOD 2022-06-26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:    2    KLEBEIELLA OXYTOCA BLOOD 2022-06-28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:    2    KLEBEIELLA OXYTOCA BLOOD 2022-07-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:    2 KLEBSIELLA PNEUMONIAE BLOOD 2022-07-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13:    3    KLEBEIELLA OXYTOCA BLOOD 2022-06-16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14:    3 KLEBSIELLA PNEUMONIAE BLOOD 2022-06-17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15:    3 KLEBSIELLA PNEUMONIAE BLOOD 2022-06-18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16:    3 KLEBSIELLA PNEUMONIAE BLOOD 2022-06-20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17:    3 KLEBSIELLA PNEUMONIAE BLOOD 2022-06-20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18:    3    KLEBEIELLA OXYTOCA BLOOD 2022-06-21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19:    3    KLEBEIELLA OXYTOCA BLOOD 2022-06-28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20:    3    KLEBEIELLA OXYTOCA BLOOD 2022-07-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21:    4    KLEBEIELLA OXYTOCA BLOOD 2022-06-20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22:    4    KLEBEIELLA OXYTOCA BLOOD 2022-06-21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23:    4 KLEBSIELLA PNEUMONIAE BLOOD 2022-06-23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24:    4 KLEBSIELLA PNEUMONIAE BLOOD 2022-06-30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25:    5    KLEBEIELLA OXYTOCA BLOOD 2022-06-18</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     ptid                  spec  type   specdate</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -158,7 +171,7 @@ instead of editing the data without reference</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

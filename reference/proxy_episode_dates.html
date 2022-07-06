@@ -55,89 +55,104 @@ Correcting for missing end dates on HES/SUS episodes"><meta name="twitter:card" 
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">proxy_episode_dates</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">group_vars</span>,
-  <span class="va">spell_start_date</span>,
-  <span class="va">spell_end_date</span>,
-  <span class="va">discharge_destination</span>,
-  .dropTmp <span class="op">=</span> <span class="cn">TRUE</span>,
-  .forceCopy <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">proxy_episode_dates</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">group_vars</span>,</span>
+<span>  <span class="va">spell_start_date</span>,</span>
+<span>  <span class="va">spell_end_date</span>,</span>
+<span>  <span class="va">discharge_destination</span>,</span>
+<span>  .dropTmp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  .forceCopy <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>a data frame; will be converted to a data.table</p></dd>
+
+
 <dt>group_vars</dt>
 <dd><p>a vector containing any variables to be used for
 record grouping, minimum is a patient identifier</p></dd>
+
+
 <dt>spell_start_date</dt>
 <dd><p>Inpatient provider spell or episode admission date</p></dd>
+
+
 <dt>spell_end_date</dt>
 <dd><p>Inpatient provider spell or episode discharge  date</p></dd>
+
+
 <dt>discharge_destination</dt>
 <dd><p>CDS discharge destination code</p></dd>
+
+
 <dt>.dropTmp</dt>
 <dd><p>default TRUE; a logical to drop all tmp values used</p></dd>
+
+
 <dt>.forceCopy</dt>
 <dd><p>default FALSE; TRUE will force data.table to take a copy
 instead of editing the data without reference</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a data.table with cleaned start and end dates, and an indicator proxy_missing where the value has changed</p>
+    
+
+<p>a data.table with cleaned start and end dates, and an indicator proxy_missing where the value has changed</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="va">proxy_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">3051</span>, <span class="fl">4</span><span class="op">)</span>,</span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">7835</span>,<span class="fl">3</span><span class="op">)</span>,</span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">9891</span>,<span class="fl">3</span><span class="op">)</span>,</span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1236</span>,<span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  provider <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"QKJ"</span>, <span class="fl">4</span><span class="op">)</span>,</span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"JSD"</span>,<span class="fl">3</span><span class="op">)</span>,</span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"YJG"</span>,<span class="fl">3</span><span class="op">)</span>,</span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"LJG"</span>,<span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  spell_start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="st">"2020-07-03"</span>, <span class="st">"2020-07-14"</span>, <span class="st">"2020-07-23"</span>, <span class="st">"2020-08-05"</span>,</span>
-<span class="r-in">    <span class="st">"2020-11-01"</span>, <span class="st">"2020-11-13"</span>, <span class="st">"2020-12-01"</span>,</span>
-<span class="r-in">    <span class="st">"2020-03-28"</span>, <span class="st">"2020-04-06"</span>, <span class="st">"2020-04-09"</span>,</span>
-<span class="r-in">    <span class="st">"2020-10-06"</span>, <span class="st">"2020-11-05"</span>, <span class="st">"2020-12-25"</span></span>
-<span class="r-in">  <span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">  spell_end <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="st">"2020-07-11"</span>, <span class="st">"2020-07-22"</span>, <span class="st">"2020-07-30"</span>, <span class="st">"2020-07-30"</span>,</span>
-<span class="r-in">    <span class="st">"2020-11-11"</span>, <span class="cn">NA</span>, <span class="st">"2020-12-03"</span>,</span>
-<span class="r-in">    <span class="st">"2020-03-28"</span>, <span class="cn">NA</span>, <span class="st">"2020-04-09"</span>,</span>
-<span class="r-in">    <span class="st">"2020-10-06"</span>, <span class="st">"2020-11-05"</span>, <span class="cn">NA</span></span>
-<span class="r-in">  <span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">  disdest <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="fl">19</span>, <span class="fl">19</span>, <span class="fl">51</span>, <span class="fl">19</span>,</span>
-<span class="r-in">    <span class="fl">19</span>, <span class="fl">19</span>, <span class="fl">19</span>,</span>
-<span class="r-in">    <span class="fl">51</span>, <span class="fl">98</span>, <span class="fl">19</span>,</span>
-<span class="r-in">    <span class="fl">19</span>, <span class="fl">19</span>, <span class="fl">98</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">proxy_episode_dates</span><span class="op">(</span></span>
-<span class="r-in">  x<span class="op">=</span><span class="va">proxy_test</span>,</span>
-<span class="r-in">  group_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'id'</span>,<span class="st">'provider'</span><span class="op">)</span>,</span>
-<span class="r-in">  spell_start_date <span class="op">=</span> <span class="st">'spell_start'</span>,</span>
-<span class="r-in">  spell_end_date <span class="op">=</span> <span class="st">'spell_end'</span>,</span>
-<span class="r-in">  discharge_destination <span class="op">=</span> <span class="st">'disdest'</span></span>
-<span class="r-in"><span class="op">)</span><span class="op">[</span><span class="op">]</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">proxy_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">3051</span>, <span class="fl">4</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">7835</span>,<span class="fl">3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">9891</span>,<span class="fl">3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1236</span>,<span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  provider <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"QKJ"</span>, <span class="fl">4</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"JSD"</span>,<span class="fl">3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"YJG"</span>,<span class="fl">3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"LJG"</span>,<span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  spell_start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"2020-07-03"</span>, <span class="st">"2020-07-14"</span>, <span class="st">"2020-07-23"</span>, <span class="st">"2020-08-05"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"2020-11-01"</span>, <span class="st">"2020-11-13"</span>, <span class="st">"2020-12-01"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"2020-03-28"</span>, <span class="st">"2020-04-06"</span>, <span class="st">"2020-04-09"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"2020-10-06"</span>, <span class="st">"2020-11-05"</span>, <span class="st">"2020-12-25"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  spell_end <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"2020-07-11"</span>, <span class="st">"2020-07-22"</span>, <span class="st">"2020-07-30"</span>, <span class="st">"2020-07-30"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"2020-11-11"</span>, <span class="cn">NA</span>, <span class="st">"2020-12-03"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"2020-03-28"</span>, <span class="cn">NA</span>, <span class="st">"2020-04-09"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"2020-10-06"</span>, <span class="st">"2020-11-05"</span>, <span class="cn">NA</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  disdest <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fl">19</span>, <span class="fl">19</span>, <span class="fl">51</span>, <span class="fl">19</span>,</span></span>
+<span class="r-in"><span>    <span class="fl">19</span>, <span class="fl">19</span>, <span class="fl">19</span>,</span></span>
+<span class="r-in"><span>    <span class="fl">51</span>, <span class="fl">98</span>, <span class="fl">19</span>,</span></span>
+<span class="r-in"><span>    <span class="fl">19</span>, <span class="fl">19</span>, <span class="fl">98</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">proxy_episode_dates</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x<span class="op">=</span><span class="va">proxy_test</span>,</span></span>
+<span class="r-in"><span>  group_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'id'</span>,<span class="st">'provider'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  spell_start_date <span class="op">=</span> <span class="st">'spell_start'</span>,</span></span>
+<span class="r-in"><span>  spell_end_date <span class="op">=</span> <span class="st">'spell_end'</span>,</span></span>
+<span class="r-in"><span>  discharge_destination <span class="op">=</span> <span class="st">'disdest'</span></span></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">[</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       id provider spell_start  spell_end disdest proxy_missing</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1: 1236      LJG  2020-10-06 2020-10-06      19             0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2: 1236      LJG  2020-11-05 2020-11-05      19             0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 1236      LJG  2020-12-25 2022-02-22      98             1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 1236      LJG  2020-12-25 2022-07-06      98             1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  4: 3051      QKJ  2020-07-03 2020-07-11      19             0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  5: 3051      QKJ  2020-07-14 2020-07-22      19             0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  6: 3051      QKJ  2020-07-23 2020-07-30      51             0</span>
@@ -162,7 +177,7 @@ instead of editing the data without reference</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

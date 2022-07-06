@@ -74,59 +74,82 @@ records.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">uk_patient_id</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">nhs_number</span>,
-  <span class="va">hospital_number</span>,
-  <span class="va">date_of_birth</span>,
-  <span class="va">sex_mfu</span>,
-  forename <span class="op">=</span> <span class="st">"NONAME"</span>,
-  surname <span class="op">=</span> <span class="st">"NONAME"</span>,
-  <span class="va">.sortOrder</span>,
-  .keepValidNHS <span class="op">=</span> <span class="cn">FALSE</span>,
-  .forceCopy <span class="op">=</span> <span class="cn">FALSE</span>,
-  .experimental <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">uk_patient_id</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">nhs_number</span>,</span>
+<span>  <span class="va">hospital_number</span>,</span>
+<span>  <span class="va">date_of_birth</span>,</span>
+<span>  <span class="va">sex_mfu</span>,</span>
+<span>  forename <span class="op">=</span> <span class="st">"NONAME"</span>,</span>
+<span>  surname <span class="op">=</span> <span class="st">"NONAME"</span>,</span>
+<span>  <span class="va">.sortOrder</span>,</span>
+<span>  .keepValidNHS <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  .forceCopy <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  .experimental <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>a data.frame or data.table containing the cleaned line list</p></dd>
+
+
 <dt>nhs_number</dt>
 <dd><p>a column as a character containing the patient NHS numbers</p></dd>
+
+
 <dt>hospital_number</dt>
 <dd><p>a column as a character containing the patient
 Hospital numbers</p></dd>
+
+
 <dt>date_of_birth</dt>
 <dd><p>a column as a date variable containing the patient
 date of birth in date format</p></dd>
+
+
 <dt>sex_mfu</dt>
 <dd><p>column as a character containing the patient sex;
 NOTE only works if coded only as character versions of Male/Female/Unknown;
 does not currently work with additional options <code>#future update</code></p></dd>
+
+
 <dt>forename</dt>
 <dd><p>a column as a character containing the patient forename;
 leave as NONAME if unavailable</p></dd>
+
+
 <dt>surname</dt>
 <dd><p>a column as a character containing the patient surname;
 leave as NONAME if unavailable</p></dd>
+
+
 <dt>.sortOrder</dt>
 <dd><p>optional; a column as a character to allow a sorting
 order on the id generation</p></dd>
+
+
 <dt>.keepValidNHS</dt>
 <dd><p>optional, default FALSE; set TRUE if you wish to retain
 the column with the NHS checksum result stored as a BOOLEAN</p></dd>
+
+
 <dt>.forceCopy</dt>
 <dd><p>optional, default FALSE; TRUE will force data.table to take a copy
 instead of editing the data without reference</p></dd>
+
+
 <dt>.experimental</dt>
 <dd><p>optional, default FALSE; TRUE will enable the
 experimental features for recoding NA values based on the mode</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A dataframe with one new variable:</p><dl><dt><code>id</code></dt>
+    
+
+<p>A dataframe with one new variable:</p><dl><dt><code>id</code></dt>
 <dd><p>a unique patient id</p></dd>
 
 <dt><code>valid_nhs</code></dt>
@@ -138,54 +161,54 @@ BOOLEAN containing the result of the NHS checksum validation</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">id_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">  nhs_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="fl">9434765919</span>,<span class="fl">9434765919</span>,<span class="fl">9434765919</span>,<span class="cn">NA</span>,<span class="cn">NA</span>,</span>
-<span class="r-in">    <span class="fl">3367170666</span>,<span class="fl">5185293519</span>,<span class="fl">5185293519</span>,<span class="fl">5185293519</span>,<span class="fl">8082318562</span>,<span class="cn">NA</span>,<span class="cn">NA</span>,<span class="cn">NA</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  hosp_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'UNKNOWN'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'31'</span>,<span class="st">'31'</span>,<span class="st">'96'</span>,<span class="st">'96'</span>,<span class="cn">NA</span>,<span class="st">'96'</span><span class="op">)</span>,</span>
-<span class="r-in">  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'F'</span>,<span class="fl">6</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'Male'</span>,<span class="fl">4</span><span class="op">)</span>, <span class="st">'U'</span>, <span class="st">'U'</span>, <span class="st">'M'</span><span class="op">)</span>,</span>
-<span class="r-in">  dateofbirth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">      <span class="st">'1988-10-06'</span>,<span class="st">'1988-10-06'</span>,<span class="st">'1900-01-01'</span>,<span class="st">'1988-10-06'</span>,<span class="st">'1988-10-06'</span>,</span>
-<span class="r-in">      <span class="st">'1988-10-06'</span>,<span class="st">'1988-10-06'</span>,<span class="st">'1988-10-06'</span>,<span class="st">'1988-10-06'</span>,<span class="st">'2020-01-28'</span>,</span>
-<span class="r-in">      <span class="st">'2020-01-28'</span>,<span class="st">'2020-01-28'</span>,<span class="st">'2020-01-28'</span></span>
-<span class="r-in">    <span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  firstname <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="st">'Danger'</span>,<span class="st">'Danger'</span>,<span class="st">'Denger'</span>,<span class="st">'Danger'</span>,<span class="st">'Danger'</span>,<span class="st">'DANGER'</span>,<span class="st">'Danger'</span>,</span>
-<span class="r-in">    <span class="st">'Danger'</span>,<span class="st">'Danger'</span>,<span class="st">'Crazy'</span>,<span class="st">'Crazy'</span>,<span class="st">'Krazy'</span>,<span class="st">'C'</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  lastname <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="st">'Mouse'</span>,<span class="st">'Mause'</span>,<span class="st">'Mouse'</span>,<span class="st">'Moose'</span>,<span class="st">'Moose'</span>,<span class="st">'Mouse'</span>,<span class="st">'MOUSe'</span>,</span>
-<span class="r-in">    <span class="st">'Mouse'</span>,<span class="st">'Mouse'</span>,<span class="st">'Frog'</span>,<span class="st">'FROG'</span>,<span class="st">'Frug'</span>,<span class="st">'Frog'</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  testdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.Date.html" class="external-link">seq.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">-</span><span class="fl">21</span>,<span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>,<span class="st">"day"</span><span class="op">)</span>,<span class="fl">13</span>,replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="fu">uk_patient_id</span><span class="op">(</span>x <span class="op">=</span> <span class="va">id_test</span>,</span>
-<span class="r-in">              nhs_number <span class="op">=</span> <span class="st">'nhs_n'</span>,</span>
-<span class="r-in">              hospital_number <span class="op">=</span> <span class="st">'hosp_n'</span>,</span>
-<span class="r-in">              forename <span class="op">=</span> <span class="st">'firstname'</span>,</span>
-<span class="r-in">              surname <span class="op">=</span> <span class="st">'lastname'</span>,</span>
-<span class="r-in">              sex_mfu <span class="op">=</span> <span class="st">'sex'</span>,</span>
-<span class="r-in">              date_of_birth <span class="op">=</span> <span class="st">'dateofbirth'</span>,</span>
-<span class="r-in">              .sortOrder <span class="op">=</span> <span class="st">'testdate'</span><span class="op">)</span><span class="op">[</span><span class="op">]</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">id_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  nhs_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fl">9434765919</span>,<span class="fl">9434765919</span>,<span class="fl">9434765919</span>,<span class="cn">NA</span>,<span class="cn">NA</span>,</span></span>
+<span class="r-in"><span>    <span class="fl">3367170666</span>,<span class="fl">5185293519</span>,<span class="fl">5185293519</span>,<span class="fl">5185293519</span>,<span class="fl">8082318562</span>,<span class="cn">NA</span>,<span class="cn">NA</span>,<span class="cn">NA</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  hosp_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'UNKNOWN'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'31'</span>,<span class="st">'31'</span>,<span class="st">'96'</span>,<span class="st">'96'</span>,<span class="cn">NA</span>,<span class="st">'96'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'F'</span>,<span class="fl">6</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'Male'</span>,<span class="fl">4</span><span class="op">)</span>, <span class="st">'U'</span>, <span class="st">'U'</span>, <span class="st">'M'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  dateofbirth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="st">'1988-10-06'</span>,<span class="st">'1988-10-06'</span>,<span class="st">'1900-01-01'</span>,<span class="st">'1988-10-06'</span>,<span class="st">'1988-10-06'</span>,</span></span>
+<span class="r-in"><span>      <span class="st">'1988-10-06'</span>,<span class="st">'1988-10-06'</span>,<span class="st">'1988-10-06'</span>,<span class="st">'1988-10-06'</span>,<span class="st">'2020-01-28'</span>,</span></span>
+<span class="r-in"><span>      <span class="st">'2020-01-28'</span>,<span class="st">'2020-01-28'</span>,<span class="st">'2020-01-28'</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  firstname <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">'Danger'</span>,<span class="st">'Danger'</span>,<span class="st">'Denger'</span>,<span class="st">'Danger'</span>,<span class="st">'Danger'</span>,<span class="st">'DANGER'</span>,<span class="st">'Danger'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'Danger'</span>,<span class="st">'Danger'</span>,<span class="st">'Crazy'</span>,<span class="st">'Crazy'</span>,<span class="st">'Krazy'</span>,<span class="st">'C'</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  lastname <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">'Mouse'</span>,<span class="st">'Mause'</span>,<span class="st">'Mouse'</span>,<span class="st">'Moose'</span>,<span class="st">'Moose'</span>,<span class="st">'Mouse'</span>,<span class="st">'MOUSe'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'Mouse'</span>,<span class="st">'Mouse'</span>,<span class="st">'Frog'</span>,<span class="st">'FROG'</span>,<span class="st">'Frug'</span>,<span class="st">'Frog'</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  testdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.Date.html" class="external-link">seq.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">-</span><span class="fl">21</span>,<span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>,<span class="st">"day"</span><span class="op">)</span>,<span class="fl">13</span>,replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">uk_patient_id</span><span class="op">(</span>x <span class="op">=</span> <span class="va">id_test</span>,</span></span>
+<span class="r-in"><span>              nhs_number <span class="op">=</span> <span class="st">'nhs_n'</span>,</span></span>
+<span class="r-in"><span>              hospital_number <span class="op">=</span> <span class="st">'hosp_n'</span>,</span></span>
+<span class="r-in"><span>              forename <span class="op">=</span> <span class="st">'firstname'</span>,</span></span>
+<span class="r-in"><span>              surname <span class="op">=</span> <span class="st">'lastname'</span>,</span></span>
+<span class="r-in"><span>              sex_mfu <span class="op">=</span> <span class="st">'sex'</span>,</span></span>
+<span class="r-in"><span>              date_of_birth <span class="op">=</span> <span class="st">'dateofbirth'</span>,</span></span>
+<span class="r-in"><span>              .sortOrder <span class="op">=</span> <span class="st">'testdate'</span><span class="op">)</span><span class="op">[</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     id      nhs_n  hosp_n  sex dateofbirth firstname lastname   testdate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:  1 5185293519      31    M  1988-10-06    DANGER    MOUSE 2022-02-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  1 5185293519      31    M  1988-10-06    DANGER    MOUSE 2022-02-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:  2 9434765919      13    F  1988-10-06    DANGER    MOUSE 2022-02-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:  2 9434765919      13    F  1900-01-01    DENGER    MOUSE 2022-02-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  2 9434765919      13    F  1988-10-06    DANGER    MAUSE 2022-02-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  2 3367170666      13    F  1988-10-06    DANGER    MOUSE 2022-02-10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:  2         NA      13    F  1988-10-06    DANGER    MOOSE 2022-02-14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  2 5185293519      13    M  1988-10-06    DANGER    MOUSE 2022-02-19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  2         NA UNKNOWN    F  1988-10-06    DANGER    MOOSE 2022-02-22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:  4         NA      96    M  2020-01-28         C     FROG 2022-02-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11:  4 8082318562      96    M  2020-01-28     CRAZY     FROG 2022-02-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12:  4         NA      96 &lt;NA&gt;  2020-01-28     CRAZY     FROG 2022-02-13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13:  7         NA    &lt;NA&gt; &lt;NA&gt;  2020-01-28     KRAZY     FRUG 2022-02-07</span>
-<span class="r-in"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:  1         NA UNKNOWN    F  1988-10-06    DANGER    MOOSE 2022-06-18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  1         NA      13    F  1988-10-06    DANGER    MOOSE 2022-06-23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:  2 8082318562      96    M  2020-01-28     CRAZY     FROG 2022-06-21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:  2         NA      96    M  2020-01-28         C     FROG 2022-06-23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  2         NA      96 &lt;NA&gt;  2020-01-28     CRAZY     FROG 2022-06-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  3 5185293519      13    M  1988-10-06    DANGER    MOUSE 2022-06-26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:  3 9434765919      13    F  1988-10-06    DANGER    MAUSE 2022-06-28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  3 9434765919      13    F  1900-01-01    DENGER    MOUSE 2022-06-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  3 3367170666      13    F  1988-10-06    DANGER    MOUSE 2022-07-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:  3 9434765919      13    F  1988-10-06    DANGER    MOUSE 2022-07-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:  4 5185293519      31    M  1988-10-06    DANGER    MOUSE 2022-06-23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:  4 5185293519      31    M  1988-10-06    DANGER    MOUSE 2022-06-27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13: 11         NA    &lt;NA&gt; &lt;NA&gt;  2020-01-28     KRAZY     FRUG 2022-06-29</span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -200,7 +223,7 @@ BOOLEAN containing the result of the NHS checksum validation</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -57,50 +57,73 @@ NHS number, Hospital Number and Date of Birth.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">link_ae_inpatient</span><span class="op">(</span>
-  <span class="va">ae_data</span>,
-  <span class="va">ae_in</span>,
-  <span class="va">ae_out</span>,
-  <span class="va">inpatient_data</span>,
-  <span class="va">admission_date</span>,
-  <span class="va">spell_id</span>,
-  nhs_number <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nhs_number"</span>, <span class="st">"nhs_number"</span><span class="op">)</span>,
-  hospital_number <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"local_patient_identifier"</span>, <span class="st">"local_patient_identifier"</span><span class="op">)</span>,
-  patient_dob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"patient_birth_date"</span>, <span class="st">"date_birth"</span><span class="op">)</span>,
-  org_code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"organisation_code_of_provider"</span>, <span class="st">"organisation_code_code_of_provider"</span><span class="op">)</span>,
-  .forceCopy <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">link_ae_inpatient</span><span class="op">(</span></span>
+<span>  <span class="va">ae_data</span>,</span>
+<span>  <span class="va">ae_in</span>,</span>
+<span>  <span class="va">ae_out</span>,</span>
+<span>  <span class="va">inpatient_data</span>,</span>
+<span>  <span class="va">admission_date</span>,</span>
+<span>  <span class="va">spell_id</span>,</span>
+<span>  nhs_number <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nhs_number"</span>, <span class="st">"nhs_number"</span><span class="op">)</span>,</span>
+<span>  hospital_number <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"local_patient_identifier"</span>, <span class="st">"local_patient_identifier"</span><span class="op">)</span>,</span>
+<span>  patient_dob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"patient_birth_date"</span>, <span class="st">"date_birth"</span><span class="op">)</span>,</span>
+<span>  org_code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"organisation_code_of_provider"</span>, <span class="st">"organisation_code_code_of_provider"</span><span class="op">)</span>,</span>
+<span>  .forceCopy <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>ae_data</dt>
 <dd><p>the ECDS A&amp;E dataset</p></dd>
+
+
 <dt>ae_in</dt>
 <dd><p>the ECDS arrival date</p></dd>
+
+
 <dt>ae_out</dt>
 <dd><p>the ECDS discharge date</p></dd>
+
+
 <dt>inpatient_data</dt>
 <dd><p>the HES/SUS inpatient dataset</p></dd>
+
+
 <dt>admission_date</dt>
 <dd><p>a vector containing the inpatient (HES/SUS) admission date</p></dd>
+
+
 <dt>spell_id</dt>
 <dd><p>the HES/SUS spell id</p></dd>
+
+
 <dt>nhs_number</dt>
 <dd><p>a vector containing the columns for the NHS numbers</p></dd>
+
+
 <dt>hospital_number</dt>
 <dd><p>a vector containing the columns for the Hospital numbers</p></dd>
+
+
 <dt>patient_dob</dt>
 <dd><p>a vector containing the columns for the date of birth</p></dd>
+
+
 <dt>org_code</dt>
 <dd><p>a vector containing the columns for the organisation codes</p></dd>
+
+
 <dt>.forceCopy</dt>
 <dd><p>a boolean to control if you want to copy the dataset before
 linking together</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a patient level linked hospital record</p>
+    
+
+<p>a patient level linked hospital record</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -119,7 +142,7 @@ linking together</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

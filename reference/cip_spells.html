@@ -69,45 +69,64 @@ http://content.digital.nhs.uk/media/11859/Provider-Spells-Methodology/pdf/Spells
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">cip_spells</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">group_vars</span>,
-  <span class="va">spell_start_date</span>,
-  <span class="va">admission_method</span>,
-  <span class="va">admission_source</span>,
-  <span class="va">spell_end_date</span>,
-  <span class="va">discharge_destination</span>,
-  <span class="va">patient_classification</span>,
-  .forceCopy <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cip_spells</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">group_vars</span>,</span>
+<span>  <span class="va">spell_start_date</span>,</span>
+<span>  <span class="va">admission_method</span>,</span>
+<span>  <span class="va">admission_source</span>,</span>
+<span>  <span class="va">spell_end_date</span>,</span>
+<span>  <span class="va">discharge_destination</span>,</span>
+<span>  <span class="va">patient_classification</span>,</span>
+<span>  .forceCopy <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>a data frame; will be converted to a data.table</p></dd>
+
+
 <dt>group_vars</dt>
 <dd><p>a vector containing any variables to be used for
 record grouping, minimum is a patient identifier</p></dd>
+
+
 <dt>spell_start_date</dt>
 <dd><p>Inpatient provider spell or episode admission date</p></dd>
+
+
 <dt>admission_method</dt>
 <dd><p>CDS admission method code</p></dd>
+
+
 <dt>admission_source</dt>
 <dd><p>CDS admission source code</p></dd>
+
+
 <dt>spell_end_date</dt>
 <dd><p>Inpatient provider spell or episode discharge  date</p></dd>
+
+
 <dt>discharge_destination</dt>
 <dd><p>CDS discharge destination code</p></dd>
+
+
 <dt>patient_classification</dt>
 <dd><p>CDS patient classification code</p></dd>
+
+
 <dt>.forceCopy</dt>
 <dd><p>default FALSE; TRUE will force data.table to take a copy
 instead of editing the data without reference</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>the original data.frame as a data.table
+    
+
+<p>the original data.frame as a data.table
 with the following new fields:</p><dl><dt><code>cip_indx</code></dt>
 <dd><p>an id field for the CIP spell</p></dd>
 
@@ -122,83 +141,83 @@ with the following new fields:</p><dl><dt><code>cip_indx</code></dt>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="va">cip_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'465'</span>,<span class="st">'465'</span>,<span class="st">'465'</span>,<span class="st">'465'</span>,<span class="st">'8418'</span>,<span class="st">'8418'</span>,<span class="st">'8418'</span>,</span>
-<span class="r-in">         <span class="st">'8418'</span>,<span class="st">'8418'</span>,<span class="st">'8418'</span>,<span class="st">'8418'</span>,<span class="st">'8418'</span>,<span class="st">'26443'</span>,</span>
-<span class="r-in">         <span class="st">'26443'</span>,<span class="st">'26443'</span>,<span class="st">'33299'</span>,<span class="st">'33299'</span>,<span class="st">'33299'</span>,<span class="st">'33299'</span>,</span>
-<span class="r-in">         <span class="st">'33299'</span>,<span class="st">'33299'</span>,<span class="st">'33299'</span>,<span class="st">'33299'</span>,<span class="st">'33299'</span>,<span class="st">'33299'</span>,</span>
-<span class="r-in">         <span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,</span>
-<span class="r-in">         <span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,</span>
-<span class="r-in">         <span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,</span>
-<span class="r-in">         <span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,</span>
-<span class="r-in">         <span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'78915'</span>,<span class="st">'78915'</span>,<span class="st">'78915'</span><span class="op">)</span>,</span>
-<span class="r-in">  provider <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'X1T'</span>,<span class="st">'X1T'</span>,<span class="st">'X1T'</span>,<span class="st">'X1T'</span>,<span class="st">'KHA'</span>,<span class="st">'KHA'</span>,<span class="st">'KHA'</span>,</span>
-<span class="r-in">               <span class="st">'KHA'</span>,<span class="st">'KHA'</span>,<span class="st">'KHA'</span>,<span class="st">'KHA'</span>,<span class="st">'KHA'</span>,<span class="st">'BX2'</span>,<span class="st">'BX2'</span>,</span>
-<span class="r-in">               <span class="st">'BX2'</span>,<span class="st">'PXH'</span>,<span class="st">'PXH'</span>,<span class="st">'PXH'</span>,<span class="st">'PXH'</span>,<span class="st">'PXH'</span>,<span class="st">'PXH'</span>,</span>
-<span class="r-in">               <span class="st">'PXH'</span>,<span class="st">'PXH'</span>,<span class="st">'PXH'</span>,<span class="st">'PXH'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,</span>
-<span class="r-in">               <span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,</span>
-<span class="r-in">               <span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'YYT'</span>,</span>
-<span class="r-in">               <span class="st">'YYT'</span>,<span class="st">'YYT'</span>,<span class="st">'YYT'</span>,<span class="st">'YYT'</span>,<span class="st">'YYT'</span>,<span class="st">'YYT'</span>,<span class="st">'YYT'</span>,</span>
-<span class="r-in">               <span class="st">'YYT'</span>,<span class="st">'YYT'</span>,<span class="st">'YYT'</span>,<span class="st">'ABX'</span>,<span class="st">'ABX'</span>,<span class="st">'ABX'</span><span class="op">)</span>,</span>
-<span class="r-in">  spell_start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="st">'2020-03-07'</span>,<span class="st">'2020-03-07'</span>,<span class="st">'2020-03-25'</span>,<span class="st">'2020-04-03'</span>,<span class="st">'2020-01-25'</span>,</span>
-<span class="r-in">    <span class="st">'2020-01-26'</span>,<span class="st">'2020-07-14'</span>,<span class="st">'2020-08-02'</span>,<span class="st">'2020-08-12'</span>,<span class="st">'2020-08-19'</span>,</span>
-<span class="r-in">    <span class="st">'2020-08-19'</span>,<span class="st">'2020-11-19'</span>,<span class="st">'2019-11-12'</span>,<span class="st">'2020-04-17'</span>,<span class="st">'2020-04-23'</span>,</span>
-<span class="r-in">    <span class="st">'2020-07-03'</span>,<span class="st">'2020-01-17'</span>,<span class="st">'2020-02-07'</span>,<span class="st">'2020-03-20'</span>,<span class="st">'2020-04-27'</span>,</span>
-<span class="r-in">    <span class="st">'2020-06-21'</span>,<span class="st">'2020-07-02'</span>,<span class="st">'2020-10-17'</span>,<span class="st">'2020-11-27'</span>,<span class="st">'2021-01-02'</span>,</span>
-<span class="r-in">    <span class="st">'2019-12-31'</span>,<span class="st">'2020-01-02'</span>,<span class="st">'2020-01-14'</span>,<span class="st">'2020-01-16'</span>,<span class="st">'2020-02-07'</span>,</span>
-<span class="r-in">    <span class="st">'2020-02-11'</span>,<span class="st">'2020-02-14'</span>,<span class="st">'2020-02-18'</span>,<span class="st">'2020-02-21'</span>,<span class="st">'2020-02-25'</span>,</span>
-<span class="r-in">    <span class="st">'2020-02-28'</span>,<span class="st">'2020-03-09'</span>,<span class="st">'2020-03-11'</span>,<span class="st">'2020-03-12'</span>,<span class="st">'2020-03-13'</span>,</span>
-<span class="r-in">    <span class="st">'2020-03-14'</span>,<span class="st">'2020-02-04'</span>,<span class="st">'2020-02-07'</span>,<span class="st">'2020-02-11'</span>,<span class="st">'2020-02-14'</span>,</span>
-<span class="r-in">    <span class="st">'2020-02-18'</span>,<span class="st">'2020-02-21'</span>,<span class="st">'2020-02-25'</span>,<span class="st">'2020-02-28'</span>,<span class="st">'2020-03-09'</span>,</span>
-<span class="r-in">    <span class="st">'2020-03-11'</span>,<span class="st">'2020-03-12'</span>,<span class="st">'2020-04-16'</span>,<span class="st">'2020-04-24'</span>,<span class="st">'2020-05-13'</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">  spell_end <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="st">'2020-03-07'</span>,<span class="st">'2020-03-25'</span>,<span class="st">'2020-04-02'</span>,<span class="st">'2020-04-27'</span>,<span class="st">'2020-01-25'</span>,</span>
-<span class="r-in">    <span class="st">'2020-01-27'</span>,<span class="st">'2020-07-17'</span>,<span class="st">'2020-08-07'</span>,<span class="st">'2020-08-14'</span>,<span class="st">'2020-08-19'</span>,</span>
-<span class="r-in">    <span class="st">'2020-08-22'</span>,<span class="st">'2020-12-16'</span>,<span class="st">'2020-04-17'</span>,<span class="st">'2020-04-23'</span>,<span class="st">'2020-05-20'</span>,</span>
-<span class="r-in">    <span class="st">'2020-07-24'</span>,<span class="st">'2020-01-28'</span>,<span class="st">'2020-02-07'</span>,<span class="st">'2020-03-23'</span>,<span class="st">'2020-04-29'</span>,</span>
-<span class="r-in">    <span class="st">'2020-06-21'</span>,<span class="st">'2020-07-03'</span>,<span class="st">'2020-11-27'</span>,<span class="st">'2021-01-02'</span>,<span class="st">'2021-01-10'</span>,</span>
-<span class="r-in">    <span class="st">'2019-12-31'</span>,<span class="st">'2020-01-11'</span>,<span class="st">'2020-01-14'</span>,<span class="st">'2020-02-04'</span>,<span class="st">'2020-02-07'</span>,</span>
-<span class="r-in">    <span class="st">'2020-02-11'</span>,<span class="st">'2020-02-14'</span>,<span class="st">'2020-02-18'</span>,<span class="st">'2020-02-21'</span>,<span class="st">'2020-02-25'</span>,</span>
-<span class="r-in">    <span class="st">'2020-02-28'</span>,<span class="st">'2020-03-09'</span>,<span class="st">'2020-03-11'</span>,<span class="st">'2020-03-12'</span>,<span class="st">'2020-03-13'</span>,</span>
-<span class="r-in">    <span class="st">'2020-03-30'</span>,<span class="st">'2020-02-07'</span>,<span class="st">'2020-02-11'</span>,<span class="st">'2020-02-14'</span>,<span class="st">'2020-02-18'</span>,</span>
-<span class="r-in">    <span class="st">'2020-02-21'</span>,<span class="st">'2020-02-25'</span>,<span class="st">'2020-02-28'</span>,<span class="st">'2020-03-09'</span>,<span class="st">'2020-03-11'</span>,</span>
-<span class="r-in">    <span class="st">'2020-03-12'</span>,<span class="st">'2020-03-13'</span>,<span class="st">'2020-04-24'</span>,<span class="st">'2020-05-13'</span>,<span class="st">'2020-06-11'</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">  adm_meth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'21'</span>,<span class="st">'81'</span>,<span class="st">'21'</span>,<span class="st">'81'</span>,<span class="st">'21'</span>,<span class="st">'21'</span>,<span class="st">'11'</span>,<span class="st">'21'</span>,<span class="st">'21'</span>,<span class="st">'21'</span>,<span class="st">'21'</span>,</span>
-<span class="r-in">               <span class="st">'21'</span>,<span class="st">'21'</span>,<span class="st">'81'</span>,<span class="st">'21'</span>,<span class="st">'81'</span>,<span class="st">'21'</span>,<span class="st">'21'</span>,<span class="st">'21'</span>,<span class="st">'21'</span>,<span class="st">'21'</span>,<span class="st">'21'</span>,</span>
-<span class="r-in">               <span class="st">'21'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'12'</span>,<span class="st">'22'</span>,<span class="st">'12'</span>,<span class="st">'2D'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,</span>
-<span class="r-in">               <span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'21'</span>,<span class="st">'81'</span>,<span class="st">'81'</span>,<span class="st">'81'</span>,</span>
-<span class="r-in">               <span class="st">'81'</span>,<span class="st">'81'</span>,<span class="st">'13'</span>,<span class="st">'81'</span>,<span class="st">'81'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'21'</span>,<span class="st">'11'</span>,<span class="st">'81'</span><span class="op">)</span>,</span>
-<span class="r-in">  adm_src <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,</span>
-<span class="r-in">              <span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,</span>
-<span class="r-in">              <span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,</span>
-<span class="r-in">              <span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,</span>
-<span class="r-in">              <span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'51'</span><span class="op">)</span>,</span>
-<span class="r-in">  dis_meth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'4'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,</span>
-<span class="r-in">               <span class="st">'4'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'8'</span>,<span class="st">'1'</span>,<span class="st">'4'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,</span>
-<span class="r-in">               <span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,</span>
-<span class="r-in">               <span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'2'</span><span class="op">)</span>,</span>
-<span class="r-in">  dis_dest <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'54'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,</span>
-<span class="r-in">               <span class="st">'79'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'79'</span>,<span class="st">'65'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'29'</span>,</span>
-<span class="r-in">               <span class="st">'98'</span>,<span class="st">'51'</span>,<span class="st">'79'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,</span>
-<span class="r-in">               <span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,</span>
-<span class="r-in">               <span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'29'</span>,<span class="st">'54'</span>,<span class="st">'19'</span><span class="op">)</span>,</span>
-<span class="r-in">  patclass <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,</span>
-<span class="r-in">               <span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'2'</span>,<span class="st">'1'</span>,<span class="st">'2'</span>,</span>
-<span class="r-in">               <span class="st">'1'</span>,<span class="st">'2'</span>,<span class="st">'2'</span>,<span class="st">'2'</span>,<span class="st">'2'</span>,<span class="st">'2'</span>,<span class="st">'2'</span>,<span class="st">'2'</span>,<span class="st">'2'</span>,<span class="st">'2'</span>,<span class="st">'2'</span>,<span class="st">'2'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,</span>
-<span class="r-in">               <span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">cip_spells</span><span class="op">(</span>x<span class="op">=</span><span class="va">cip_test</span>,</span>
-<span class="r-in">  group_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'id'</span>,<span class="st">'provider'</span><span class="op">)</span>,</span>
-<span class="r-in">  patient_classification <span class="op">=</span> <span class="st">'patclass'</span>,</span>
-<span class="r-in">  spell_start_date <span class="op">=</span> <span class="st">'spell_start'</span>,</span>
-<span class="r-in">  admission_method <span class="op">=</span> <span class="st">'adm_meth'</span>,</span>
-<span class="r-in">  admission_source <span class="op">=</span> <span class="st">'adm_src'</span>,</span>
-<span class="r-in">  spell_end_date <span class="op">=</span> <span class="st">'spell_end'</span>,</span>
-<span class="r-in">  discharge_destination <span class="op">=</span> <span class="st">'dis_dest'</span></span>
-<span class="r-in"><span class="op">)</span><span class="op">[</span><span class="op">]</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">cip_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'465'</span>,<span class="st">'465'</span>,<span class="st">'465'</span>,<span class="st">'465'</span>,<span class="st">'8418'</span>,<span class="st">'8418'</span>,<span class="st">'8418'</span>,</span></span>
+<span class="r-in"><span>         <span class="st">'8418'</span>,<span class="st">'8418'</span>,<span class="st">'8418'</span>,<span class="st">'8418'</span>,<span class="st">'8418'</span>,<span class="st">'26443'</span>,</span></span>
+<span class="r-in"><span>         <span class="st">'26443'</span>,<span class="st">'26443'</span>,<span class="st">'33299'</span>,<span class="st">'33299'</span>,<span class="st">'33299'</span>,<span class="st">'33299'</span>,</span></span>
+<span class="r-in"><span>         <span class="st">'33299'</span>,<span class="st">'33299'</span>,<span class="st">'33299'</span>,<span class="st">'33299'</span>,<span class="st">'33299'</span>,<span class="st">'33299'</span>,</span></span>
+<span class="r-in"><span>         <span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,</span></span>
+<span class="r-in"><span>         <span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,</span></span>
+<span class="r-in"><span>         <span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,</span></span>
+<span class="r-in"><span>         <span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,</span></span>
+<span class="r-in"><span>         <span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'52635'</span>,<span class="st">'78915'</span>,<span class="st">'78915'</span>,<span class="st">'78915'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  provider <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'X1T'</span>,<span class="st">'X1T'</span>,<span class="st">'X1T'</span>,<span class="st">'X1T'</span>,<span class="st">'KHA'</span>,<span class="st">'KHA'</span>,<span class="st">'KHA'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'KHA'</span>,<span class="st">'KHA'</span>,<span class="st">'KHA'</span>,<span class="st">'KHA'</span>,<span class="st">'KHA'</span>,<span class="st">'BX2'</span>,<span class="st">'BX2'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'BX2'</span>,<span class="st">'PXH'</span>,<span class="st">'PXH'</span>,<span class="st">'PXH'</span>,<span class="st">'PXH'</span>,<span class="st">'PXH'</span>,<span class="st">'PXH'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'PXH'</span>,<span class="st">'PXH'</span>,<span class="st">'PXH'</span>,<span class="st">'PXH'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'9HA'</span>,<span class="st">'YYT'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'YYT'</span>,<span class="st">'YYT'</span>,<span class="st">'YYT'</span>,<span class="st">'YYT'</span>,<span class="st">'YYT'</span>,<span class="st">'YYT'</span>,<span class="st">'YYT'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'YYT'</span>,<span class="st">'YYT'</span>,<span class="st">'YYT'</span>,<span class="st">'ABX'</span>,<span class="st">'ABX'</span>,<span class="st">'ABX'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  spell_start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">'2020-03-07'</span>,<span class="st">'2020-03-07'</span>,<span class="st">'2020-03-25'</span>,<span class="st">'2020-04-03'</span>,<span class="st">'2020-01-25'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'2020-01-26'</span>,<span class="st">'2020-07-14'</span>,<span class="st">'2020-08-02'</span>,<span class="st">'2020-08-12'</span>,<span class="st">'2020-08-19'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'2020-08-19'</span>,<span class="st">'2020-11-19'</span>,<span class="st">'2019-11-12'</span>,<span class="st">'2020-04-17'</span>,<span class="st">'2020-04-23'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'2020-07-03'</span>,<span class="st">'2020-01-17'</span>,<span class="st">'2020-02-07'</span>,<span class="st">'2020-03-20'</span>,<span class="st">'2020-04-27'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'2020-06-21'</span>,<span class="st">'2020-07-02'</span>,<span class="st">'2020-10-17'</span>,<span class="st">'2020-11-27'</span>,<span class="st">'2021-01-02'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'2019-12-31'</span>,<span class="st">'2020-01-02'</span>,<span class="st">'2020-01-14'</span>,<span class="st">'2020-01-16'</span>,<span class="st">'2020-02-07'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'2020-02-11'</span>,<span class="st">'2020-02-14'</span>,<span class="st">'2020-02-18'</span>,<span class="st">'2020-02-21'</span>,<span class="st">'2020-02-25'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'2020-02-28'</span>,<span class="st">'2020-03-09'</span>,<span class="st">'2020-03-11'</span>,<span class="st">'2020-03-12'</span>,<span class="st">'2020-03-13'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'2020-03-14'</span>,<span class="st">'2020-02-04'</span>,<span class="st">'2020-02-07'</span>,<span class="st">'2020-02-11'</span>,<span class="st">'2020-02-14'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'2020-02-18'</span>,<span class="st">'2020-02-21'</span>,<span class="st">'2020-02-25'</span>,<span class="st">'2020-02-28'</span>,<span class="st">'2020-03-09'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'2020-03-11'</span>,<span class="st">'2020-03-12'</span>,<span class="st">'2020-04-16'</span>,<span class="st">'2020-04-24'</span>,<span class="st">'2020-05-13'</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  spell_end <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">'2020-03-07'</span>,<span class="st">'2020-03-25'</span>,<span class="st">'2020-04-02'</span>,<span class="st">'2020-04-27'</span>,<span class="st">'2020-01-25'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'2020-01-27'</span>,<span class="st">'2020-07-17'</span>,<span class="st">'2020-08-07'</span>,<span class="st">'2020-08-14'</span>,<span class="st">'2020-08-19'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'2020-08-22'</span>,<span class="st">'2020-12-16'</span>,<span class="st">'2020-04-17'</span>,<span class="st">'2020-04-23'</span>,<span class="st">'2020-05-20'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'2020-07-24'</span>,<span class="st">'2020-01-28'</span>,<span class="st">'2020-02-07'</span>,<span class="st">'2020-03-23'</span>,<span class="st">'2020-04-29'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'2020-06-21'</span>,<span class="st">'2020-07-03'</span>,<span class="st">'2020-11-27'</span>,<span class="st">'2021-01-02'</span>,<span class="st">'2021-01-10'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'2019-12-31'</span>,<span class="st">'2020-01-11'</span>,<span class="st">'2020-01-14'</span>,<span class="st">'2020-02-04'</span>,<span class="st">'2020-02-07'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'2020-02-11'</span>,<span class="st">'2020-02-14'</span>,<span class="st">'2020-02-18'</span>,<span class="st">'2020-02-21'</span>,<span class="st">'2020-02-25'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'2020-02-28'</span>,<span class="st">'2020-03-09'</span>,<span class="st">'2020-03-11'</span>,<span class="st">'2020-03-12'</span>,<span class="st">'2020-03-13'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'2020-03-30'</span>,<span class="st">'2020-02-07'</span>,<span class="st">'2020-02-11'</span>,<span class="st">'2020-02-14'</span>,<span class="st">'2020-02-18'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'2020-02-21'</span>,<span class="st">'2020-02-25'</span>,<span class="st">'2020-02-28'</span>,<span class="st">'2020-03-09'</span>,<span class="st">'2020-03-11'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'2020-03-12'</span>,<span class="st">'2020-03-13'</span>,<span class="st">'2020-04-24'</span>,<span class="st">'2020-05-13'</span>,<span class="st">'2020-06-11'</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  adm_meth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'21'</span>,<span class="st">'81'</span>,<span class="st">'21'</span>,<span class="st">'81'</span>,<span class="st">'21'</span>,<span class="st">'21'</span>,<span class="st">'11'</span>,<span class="st">'21'</span>,<span class="st">'21'</span>,<span class="st">'21'</span>,<span class="st">'21'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'21'</span>,<span class="st">'21'</span>,<span class="st">'81'</span>,<span class="st">'21'</span>,<span class="st">'81'</span>,<span class="st">'21'</span>,<span class="st">'21'</span>,<span class="st">'21'</span>,<span class="st">'21'</span>,<span class="st">'21'</span>,<span class="st">'21'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'21'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'12'</span>,<span class="st">'22'</span>,<span class="st">'12'</span>,<span class="st">'2D'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'21'</span>,<span class="st">'81'</span>,<span class="st">'81'</span>,<span class="st">'81'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'81'</span>,<span class="st">'81'</span>,<span class="st">'13'</span>,<span class="st">'81'</span>,<span class="st">'81'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'13'</span>,<span class="st">'21'</span>,<span class="st">'11'</span>,<span class="st">'81'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  adm_src <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,</span></span>
+<span class="r-in"><span>              <span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,</span></span>
+<span class="r-in"><span>              <span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,</span></span>
+<span class="r-in"><span>              <span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,</span></span>
+<span class="r-in"><span>              <span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'51'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  dis_meth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'4'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'4'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'8'</span>,<span class="st">'1'</span>,<span class="st">'4'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'2'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  dis_dest <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'54'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'79'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'79'</span>,<span class="st">'65'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'29'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'98'</span>,<span class="st">'51'</span>,<span class="st">'79'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'19'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'51'</span>,<span class="st">'29'</span>,<span class="st">'54'</span>,<span class="st">'19'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  patclass <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'2'</span>,<span class="st">'1'</span>,<span class="st">'2'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'1'</span>,<span class="st">'2'</span>,<span class="st">'2'</span>,<span class="st">'2'</span>,<span class="st">'2'</span>,<span class="st">'2'</span>,<span class="st">'2'</span>,<span class="st">'2'</span>,<span class="st">'2'</span>,<span class="st">'2'</span>,<span class="st">'2'</span>,<span class="st">'2'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,</span></span>
+<span class="r-in"><span>               <span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span>,<span class="st">'1'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">cip_spells</span><span class="op">(</span>x<span class="op">=</span><span class="va">cip_test</span>,</span></span>
+<span class="r-in"><span>  group_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'id'</span>,<span class="st">'provider'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  patient_classification <span class="op">=</span> <span class="st">'patclass'</span>,</span></span>
+<span class="r-in"><span>  spell_start_date <span class="op">=</span> <span class="st">'spell_start'</span>,</span></span>
+<span class="r-in"><span>  admission_method <span class="op">=</span> <span class="st">'adm_meth'</span>,</span></span>
+<span class="r-in"><span>  admission_source <span class="op">=</span> <span class="st">'adm_src'</span>,</span></span>
+<span class="r-in"><span>  spell_end_date <span class="op">=</span> <span class="st">'spell_end'</span>,</span></span>
+<span class="r-in"><span>  discharge_destination <span class="op">=</span> <span class="st">'dis_dest'</span></span></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">[</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        id provider spell_start  spell_end adm_meth adm_src dis_meth dis_dest</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1: 26443      BX2  2019-11-12 2020-04-17       21      19        1       51</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2: 26443      BX2  2020-04-17 2020-04-23       81      51        1       51</span>
@@ -313,7 +332,7 @@ with the following new fields:</p><dl><dt><code>cip_indx</code></dt>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 54:        1             0    7.8.5      2020-08-19    2020-08-22</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 55:        1             0    7.8.7      2020-11-19    2020-12-16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     patclass proxy_missing cip_indx cip_spell_start cip_spell_end</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -328,7 +347,7 @@ with the following new fields:</p><dl><dt><code>cip_indx</code></dt>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>
