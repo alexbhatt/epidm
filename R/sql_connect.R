@@ -54,7 +54,7 @@ sql_connect <- function(server,
     conString <- paste0('driver={',driver,'};',
                         'server=',server,';',
                         'database=',database,';',
-                        'trusted_connection=yes',
+                        'trusted_connection=yes;',
                         'timeout=120'
                         )
 
