@@ -1,5 +1,13 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# epidm 1.0.3.9000
+
+* missing ; in SQL connection string
+* change trusted_connection=true to trusted_connection=yes to ensure cross-functionality with k8s and linux
+* SCarnall fix for the infinite while loop case
+*added pkgdown URL
+
+
 # epidm 1.0.3
 
 * change trusted_connection=true to trusted_connection=yes to ensure cross-functionality with k8s and linux
