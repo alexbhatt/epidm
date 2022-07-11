@@ -2,7 +2,7 @@
 
 # epidm 1.0.4
 
-- Same as previous version.
+* fixed missing ';' character in SQL connection string
 
 
 # epidm 1.0.3
