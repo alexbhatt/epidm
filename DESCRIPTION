@@ -1,5 +1,5 @@
 Package: epidm
-Version: 1.0.3.9000
+Version: 1.1.0
 Title: UK Epidemiological Data Management
 Authors@R: 
     person("Alex", "Bhattacharya", 

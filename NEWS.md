@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# epidm 1.1.0
+
+- Same as previous version.
+
+
 # epidm 1.0.3.9000
 
 * missing ; in SQL connection string
