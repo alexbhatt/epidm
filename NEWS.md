@@ -1,21 +1,5 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
-<<<<<<< HEAD
-# epidm 1.1.0
-
-- Same as previous version.
-
-
-# epidm 1.0.3.9000
-
-* missing ; in SQL connection string
-* change trusted_connection=true to trusted_connection=yes to ensure cross-functionality with k8s and linux
-* SCarnall fix for the infinite while loop case
-*added pkgdown URL
-
-
-=======
->>>>>>> parent of d6cdfc5 (Bump version to 1.0.3.9000)
 # epidm 1.0.3
 
 * change trusted_connection=true to trusted_connection=yes to ensure cross-functionality with k8s and linux
@@ -38,4 +22,3 @@
 * Added a `NEWS.md` file to track changes to the package.
 
 This is the first release of the package for CRAN submission.
-

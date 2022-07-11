@@ -1,24 +1,20 @@
 Package: epidm
-<<<<<<< HEAD
-Version: 1.1.0
-=======
 Version: 1.0.3
->>>>>>> parent of d6cdfc5 (Bump version to 1.0.3.9000)
 Title: UK Epidemiological Data Management
-Authors@R: 
-    person("Alex", "Bhattacharya", 
-           , "alex.bhatt@gmail.com", 
+Authors@R:
+    person("Alex", "Bhattacharya",
+           , "alex.bhatt@gmail.com",
            role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-3000-2771"))
-Description: Contains utilities and functions for the cleaning, processing and 
-    management of patient level public health data for surveillance 
-    and analysis held by the UK Health Security Agency, UKHSA. 
+Description: Contains utilities and functions for the cleaning, processing and
+    management of patient level public health data for surveillance
+    and analysis held by the UK Health Security Agency, UKHSA.
 URL: https://github.com/alexbhatt/epidm, https://alexbhatt.github.io/epidm/
 BugReports: https://github.com/alexbhatt/epidm/issues
 License: GPL (>= 3)
-Depends: 
+Depends:
     R (>= 3.1)
-Imports: 
+Imports:
     data.table,
     DBI,
     odbc,
