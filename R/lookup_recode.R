@@ -123,8 +123,8 @@ lookup_recode <- function(src,
 
     lk <- as.list(
       stats::setNames(
-        .import[[1]],
-        .import[[2]]
+        .import[[1]], ## NEW replacement
+        .import[[2]]  ## OLD value
       )
     )
 
