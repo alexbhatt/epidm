@@ -64,7 +64,11 @@
 
 
 lookup_recode <- function(src,
-                          type=c('species','specimen','manual'),
+                          type=c('species',
+                                 'specimen',
+                                 'inpatient_admission_method',
+                                 'inpatient_discharge_destination',
+                                 'manual'),
                           .import = NULL) {
 
 
@@ -91,6 +95,27 @@ lookup_recode <- function(src,
       setNames(
         specimen_type_grouping$specimen_group,
         specimen_type_grouping$specimen_type
+      )
+    )
+
+  } else if (type == "inpatient_admission_method") {
+
+    ## calls upon the internal lookup table stored in the epidm package
+    ## epidm:::group_inpatient_admission_method
+    lk <- as.list(
+      setNames(
+        group_inpatient_admission_method[[2]],
+        group_inpatient_admission_method[[1]]
+      )
+    )
+  } else if (type == "inpatient_discharge_destination") {
+
+    ## calls upon the internal lookup table stored in the epidm package
+    ## epidm:::group_inpatient_admission_method
+    lk <- as.list(
+      setNames(
+        group_inpatient_discharge_destination[[2]],
+        group_inpatient_discharge_destination[[1]]
       )
     )
 

@@ -50,3 +50,30 @@
 #' \item{specimen_group}{A simple grouping of like specimen sites}
 #' }
 "specimen_type_grouping"
+
+#' Inpatient admission methods
+#'
+#' In order to group hospital inpatient admissions into human readable groups,
+#' a lookup table has been created. These work with Hospital Episode Statistics
+#' (HES) and Secondary Use Services (SUS) data with the admission_method fields.
+#'
+#' @format
+#' \describe{
+#' \item{value}{the admission_method code}
+#' \item{admission_method}{the admission_method grouping as a human readable string}
+#' }
+"group_inpatient_admission_method"
+
+#' Inpatient discharge destination
+#'
+#' In order to group hospital inpatient discharge destination into human
+#' readable groups, a lookup table has been created. These work with
+#' Hospital Episode Statistics (HES) and Secondary Use Services (SUS)
+#' data with the discharge_destination fields.
+#'
+#' @format
+#' \describe{
+#' \item{value}{the discharge_destination code}
+#' \item{discharge_destination}{the discharge_destination grouping as a human readable string}
+#' }
+"group_inpatient_discharge_destination"
