@@ -68,6 +68,7 @@ lookup_recode <- function(src,
                                  'specimen',
                                  'inpatient_admission_method',
                                  'inpatient_discharge_destination',
+                                 'ecds_destination_code',
                                  'manual'),
                           .import = NULL) {
 
@@ -116,6 +117,16 @@ lookup_recode <- function(src,
       setNames(
         group_inpatient_discharge_destination[[2]],
         group_inpatient_discharge_destination[[1]]
+      )
+    )
+  } else if (type == "ecds_destination_code") {
+
+    ## calls upon the internal lookup table stored in the epidm package
+    ## epidm:::group_inpatient_admission_method
+    lk <- as.list(
+      setNames(
+        group_ecds_discharge_destination[[2]],
+        group_ecds_discharge_destination[[1]]
       )
     )
 

@@ -59,7 +59,7 @@
 #'
 #' @format
 #' \describe{
-#' \item{value}{the admission_method code}
+#' \item{code}{the admission_method code}
 #' \item{admission_method}{the admission_method grouping as a human readable string}
 #' }
 "group_inpatient_admission_method"
@@ -73,7 +73,22 @@
 #'
 #' @format
 #' \describe{
-#' \item{value}{the discharge_destination code}
+#' \item{code}{the discharge_destination code}
 #' \item{discharge_destination}{the discharge_destination grouping as a human readable string}
+#' }
+"group_inpatient_discharge_destination"
+
+#' A&E attendance discharge destination
+#'
+#' In order to group A&E discharge destination from SNOWMED into human
+#' readable groups, a lookup table has been created. These work with
+#' Emergency Care Dataset (ECDS)
+#' data with the destination_code field to show where a patient goes after
+#' discharge from A&E.
+#'
+#' @format
+#' \describe{
+#' \item{code}{the ECDS destination_code}
+#' \item{destination_code}{the destination grouping as a human readable string}
 #' }
 "group_inpatient_discharge_destination"
