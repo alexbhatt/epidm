@@ -81,7 +81,8 @@ group_ecds_discharge_destination <-
                 "306691003",
                 "306694006",
                 "306705005",
-                "50861005"),
+                "50861005",
+               NA),
       destination_code = "Discharged"
     ),
     data.frame(
