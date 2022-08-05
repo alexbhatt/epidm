@@ -86,24 +86,54 @@ link_ae_inpatient <- function(
 
   link <- data.table::rbindlist(
     list(
-      aeNHS[inNHS,
-           on=.(nhs_number[1] = nhs_number[2],
-                patient_dob[1] = patient_dob[2],
-                org_code[1] = org_code[2],
-                link_date),
-           allow.cartesian = TRUE,
-           nomatch = NA,
-           mult = "all"
-      ],
-      aeHOS[inHOS,
-           on=.(hospital_number[1] = hospital_number[2],
-                patient_dob[1] = patient_dob[2],
-                org_code[1] = org_code[2],
-                link_date),
-           allow.cartesian = TRUE,
-           nomatch = NA,
-           mult = "all"
-      ]
+      data.table::merge.data.table(
+        x = aeNHS,
+        y = inNHS,
+        by.x = c(nhs_number[1],
+                 patient_dob[1],
+                 org_code[1],
+                 link_date),
+        by.y = c(nhs_number[2],
+                 patient_dob[2],
+                 org_code[2],
+                 link_date),
+        allow.cartesian = TRUE,
+        nomatch = NA,
+        mult = "all"
+      ),
+      data.table::merge.data.table(
+        x = aeNHS,
+        y = inNHS,
+        by.x = c(hospital_number[1],
+                 patient_dob[1],
+                 org_code[1],
+                 link_date),
+        by.y = c(hospital_number[2],
+                 patient_dob[2],
+                 org_code[2],
+                 link_date),
+        allow.cartesian = TRUE,
+        nomatch = NA,
+        mult = "all"
+      )
+      # aeNHS[inNHS,
+      #      on=.(nhs_number[1] = nhs_number[2],
+      #           patient_dob[1] = patient_dob[2],
+      #           org_code[1] = org_code[2],
+      #           link_date),
+      #      allow.cartesian = TRUE,
+      #      nomatch = NA,
+      #      mult = "all"
+      # ],
+      # aeHOS[inHOS,
+      #      on=.(hospital_number[1] = hospital_number[2],
+      #           patient_dob[1] = patient_dob[2],
+      #           org_code[1] = org_code[2],
+      #           link_date),
+      #      allow.cartesian = TRUE,
+      #      nomatch = NA,
+      #      mult = "all"
+      # ]
     )
   )
 

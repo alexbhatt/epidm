@@ -4,7 +4,12 @@
 \alias{lookup_recode}
 \title{Lookup table switch handler}
 \usage{
-lookup_recode(src, type = c("species", "specimen", "manual"), .import = NULL)
+lookup_recode(
+  src,
+  type = c("species", "specimen", "inpatient_admission_method",
+    "inpatient_discharge_destination", "ecds_destination_code", "manual"),
+  .import = NULL
+)
 }
 \arguments{
 \item{src}{a character, vector or column containing the value(s) to be referenced}

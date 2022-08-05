@@ -6,14 +6,14 @@
 \usage{
 link_ae_inpatient(
   ae_data,
-  ae_in,
-  ae_out,
-  inpatient_data,
-  admission_date,
-  spell_id,
+  ae_arrival_date,
+  ae_departure_date,
+  inp_data,
+  inp_inp_spell_start_date,
+  inp_spell_id,
   nhs_number = c("nhs_number", "nhs_number"),
   hospital_number = c("local_patient_identifier", "local_patient_identifier"),
-  patient_dob = c("patient_birth_date", "date_birth"),
+  patient_dob = c("date_birth", "date_birth"),
   org_code = c("organisation_code_of_provider", "organisation_code_code_of_provider"),
   .forceCopy = FALSE
 )
@@ -21,26 +21,26 @@ link_ae_inpatient(
 \arguments{
 \item{ae_data}{the ECDS A&E dataset}
 
-\item{ae_in}{the ECDS arrival date}
+\item{ae_arrival_date}{the ECDS arrival date}
 
-\item{ae_out}{the ECDS discharge date}
+\item{inp_data}{the HES/SUS inpatient dataset}
 
-\item{inpatient_data}{the HES/SUS inpatient dataset}
+\item{inp_spell_id}{the HES/SUS spell id}
 
-\item{admission_date}{a vector containing the inpatient (HES/SUS) admission date}
+\item{nhs_number}{a vector containing the column names for the NHS numbers in the order \code{c('ae','inpatient')}}
 
-\item{spell_id}{the HES/SUS spell id}
+\item{hospital_number}{a vector containing the column names for the Hospital numbers in the order \code{c('ae','inpatient')}}
 
-\item{nhs_number}{a vector containing the columns for the NHS numbers}
+\item{patient_dob}{a vector containing the column names for the date of birth in the order \code{c('ae','inpatient')}}
 
-\item{hospital_number}{a vector containing the columns for the Hospital numbers}
-
-\item{patient_dob}{a vector containing the columns for the date of birth}
-
-\item{org_code}{a vector containing the columns for the organisation codes}
+\item{org_code}{a vector containing the column names for the organisation codes in the order \code{c('ae','inpatient')}}
 
 \item{.forceCopy}{a boolean to control if you want to copy the dataset before
 linking together}
+
+\item{ae_ae_departure_date}{the ECDS discharge date}
+
+\item{admission_date}{a string containing the inpatient (HES/SUS) admission date column name}
 }
 \value{
 a patient level linked hospital record
@@ -49,7 +49,8 @@ a patient level linked hospital record
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
 Link together ECDS A&E records to HES/SUS inpatient records on
-NHS number, Hospital Number and Date of Birth.
+NHS number, Hospital Number and Date of Birth. To note that the inpatient
+records should already be aggregated into spells at the desired level.
 }
 \seealso{
 group_time continuous_inpatient_spells
