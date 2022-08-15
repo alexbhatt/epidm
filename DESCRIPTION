@@ -15,7 +15,7 @@ License: GPL (>= 3)
 Depends:
     R (>= 3.1)
 Imports:
-    data.table,
+    data.table (>= 1.14.3),
     DBI,
     odbc,
     phonics,
