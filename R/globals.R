@@ -52,6 +52,15 @@ utils::globalVariables(
     'tmp.windowCmax',
     'tmp.windowEnd',
     'tmp.windowNext',
-    'tmp.windowStart'
+    'tmp.windowStart',
+    'data',
+    'x',
+    'y',
+    'arr',
+    'sid',
+    'id.ae',
+    'id.inp',
+    'v1',
+    'v2'
   )
 )
