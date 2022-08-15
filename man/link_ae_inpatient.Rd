@@ -254,7 +254,7 @@ link_ae_inpatient(
     nhs_number = 'nhs_number',
     hospital_number = 'local_patient_identifier',
     patient_dob = 'date_birth',
-    or
+    org_code = 'organisation_code_code_of_provider'
   )
 )
 

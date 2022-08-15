@@ -226,7 +226,7 @@
 #'     nhs_number = 'nhs_number',
 #'     hospital_number = 'local_patient_identifier',
 #'     patient_dob = 'date_birth',
-#'     or
+#'     org_code = 'organisation_code_code_of_provider'
 #'   )
 #' )
 #'
@@ -288,7 +288,8 @@ link_ae_inpatient <- function(
       ae$patient_dob,
       ae$hospital_number,
       ae$org_code
-    )
+    ),
+    skip_absent = TRUE
   )
 
   ## valid nhs links
