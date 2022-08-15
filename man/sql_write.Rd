@@ -19,7 +19,7 @@ sql_write(x, server, database, tablename)
 writes a data.frame/data.table/tibble to a SQL database
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
 Write a table object to a SQL database. Acts a wrapper for odbc and DBI
 packages with additional checks to ensure upload completes.
