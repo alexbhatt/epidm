@@ -1,7 +1,7 @@
 #' Read a table from a SQL database
 #'
 #' @description
-#' `r lifecycle::badge('experimental')`
+#' `r lifecycle::badge('stable')`
 #'
 #'
 #' Read a table object to a SQL database. Acts a wrapper for odbc and DBI
@@ -39,7 +39,11 @@ sql_read <- function(server,
 
   ## success!
   message(paste0('Data imported in ',
-               round(difftime(Sys.time(),timeStart,units = 'mins')),'min'))
+               round(difftime(Sys.time(),
+                              timeStart,
+                              units = 'mins')),
+               'min')
+          )
 
   return(tableResult)
 
@@ -53,7 +57,7 @@ sql_read <- function(server,
 #' Write a table to a SQL database
 #'
 #' @description
-#' `r lifecycle::badge('experimental')`
+#' `r lifecycle::badge('stable')`
 #'
 #'
 #' Write a table object to a SQL database. Acts a wrapper for odbc and DBI
@@ -104,7 +108,7 @@ sql_write <- function(x,
       timeStart <- Sys.time()
 
       ## this will ensure that object matches the upload
-      while(DBrows!=nrow(x)){
+      while(DBrows != nrow(x)){
 
         message(paste('Start data upload',timeStart))
 
@@ -126,7 +130,10 @@ sql_write <- function(x,
       message(paste0(nrow(x),
                    ' records written to [',
                    database,'].[dbo].[',tablename,'] in ',
-                   round(difftime(Sys.time(),timeStart,units = 'mins')),'min')
+                   round(difftime(Sys.time(),
+                                  timeStart,
+                                  units = 'mins')),
+                   'min')
             )
     }else{
       message('data empty')
