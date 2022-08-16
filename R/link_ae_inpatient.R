@@ -285,7 +285,7 @@
 #'     patient_dob = 'date_birth',
 #'     org_code = 'organisation_code'
 #'   )
-#' )
+#' )[]
 #'
 #' @export
 
