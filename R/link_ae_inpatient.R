@@ -11,7 +11,7 @@
 #'
 #' @seealso group_time continuous_inpatient_spells
 #'
-#' @import data.table (>= 1.14.3)
+#' @import data.table
 #'
 #' @param ae a list to provide data and columns for the A&E (ECDS) data; all arguments provided quoted unless specified
 #'  \describe{
@@ -472,12 +472,20 @@ link_ae_inpatient <- function(
 
   ## if the postcode is included
   ## TODO not working as expected when column does not exist
-  if (grepl(".*postcode.*.ae$",
-            names(link),
-            ignore.case = TRUE) %in% names(link)) {
-    pcdname <- grep(".*postcode.*...$", names(link), value = TRUE)
-    pcdvar <- gsub(".ae", "", pcdname[1])
+  if(any(grepl("*pcd*|*postcode*",names(link),ignore.case = TRUE))){
+    if (grepl(".*postcode.*.ae$",
+              names(link),
+              ignore.case = TRUE) %in% names(link)) {
+      pcdname <- grep(".*postcode.*...$", names(link), value = TRUE)
 
+    } else if (grepl(".*pcd.*.ae$",
+                     names(link),
+                     ignore.case = TRUE) %in% names(link)) {
+      pcdname <- grep(".*pcd*...$", names(link), value = TRUE)
+
+    }
+
+    pcdvar <- gsub(".ae", "", pcdname[1])
     link[, (pcdvar) := data.table::fifelse(is.na(get(pcdname[1])),
                                            get(pcdname[2]),
                                            get(pcdname[2]))]
@@ -492,11 +500,12 @@ link_ae_inpatient <- function(
   link[, (rmcols) := NULL]
 
   ## put ID cols at the beginning
-  if(all(c('id',pcdvar) %in% names(link))) {
+  ##TODO add fix for missing pcdvar
+  if('id' %in% names(link) & exists("pcdvar")) {
     data.table::setcolorder(link, c('id', ae[[4]], ae[[5]], ae[[6]], ae[[7]], pcdvar))
   } else if ('id' %in% names(link)) {
     data.table::setcolorder(link, c('id', ae[[4]], ae[[5]], ae[[6]], ae[[7]]))
-  } else if (pcdvar %in% names(link)) {
+  } else if (exists("pcdvar")) {
     data.table::setcolorder(link, c(ae[[4]], ae[[5]], ae[[6]], ae[[7]], pcdvar))
   } else {
     data.table::setcolorder(link, c(ae[[4]], ae[[5]], ae[[6]], ae[[7]]))
