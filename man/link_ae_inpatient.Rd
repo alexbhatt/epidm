@@ -15,40 +15,30 @@ link_ae_inpatient(
 )
 }
 \arguments{
-\item{ae}{a list to provide data and columns for the A&E (ECDS) data; all arguments provided quoted unless specified}
+\item{ae}{a list to provide data and columns for the A&E (ECDS) data; all arguments provided quoted unless specified
+\describe{
+\item{\code{data}}{the ECDS A&E dataset provided unquoted}
+\item{\code{arrival_date}}{the ECDS arrival date}
+\item{\code{departure_date}}{the ECDS discharge date}
+\item{\code{nhs_number}}{the patient NHS number}
+\item{\code{hospital_number}}{the patient Hospital numbers also known as the local patient identifier}
+\item{\code{patient_dob}}{patient date of birth}
+\item{\code{org_code}}{the NHS trust organisation codes}
+}}
 
-\item{inp}{a list to provide data and columns for the inpatient (SUS/HES) data}
+\item{inp}{a list to provide data and columns for the inpatient (SUS/HES) data
+\describe{
+\item{\code{data}}{the HES/SUS inpatient dataset provided unquoted}
+\item{\code{spell_start_date}}{a string containing the inpatient (SUS/HES) admission date column name; all arguments provided quoted unless specified}
+\item{\code{spell_id}}{the HES/SUS spell id}
+\item{\code{nhs_number}}{the patient NHS number}
+\item{\code{hospital_number}}{the patient Hospital numbers also known as the local patient identifier}
+\item{\code{patient_dob}}{patient date of birth}
+\item{\code{org_code}}{the NHS trust organisation codes}
+}}
 
 \item{.forceCopy}{a boolean to control if you want to copy the dataset before
 linking together}
-
-\item{ae$data}{the ECDS A&E dataset provided unquoted}
-
-\item{ae$arrival_date}{the ECDS arrival date}
-
-\item{ae$departure_date}{the ECDS discharge date}
-
-\item{ae$nhs_number}{the patient NHS number}
-
-\item{ae$hospital_number}{the patient Hospital numbers also known as the local patient identifier}
-
-\item{ae$patient_dob}{patient date of birth}
-
-\item{ae$org_code}{the NHS trust organisation codes}
-
-\item{inp$data}{the HES/SUS inpatient dataset provided unquoted}
-
-\item{inp$spell_start_date}{a string containing the inpatient (SUS/HES) admission date column name; all arguments provided quoted unless specified}
-
-\item{inp$spell_id}{the HES/SUS spell id}
-
-\item{inp$nhs_number}{the patient NHS number}
-
-\item{inp$hospital_number}{the patient Hospital numbers also known as the local patient identifier}
-
-\item{inp$patient_dob}{patient date of birth}
-
-\item{inp$org_code}{the NHS trust organisation codes}
 }
 \value{
 a patient level linked hospital record
@@ -57,8 +47,9 @@ a patient level linked hospital record
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
 Link together ECDS A&E records to HES/SUS inpatient records on
-NHS number, Hospital Number and Date of Birth. To note that the inpatient
-records should already be aggregated into spells at the desired level.
+NHS number, Hospital Number and Date of Birth and organisation code.
+To note that the inpatient records should already be aggregated into
+spells at the desired level (standard, CIP or Mega)
 }
 \examples{
 sample_ae <- data.table::data.table(
@@ -162,7 +153,7 @@ sample_inp <- data.table::data.table(
                                NA,"U2715517","O5278248","T1266485",
                                "N4842033","Q5566884",NA,"X2768295","H3196212",
                                "J9365439"),
-  patient_birth_date = c("2021-08-14",
+  date_birth = c("2021-08-14",
                          "2021-08-14","2021-08-14","2021-08-14",
                          "2021-08-14","1960-05-20","1960-05-20","1960-05-20",
                          "1960-05-20","1960-05-20","1960-05-20",
