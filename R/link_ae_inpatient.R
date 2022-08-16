@@ -471,16 +471,15 @@ link_ae_inpatient <- function(
   }
 
   ## if the postcode is included
-  ## TODO not working as expected when column does not exist
   if(any(grepl("*pcd*|*postcode*",names(link),ignore.case = TRUE))){
-    if (grepl(".*postcode.*.ae$",
-              names(link),
-              ignore.case = TRUE) %in% names(link)) {
+    if (any(grepl(".*postcode.*.ae$",
+                  names(link),
+                  ignore.case = TRUE))) {
       pcdname <- grep(".*postcode.*...$", names(link), value = TRUE)
 
-    } else if (grepl(".*pcd.*.ae$",
+    } else if (any(grepl(".*pcd.*.ae$",
                      names(link),
-                     ignore.case = TRUE) %in% names(link)) {
+                     ignore.case = TRUE))) {
       pcdname <- grep(".*pcd*...$", names(link), value = TRUE)
 
     }
