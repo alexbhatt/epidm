@@ -5,30 +5,36 @@
 #'
 #'
 #' Link together ECDS A&E records to HES/SUS inpatient records on
-#'   NHS number, Hospital Number and Date of Birth. To note that the inpatient
-#'   records should already be aggregated into spells at the desired level.
-#'
-#' @import data.table
-#' @param ae a list to provide data and columns for the A&E (ECDS) data; all arguments provided quoted unless specified
-#' @param ae$data the ECDS A&E dataset provided unquoted
-#' @param ae$arrival_date the ECDS arrival date
-#' @param ae$departure_date the ECDS discharge date
-#' @param ae$nhs_number the patient NHS number
-#' @param ae$hospital_number the patient Hospital numbers also known as the local patient identifier
-#' @param ae$patient_dob patient date of birth
-#' @param ae$org_code the NHS trust organisation codes
-#' @param inp a list to provide data and columns for the inpatient (SUS/HES) data
-#' @param inp$data the HES/SUS inpatient dataset provided unquoted
-#' @param inp$spell_start_date a string containing the inpatient (SUS/HES) admission date column name; all arguments provided quoted unless specified
-#' @param inp$spell_id the HES/SUS spell id
-#' @param inp$nhs_number the patient NHS number
-#' @param inp$hospital_number the patient Hospital numbers also known as the local patient identifier
-#' @param inp$patient_dob patient date of birth
-#' @param inp$org_code the NHS trust organisation codes
-#' @param .forceCopy a boolean to control if you want to copy the dataset before
-#'   linking together
+#'   NHS number, Hospital Number and Date of Birth and organisation code.
+#'   To note that the inpatient records should already be aggregated into
+#'   spells at the desired level (standard, CIP or Mega)
 #'
 #' @seealso group_time continuous_inpatient_spells
+#'
+#' @import data.table (>= 1.14.3)
+#'
+#' @param ae a list to provide data and columns for the A&E (ECDS) data; all arguments provided quoted unless specified
+#'  \describe{
+#'    \item{`data`}{the ECDS A&E dataset provided unquoted}
+#'    \item{`arrival_date`}{the ECDS arrival date}
+#'    \item{`departure_date`}{the ECDS discharge date}
+#'    \item{`nhs_number`}{the patient NHS number}
+#'    \item{`hospital_number`}{the patient Hospital numbers also known as the local patient identifier}
+#'    \item{`patient_dob`}{patient date of birth}
+#'    \item{`org_code`}{the NHS trust organisation codes}
+#'   }
+#' @param inp a list to provide data and columns for the inpatient (SUS/HES) data
+#'   \describe{
+#'   \item{`data`}{the HES/SUS inpatient dataset provided unquoted}
+#'   \item{`spell_start_date`}{a string containing the inpatient (SUS/HES) admission date column name; all arguments provided quoted unless specified}
+#'   \item{`spell_id`}{the HES/SUS spell id}
+#'   \item{`nhs_number`}{the patient NHS number}
+#'   \item{`hospital_number`}{the patient Hospital numbers also known as the local patient identifier}
+#'   \item{`patient_dob`}{patient date of birth}
+#'   \item{`org_code`}{the NHS trust organisation codes}
+#'   }
+#' @param .forceCopy a boolean to control if you want to copy the dataset before
+#'   linking together
 #'
 #' @return a patient level linked hospital record
 #'
@@ -283,6 +289,8 @@
 #'
 #' @export
 
+### FUNCTION START #############################################################
+
 link_ae_inpatient <- function(
     ae = list(
       data,
@@ -326,7 +334,7 @@ link_ae_inpatient <- function(
            link_date := .SD,
            .SDcols = inp$spell_start_date]
 
-  setnames(
+  data.table::setnames(
     inp$data,
     c(
       inp$nhs_number,
@@ -427,7 +435,8 @@ link_ae_inpatient <- function(
     )
   )
 
-  link[,source := eval(substitute2(
+  ## put a meaningful source tag
+  link[,source := eval(data.table::substitute2(
     data.table::fcase(
       !is.na(arr) & !is.na(sid), "ECDS:SUS",
       !is.na(arr) & is.na(sid), "ECDS",
@@ -448,13 +457,13 @@ link_ae_inpatient <- function(
 
   # if an ID column exists
   if("id.ae" %in% names(link)) {
-    link[, id := fifelse(is.na(id.ae),id.inp,id.ae)]
+    link[, id := data.table::fifelse(is.na(id.ae),id.inp,id.ae)]
   }
 
   ## loop through identifiers and consolidate
   for(i in c(ae[[4]],ae[[5]],ae[[6]],ae[[7]])){
     eval(data.table::substitute2(
-      link[,(i) := fifelse(is.na(v1),v2,v1)],
+      link[,(i) := data.table::fifelse(is.na(v1),v2,v1)],
       list(
         v1 = linknames[[i]][1],
         v2 = linknames[[i]][2]
@@ -463,17 +472,15 @@ link_ae_inpatient <- function(
 
   ## if the postcode is included
   ## TODO not working as expected when column does not exist
-  if(grepl(".*postcode.*.ae$",
-          names(link),
-          ignore.case = TRUE) %in% names(link)) {
+  if (grepl(".*postcode.*.ae$",
+            names(link),
+            ignore.case = TRUE) %in% names(link)) {
+    pcdname <- grep(".*postcode.*...$", names(link), value = TRUE)
+    pcdvar <- gsub(".ae", "", pcdname[1])
 
-    pcdname <- grep(".*postcode.*...$",names(link),value=TRUE)
-    pcdvar <- gsub(".ae","",pcdname[1])
-
-    link[,(pcdvar):=fifelse(is.na(get(pcdname[1])),
-                            get(pcdname[2]),
-                            get(pcdname[2]))
-    ]
+    link[, (pcdvar) := data.table::fifelse(is.na(get(pcdname[1])),
+                                           get(pcdname[2]),
+                                           get(pcdname[2]))]
   }
 
   # cpature and delete extra cols
@@ -486,13 +493,13 @@ link_ae_inpatient <- function(
 
   ## put ID cols at the beginning
   if(all(c('id',pcdvar) %in% names(link))) {
-    setcolorder(link, c('id', ae[[4]], ae[[5]], ae[[6]], ae[[7]], pcdvar))
+    data.table::setcolorder(link, c('id', ae[[4]], ae[[5]], ae[[6]], ae[[7]], pcdvar))
   } else if ('id' %in% names(link)) {
-    setcolorder(link, c('id', ae[[4]], ae[[5]], ae[[6]], ae[[7]]))
+    data.table::setcolorder(link, c('id', ae[[4]], ae[[5]], ae[[6]], ae[[7]]))
   } else if (pcdvar %in% names(link)) {
-    setcolorder(link, c(ae[[4]], ae[[5]], ae[[6]], ae[[7]], pcdvar))
+    data.table::setcolorder(link, c(ae[[4]], ae[[5]], ae[[6]], ae[[7]], pcdvar))
   } else {
-    setcolorder(link, c(ae[[4]], ae[[5]], ae[[6]], ae[[7]]))
+    data.table::setcolorder(link, c(ae[[4]], ae[[5]], ae[[6]], ae[[7]]))
   }
 
 
