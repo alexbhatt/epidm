@@ -36,6 +36,9 @@ uk_patient_id2 <- function(data,
   data.table::setcolorder(x,c('id','tmp.idN'))
 
   ## VALIDIDTY MARKERS #########################################################
+  ## NOTE: using exists(x,where=id) as the items X are within a list
+  ## missing() does not recognise them as they are not primary arguments
+
   ## valid NHS numbers via checksum formula
   if(exists('nhs_number',where=id)){
     x[,tmp.valid.nhs := lapply(.SD,
@@ -52,8 +55,8 @@ uk_patient_id2 <- function(data,
       .SDcols = id$hospital_number]
 
     ## cleanup as some codes have massive leading or lagging whitespace
-    x[, idhn := .(trimws(idhn)),
-      env = list(idhn = id$hospital_number)]
+    x[, col := .(trimws(col)),
+      env = list(col = id$hospital_number)]
 
   }
 
