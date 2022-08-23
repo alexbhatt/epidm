@@ -260,30 +260,17 @@ uk_patient_id2 <- function(data,
     ## set types for the columns; and clear out the invalid results
     ## we will bring the results together later
 
-    x[,
-      c(nhs_number) := .(
-        data.table::fifelse(tmp.valid.hos,
-                            as.numeric(get(id$nhs_number)),
-                            NA_integer_)
-      )
-    ]
+    for (i in c(id$nhs_number,id$hospital_number,id$date_of_birth)) {
+      x[,
+        col := .(
+          data.table::fifelse(tmp.valid.hos,
+                              as.numeric(col),
+                              NA_integer_)
+        ),
+        env = list(col = i)
+      ]
 
-    x[,
-      c(hospital_number) := .(
-        data.table::fifelse(tmp.valid.hos,
-                            as.character(get(id$hospital_number)),
-                            NA_character_)
-      )
-    ]
-
-    x[,
-      c(date_of_birth) := .(
-        data.table::fifelse(tmp.valid.dob,
-                            as.character(get(id$date_of_birth)),
-                            NA_character_)
-      )
-    ]
-
+    }
 
     copyid <- c(id$nhs_number,id$hospital_number,id$date_of_birth,id$sex_mfu)
 
