@@ -352,10 +352,10 @@ link_ae_inpatient <- function(
   )
 
   ## valid nhs links
-  aeNHS <- ae$data[eval(data.table::substitute2(!is.na(x),
-                                                list(x = ae$nhs_number))), ]
-  inpNHS <- inp$data[eval(data.table::substitute2(!is.na(x),
-                                                  list(x = ae$nhs_number))), ]
+  aeNHS <- ae$data[!is.na(x),
+                   env = list(x = ae$nhs_number)]
+  inpNHS <- inp$data[!is.na(x),
+                     env = list(x = ae$nhs_number)]
 
   aeNHS[, c('link_id',
             'link_dob',
@@ -369,17 +369,15 @@ link_ae_inpatient <- function(
                               get(ae$org_code))]
 
   ## valid hospital number links
-  aeHOS <- ae$data[eval(data.table::substitute2(
+  aeHOS <- ae$data[
     is.na(x) & !is.na(y),
-    list(x = ae$nhs_number,
-         y = ae$hospital_number)
-  )),]
+    env = list(x = ae$nhs_number,
+         y = ae$hospital_number)]
 
-  inpHOS <- inp$data[eval(data.table::substitute2(
+  inpHOS <- inp$data[
     is.na(x) & !is.na(y),
-    list(x = ae$nhs_number,
-         y = ae$hospital_number)
-  )),]
+    env = list(x = ae$nhs_number,
+         y = ae$hospital_number)]
 
   aeHOS[, c('link_id',
             'link_dob',
@@ -436,16 +434,15 @@ link_ae_inpatient <- function(
   )
 
   ## put a meaningful source tag
-  link[,source := eval(data.table::substitute2(
+  link[,source :=
     data.table::fcase(
       !is.na(arr) & !is.na(sid), "ECDS:SUS",
       !is.na(arr) & is.na(sid), "ECDS",
       is.na(arr) & !is.na(sid), "SUS",
       default = NA
     ),
-    list(arr = ae$arrival_date,
+    env = list(arr = ae$arrival_date,
          sid = inp$spell_id)
-  ))
   ]
 
   ## cleanup varnames
