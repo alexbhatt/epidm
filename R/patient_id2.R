@@ -106,6 +106,11 @@ uk_patient_id2 <- function(data,
     ]
 
     if(exists('forename',where=id)){
+      x[,
+        tmp.valid.n1 := !n %in% c("","NA",NA),
+        env = list(n = id$forename)
+      ]
+
       namecols <- c(id$surname,id$forename)
 
       ## look for name swaps, when the first and last have been swapped
@@ -309,8 +314,33 @@ uk_patient_id2 <- function(data,
     ]
 
   }
+  ## S7: SEX + FULL NAME ##########################################################
+  if(all(sapply(c('forename','surname','sex_mfu'),
+                function(x) exists(x,where=id)))){
 
-  ## S7: SEX + DOB + FUZZY NAME ##############################################
+    x[,c('id',
+         'tmp.stage') := .(
+           data.table::fifelse(
+             tmp.valid.n1 & tmp.valid.n2 & tmp.valid.sex,
+             id[1],
+             id),
+           data.table::fifelse(
+             tmp.valid.n1 & tmp.valid.n2 & tmp.valid.sex,
+             paste0(tmp.stage,';s7'),
+             tmp.stage)
+         ),
+      by = c(
+        id$sex_mfu,
+        namecols
+      )
+    ][
+      ,tmp.idN := .N,
+      by = 'id'
+    ]
+
+  }
+
+  ## S8: SEX + DOB + FUZZY NAME ##############################################
   if(all(sapply(c('surname','date_of_birth','sex_mfu'),
                 function(x) exists(x,where=id)))){
 
@@ -322,7 +352,7 @@ uk_patient_id2 <- function(data,
              id),
            data.table::fifelse(
              tmp.valid.sex & tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
-             paste0(tmp.stage,';s7'),
+             paste0(tmp.stage,';s8'),
              tmp.stage)
          ),
       by = c(
@@ -337,19 +367,19 @@ uk_patient_id2 <- function(data,
 
   }
 
-  ## S8: DOB + FUZZY NAME ####################################################
+  ## S9: DOB + FUZZY NAME ####################################################
   if(all(sapply(c('surname','date_of_birth'),
                 function(x) exists(x,where=id)))){
 
     x[,c('id',
          'tmp.stage') := .(
            data.table::fifelse(
-             tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
+             tmp.valid.dob & tmp.valid.n2,
              id[1],
              id),
            data.table::fifelse(
-             tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
-             paste0(tmp.stage,';s8'),
+             tmp.valid.dob & tmp.valid.n2,
+             paste0(tmp.stage,';s9'),
              tmp.stage)
          ),
       by = c(
@@ -362,7 +392,35 @@ uk_patient_id2 <- function(data,
     ]
 
   }
-  ## S9: NAME SWAP  ####################################################
+
+  ## S10: NAME + PCD ####################################################
+  if(all(sapply(c('postcode','surname','forename'),
+                function(x) exists(x,where=id)))){
+
+    x[,c('id',
+         'tmp.stage') := .(
+           data.table::fifelse(
+             tmp.valid.n2,
+             id[1],
+             id),
+           data.table::fifelse(
+             tmp.valid.n2 & tmp.valid.pcd,
+             paste0(tmp.stage,';s10'),
+             tmp.stage)
+         ),
+      by = c(
+        namecols,
+        id$postcode
+      )
+    ][
+      ,tmp.idN := .N,
+      by = 'id'
+    ]
+
+  }
+
+  ## S11: NAME SWAP  ####################################################
+  ## TODO not working
   if(all(sapply(c('surname','forename'),
                 function(x) exists(x,where=id)))){
 
@@ -374,7 +432,7 @@ uk_patient_id2 <- function(data,
              id),
            data.table::fifelse(
              tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
-             paste0(tmp.stage,';s9'),
+             paste0(tmp.stage,';s11'),
              tmp.stage)
          ),
       by = c(
