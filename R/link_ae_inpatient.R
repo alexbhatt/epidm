@@ -97,6 +97,9 @@
 #'                      "2022-07-11","2022-06-20","2022-07-10",
 #'                      "2022-07-20","2022-07-20","2022-07-19")
 #' )
+#' sample_ae$pcd <- paste0(sample(LETTERS,1),sample(1:14,1)," ",
+#' sample(LETTERS,1),sample(0:9,1),sample(LETTERS,1))
+#' sample_ae$id = seq_len(nrow(sample_ae))*7
 #'
 #' sample_inp <- data.table::data.table(
 #'   nhs_number = c("335661151",
@@ -266,6 +269,10 @@
 #'                      "2022-07-10")
 #' )
 #'
+#' sample_inp$pcd <- paste0(sample(LETTERS,1),sample(1:14,1)," ",
+#' sample(LETTERS,1),sample(0:9,1),sample(LETTERS,1))
+#' sample_inp$id = seq_len(nrow(sample_inp))*3
+#'
 #' link_ae_inpatient(
 #'   ae = list(
 #'     data = sample_ae,
@@ -294,6 +301,7 @@
 link_ae_inpatient <- function(
     ae = list(
       data,
+      record_id = 'unique_record_id',
       arrival_date = 'arrival_date',
       departure_date = 'departure_date',
       nhs_number = 'nhs_number',
@@ -303,6 +311,7 @@ link_ae_inpatient <- function(
     ),
     inp = list(
       data,
+      record_id = 'unique_record_id',
       spell_id = 'mega_spell_id',
       spell_start_date = 'spell_start_date',
       nhs_number = 'nhs_number',
@@ -372,12 +381,12 @@ link_ae_inpatient <- function(
   aeHOS <- ae$data[
     is.na(x) & !is.na(y),
     env = list(x = ae$nhs_number,
-         y = ae$hospital_number)]
+               y = ae$hospital_number)]
 
   inpHOS <- inp$data[
     is.na(x) & !is.na(y),
     env = list(x = ae$nhs_number,
-         y = ae$hospital_number)]
+               y = ae$hospital_number)]
 
   aeHOS[, c('link_id',
             'link_dob',
@@ -435,14 +444,14 @@ link_ae_inpatient <- function(
 
   ## put a meaningful source tag
   link[,source :=
-    data.table::fcase(
-      !is.na(arr) & !is.na(sid), "ECDS:SUS",
-      !is.na(arr) & is.na(sid), "ECDS",
-      is.na(arr) & !is.na(sid), "SUS",
-      default = NA
-    ),
-    env = list(arr = ae$arrival_date,
-         sid = inp$spell_id)
+         data.table::fcase(
+           !is.na(arr) & !is.na(sid), "ECDS:SUS",
+           !is.na(arr) & is.na(sid), "ECDS",
+           is.na(arr) & !is.na(sid), "SUS",
+           default = NA
+         ),
+       env = list(arr = ae$arrival_date,
+                  sid = inp$spell_id)
   ]
 
   ## cleanup varnames
@@ -459,12 +468,13 @@ link_ae_inpatient <- function(
 
   ## loop through identifiers and consolidate
   for(i in c(ae[[4]],ae[[5]],ae[[6]],ae[[7]])){
-    eval(data.table::substitute2(
-      link[,(i) := data.table::fifelse(is.na(v1),v2,v1)],
-      list(
-        v1 = linknames[[i]][1],
-        v2 = linknames[[i]][2]
-      )))
+
+    link[,(i) := data.table::fifelse(is.na(v1),v2,v1),
+         env = list(
+           v1 = linknames[[i]][1],
+           v2 = linknames[[i]][2]
+         )
+    ]
   }
 
   ## if the postcode is included
@@ -475,8 +485,8 @@ link_ae_inpatient <- function(
       pcdname <- grep(".*postcode.*...$", names(link), value = TRUE)
 
     } else if (any(grepl(".*pcd.*.ae$",
-                     names(link),
-                     ignore.case = TRUE))) {
+                         names(link),
+                         ignore.case = TRUE))) {
       pcdname <- grep(".*pcd*...$", names(link), value = TRUE)
 
     }
@@ -488,6 +498,18 @@ link_ae_inpatient <- function(
   }
 
   # cpature and delete extra cols
+  ## if you want to keep a uid column
+  if(exists('record_id',where=ae)){
+    names(link) <- gsub(paste0(ae$record_id,'.ae'),
+                        paste0(ae$record_id,'_ae'),
+                        names(link))
+  }
+  if(exists('record_id',where=inp)){
+    names(link) <- gsub(paste0(ae$record_id,'.inp'),
+                        paste0(ae$record_id,'_inp'),
+                        names(link))
+  }
+
   rmcols <- c(
     grep("link_",names(link),value = TRUE),
     grep(".ae",names(link),value = TRUE),
@@ -496,7 +518,6 @@ link_ae_inpatient <- function(
   link[, (rmcols) := NULL]
 
   ## put ID cols at the beginning
-  ##TODO add fix for missing pcdvar
   if('id' %in% names(link) & exists("pcdvar")) {
     data.table::setcolorder(link, c('id', ae[[4]], ae[[5]], ae[[6]], ae[[7]], pcdvar))
   } else if ('id' %in% names(link)) {
