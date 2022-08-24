@@ -31,9 +31,10 @@ uk_patient_id2 <- function(data,
   # use SDcols version to ensure that the column name and argument name work if the same
   x[,id := seq_len(.N)]
   x[,tmp.idN := 1L]
+  x[,tmp.stage := ""]
 
   ## set id to column 1
-  data.table::setcolorder(x,c('id','tmp.idN'))
+  data.table::setcolorder(x,c('id','tmp.idN','tmp.stage'))
 
   ## VALIDIDTY MARKERS #########################################################
   ## NOTE: using exists(x,where=id) as the items X are within a list
@@ -105,6 +106,15 @@ uk_patient_id2 <- function(data,
 
     if(exists('forename',where=id)){
       namecols <- c(id$surname,id$forename)
+
+      ## look for name swaps, when the first and last have been swapped
+      ## common in asian names
+      x[,tmp.flip.n1 := n,
+        env = list(n = id$surname)]
+
+      x[,tmp.flip.n2 := n,
+        env = list(n = id$forename)]
+
     } else {
       namecols <- c(id$surname)
     }
@@ -122,8 +132,15 @@ uk_patient_id2 <- function(data,
     ## soundex is a non-reversible pseudonymisation technique for names
     ## is always results in the pattern [A-Z][0-9][0-9][0-9]
     ## eg. phonics::soundex("bhattacharya") == 'B326'
-    x[,tmp.fuzz.n2 := phonics::soundex(stringr::word(n2,1)),
+    x[!is.na(n2),
+      tmp.fuzz.n2 := phonics::soundex(
+        stringr::word(
+          gsub("[^[:alpha:]]", " ", n2),
+          1
+          )
+        ),
       env = list(n2 = id$surname)]
+
 
     if(exists('forename',where=id)){
       x[,tmp.fuzz.n1 := base::substr(n1,1,1),
@@ -141,12 +158,17 @@ uk_patient_id2 <- function(data,
   ## S1: NHS + DOB ###########################################################
   if(all(sapply(c('nhs_number','date_of_birth'),
                 function(x) exists(x,where=id)))){
-    x[,
-      id := data.table::fifelse(
-        tmp.valid.nhs & tmp.valid.dob,
-        id[1],
-        id
-      ),
+    x[,c('id',
+         'tmp.stage') := .(
+           data.table::fifelse(
+             tmp.valid.nhs & tmp.valid.dob,
+             id[1],
+             id),
+           data.table::fifelse(
+             tmp.valid.nhs & tmp.valid.dob,
+             paste0(tmp.stage,'s1'),
+             tmp.stage)
+         ),
       by = c(
         id$nhs_number,
         id$date_of_birth
@@ -155,16 +177,24 @@ uk_patient_id2 <- function(data,
       ,tmp.idN := .GRP,
       by = 'id'
     ]
+
+
   }
 
   ## S2: HOS + DOB ###########################################################
   if(all(sapply(c('hospital_number','date_of_birth'),
                 function(x) exists(x,where=id)))){
-    x[,
-      id := data.table::fifelse(
-        tmp.valid.hos & tmp.valid.dob,
-        id[1],
-        id),
+    x[,c('id',
+         'tmp.stage') := .(
+           data.table::fifelse(
+             tmp.valid.hos & tmp.valid.dob,
+             id[1],
+             id),
+           data.table::fifelse(
+             tmp.valid.hos & tmp.valid.dob,
+             paste0(tmp.stage,';s2'),
+             tmp.stage),
+         ),
       by = c(
         id$hospital_number,
         id$date_of_birth
@@ -173,17 +203,24 @@ uk_patient_id2 <- function(data,
       ,tmp.idN := .GRP,
       by = 'id'
     ]
+
   }
 
   ## S3: NHS + HOS ###########################################################
-  if(all(sapply(c('hospital_number','hospital_number'),
+  if(all(sapply(c('nhs_number','hospital_number'),
                 function(x) exists(x,where=id)))){
 
-    x[,
-      id := data.table::fifelse(
-        tmp.valid.nhs & tmp.valid.hos,
-        id[1],
-        id),
+    x[,c('id',
+         'tmp.stage') := .(
+           data.table::fifelse(
+             tmp.valid.nhs & tmp.valid.hos,
+             id[1],
+             id),
+           data.table::fifelse(
+             tmp.valid.nhs & tmp.valid.hos,
+             paste0(tmp.stage,';s3'),
+             tmp.stage)
+         ),
       by = c(
         id$nhs_number,
         id$hospital_number
@@ -192,17 +229,24 @@ uk_patient_id2 <- function(data,
       ,tmp.idN := .GRP,
       by = 'id'
     ]
+
   }
 
   ## S4: DOB + NAME ##########################################################
   if(all(sapply(c('surname','date_of_birth'),
                 function(x) exists(x,where=id)))){
 
-    x[,
-      id := data.table::fifelse(
-        tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
-        id[1],
-        id),
+    x[,c('id',
+         'tmp.stage') := .(
+           data.table::fifelse(
+             tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
+             id[1],
+             id),
+           data.table::fifelse(
+             tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
+             paste0(tmp.stage,';s4'),
+             tmp.stage)
+         ),
       by = c(
         id$date_of_birth,
         namecols
@@ -211,19 +255,26 @@ uk_patient_id2 <- function(data,
       ,tmp.idN := .GRP,
       by = 'id'
     ]
+
   }
 
   ## S5: SEX + DOB + FUZZY NAME ##############################################
   if(all(sapply(c('surname','date_of_birth','sex_mfu'),
                 function(x) exists(x,where=id)))){
 
-    x[,
-      id := data.table::fifelse(
-        tmp.valid.sex & tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
-        id[1],
-        id),
+    x[,c('id',
+         'tmp.stage') := .(
+           data.table::fifelse(
+             tmp.valid.sex & tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
+             id[1],
+             id),
+           data.table::fifelse(
+             tmp.valid.sex & tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
+             paste0(tmp.stage,';s5'),
+             tmp.stage)
+         ),
       by = c(
-        sex_mfu,
+        id$sex_mfu,
         'tmp.fuzz.ym',
         tmp.fuzz.n
       )
@@ -231,20 +282,52 @@ uk_patient_id2 <- function(data,
       ,tmp.idN := .GRP,
       by = 'id'
     ]
+
   }
 
   ## S6: DOB + FUZZY NAME ####################################################
   if(all(sapply(c('surname','date_of_birth'),
                 function(x) exists(x,where=id)))){
 
-    x[,
-      id := data.table::fifelse(
-        tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
-        id[1],
-        id),
+    x[,c('id',
+         'tmp.stage') := .(
+           data.table::fifelse(
+             tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
+             id[1],
+             id),
+           data.table::fifelse(
+             tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
+             paste0(tmp.stage,';s6'),
+             tmp.stage)
+         ),
       by = c(
         'tmp.fuzz.ym',
         tmp.fuzz.n
+      )
+    ][
+      ,tmp.idN := .GRP,
+      by = 'id'
+    ]
+
+  }
+  ## S7: NAME SWAP  ####################################################
+  if(all(sapply(c('surname','forename'),
+                function(x) exists(x,where=id)))){
+
+    x[,c('id',
+         'tmp.stage') := .(
+           data.table::fifelse(
+             tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
+             id[1],
+             id),
+           data.table::fifelse(
+             tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
+             paste0(tmp.stage,';s7'),
+             tmp.stage)
+         ),
+      by = c(
+        tmp.swap.n1 = id$surname,
+        tmp.swap.n2 = id$forename
       )
     ][
       ,tmp.idN := .GRP,
