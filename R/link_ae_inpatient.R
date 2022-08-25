@@ -98,7 +98,7 @@
 #'                      "2022-07-20","2022-07-20","2022-07-19")
 #' )
 #' sample_ae$pcd <- paste0(sample(LETTERS,1),sample(1:14,1)," ",
-#' sample(LETTERS,1),sample(0:9,1),sample(LETTERS,1))
+#'                         sample(LETTERS,1),sample(0:9,1),sample(LETTERS,1))
 #' sample_ae$id = seq_len(nrow(sample_ae))*7
 #'
 #' sample_inp <- data.table::data.table(
@@ -270,7 +270,7 @@
 #' )
 #'
 #' sample_inp$pcd <- paste0(sample(LETTERS,1),sample(1:14,1)," ",
-#' sample(LETTERS,1),sample(0:9,1),sample(LETTERS,1))
+#'                          sample(LETTERS,1),sample(0:9,1),sample(LETTERS,1))
 #' sample_inp$id = seq_len(nrow(sample_inp))*3
 #'
 #' link_ae_inpatient(
@@ -482,38 +482,47 @@ link_ae_inpatient <- function(
     if (any(grepl(".*postcode.*.ae$",
                   names(link),
                   ignore.case = TRUE))) {
-      pcdname <- grep(".*postcode.*...$", names(link), value = TRUE)
+      pcdname <- grep(".*postcode.*....$", names(link), value = TRUE)
 
     } else if (any(grepl(".*pcd.*.ae$",
                          names(link),
                          ignore.case = TRUE))) {
-      pcdname <- grep(".*pcd*...$", names(link), value = TRUE)
+      pcdname <- grep(".*pcd*....$", names(link), value = TRUE)
 
     }
 
     pcdvar <- gsub(".ae", "", pcdname[1])
-    link[, (pcdvar) := data.table::fifelse(is.na(get(pcdname[1])),
-                                           get(pcdname[2]),
-                                           get(pcdname[2]))]
+
+    link[,
+         var := data.table::fifelse(is.na(n2),
+                                    n1,
+                                    n2),
+         env = list(var = pcdvar,
+                    n1 = pcdname[1], ## A&E report
+                    n2 = pcdname[2]) ## Inpatient report
+         ]
   }
 
-  # cpature and delete extra cols
   ## if you want to keep a uid column
-  if(exists('record_id',where=ae)){
-    names(link) <- gsub(paste0(ae$record_id,'.ae'),
-                        paste0(ae$record_id,'_ae'),
-                        names(link))
-  }
-  if(exists('record_id',where=inp)){
-    names(link) <- gsub(paste0(ae$record_id,'.inp'),
-                        paste0(ae$record_id,'_inp'),
-                        names(link))
+
+  if(exists('record_id',where=ae) & exists('record_id',where=inp)){
+    if(ae$record_id == inp$record_id){
+
+      names(link) <- gsub(paste0(ae$record_id,'.ae'),
+                          paste0(ae$record_id,'_ae'),
+                          names(link))
+
+      names(link) <- gsub(paste0(ae$record_id,'.inp'),
+                          paste0(ae$record_id,'_inp'),
+                          names(link))
+    }
   }
 
+  ## capture and delete extra cols
   rmcols <- c(
     grep("link_",names(link),value = TRUE),
-    grep(".ae",names(link),value = TRUE),
-    grep(".inp",names(link),value = TRUE))
+    grep("[\\.]ae",names(link),value = TRUE),
+    grep("[\\.]inp",names(link),value = TRUE))
 
   link[, (rmcols) := NULL]
 
