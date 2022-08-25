@@ -16,6 +16,7 @@
 #' @param ae a list to provide data and columns for the A&E (ECDS) data; all arguments provided quoted unless specified
 #'  \describe{
 #'    \item{`data`}{the ECDS A&E dataset provided unquoted}
+#'    \item{`record_id`}{a unique id within the dataset to be retained; optional}
 #'    \item{`arrival_date`}{the ECDS arrival date}
 #'    \item{`departure_date`}{the ECDS discharge date}
 #'    \item{`nhs_number`}{the patient NHS number}
@@ -26,6 +27,7 @@
 #' @param inp a list to provide data and columns for the inpatient (SUS/HES) data
 #'   \describe{
 #'   \item{`data`}{the HES/SUS inpatient dataset provided unquoted}
+#'    \item{`record_id`}{a unique id within the dataset to be retained; optional}
 #'   \item{`spell_start_date`}{a string containing the inpatient (SUS/HES) admission date column name; all arguments provided quoted unless specified}
 #'   \item{`spell_id`}{the HES/SUS spell id}
 #'   \item{`nhs_number`}{the patient NHS number}
