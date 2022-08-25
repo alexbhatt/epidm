@@ -467,7 +467,8 @@ link_ae_inpatient <- function(
   }
 
   ## loop through identifiers and consolidate
-  for(i in c(ae[[4]],ae[[5]],ae[[6]],ae[[7]])){
+  ids <- as.vector(unlist(lapply(ae[c(5:length(ae))],`[[`,1)))
+  for(i in ids){
 
     link[,(i) := data.table::fifelse(is.na(v1),v2,v1),
          env = list(
