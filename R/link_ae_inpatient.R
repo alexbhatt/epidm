@@ -302,22 +302,22 @@ link_ae_inpatient <- function(
     ae = list(
       data,
       record_id = 'unique_record_id',
-      arrival_date = 'arrival_date',
-      departure_date = 'departure_date',
       nhs_number = 'nhs_number',
       hospital_number = 'local_patient_identifier',
       patient_dob = 'patient_birth_date',
-      org_code = 'organisation_code_of_provider'
+      org_code = 'organisation_code_of_provider',
+      arrival_date = 'arrival_date',
+      departure_date = 'departure_date'
     ),
     inp = list(
       data,
       record_id = 'unique_record_id',
-      spell_id = 'mega_spell_id',
-      spell_start_date = 'spell_start_date',
       nhs_number = 'nhs_number',
       hospital_number = 'local_patient_identifier',
       patient_dob = 'date_birth',
-      org_code = 'organisation_code_code_of_provider'
+      org_code = 'organisation_code_code_of_provider',
+      spell_id = 'mega_spell_id',
+      spell_start_date = 'spell_start_date'
     ),
     .forceCopy = FALSE) {
 
@@ -504,6 +504,7 @@ link_ae_inpatient <- function(
   }
 
   ## if you want to keep a uid column
+  cols <- as.vector(unlist(lapply(ae[c(2:length(ae))],`[[`,1)))
 
   if(exists('record_id',where=ae) & exists('record_id',where=inp)){
     if(ae$record_id == inp$record_id){
@@ -515,6 +516,10 @@ link_ae_inpatient <- function(
       names(link) <- gsub(paste0(ae$record_id,'.inp'),
                           paste0(ae$record_id,'_inp'),
                           names(link))
+
+      cols <- gsub(paste0('^',ae$record_id), paste0(ae$record_id,"_ae"), cols)
+      cols <- c(cols, paste0(inp$record_id,"_inp"))
+
     }
   }
 
@@ -527,16 +532,7 @@ link_ae_inpatient <- function(
   link[, (rmcols) := NULL]
 
   ## put ID cols at the beginning
-  if('id' %in% names(link) & exists("pcdvar")) {
-    data.table::setcolorder(link, c('id', ae[[4]], ae[[5]], ae[[6]], ae[[7]], pcdvar))
-  } else if ('id' %in% names(link)) {
-    data.table::setcolorder(link, c('id', ae[[4]], ae[[5]], ae[[6]], ae[[7]]))
-  } else if (exists("pcdvar")) {
-    data.table::setcolorder(link, c(ae[[4]], ae[[5]], ae[[6]], ae[[7]], pcdvar))
-  } else {
-    data.table::setcolorder(link, c(ae[[4]], ae[[5]], ae[[6]], ae[[7]]))
-  }
-
+  data.table::setcolorder(link, cols)
 
   return(link)
 }
