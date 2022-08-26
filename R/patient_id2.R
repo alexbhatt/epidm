@@ -161,41 +161,53 @@ uk_patient_id2 <- function(data,
     }
   }
 
+  if(exists('sex_mfu',where=id)){
+    x[,
+      tmp.valid.pcd := !is.na(pcd),
+      env = list(pcd = id$postcode)
+    ]
+
+  }
+
+  ## RECORD MATCHING ###########################################################
   ## a function to undertake the validation and dedupe steps
   ## stage = integer for flag
   ## validation = vector with validation cols
   ## group = vector with grouping cols
+
+
   stage <- function(stage = 1,
+                    required,
                     validation,
                     group){
 
-    if(all(sapply(group,
+    if(all(sapply(required,
                   function(x) exists(x,where=id)))){
 
     valid <- paste(validation,collapse=" & ")
 
-    x[,`:=` (
-      id = data.table::fifelse(
-        eval(parse(text = valid)),
-        data.table::fifelse(
-          id==tmp.recid | tmp.idN==1,
-          id[1],
-          id),
-        id),
-      tmp.stage = data.table::fifelse(
-        eval(parse(text = valid)),
-        paste0(tmp.stage,paste0('s',stage)),
-        tmp.stage)
-    ),
-    by = group,
-    env = list(
+    ## use eval(parse(text=valid)) to allow the submission of a text
+    #   string to be evaluated as code
 
-    )
-    ][
-      ,`:=` (tmp.idN = .N,
-             tmp.GRP = .GRP),
-      by = 'id'
-    ]
+      x[,`:=` (
+        id = data.table::fifelse(
+          eval(parse(text = valid)),
+          data.table::fifelse(
+            id==tmp.recid & tmp.idN==1,
+            id[1],
+            id),
+          id),
+        tmp.stage = data.table::fifelse(
+          eval(parse(text = valid)),
+          paste0(tmp.stage,paste0('s',stage)),
+          tmp.stage)
+      ),
+      by = group
+      ][
+        ,`:=` (tmp.idN = .N,
+               tmp.GRP = .GRP),
+        by = 'id'
+      ]
 
     return(x)
     }
@@ -203,281 +215,109 @@ uk_patient_id2 <- function(data,
 
   ## S1: NHS + DOB ###########################################################
 
-
-
-
     stage(stage = 1,
-          validation = c('tmp.valid.hos',
+          required = c('nhs_number',
+                       'date_of_birth'),
+          validation = c('tmp.valid.nhs',
                          'tmp.valid.dob'),
-          group = c(id$hospital_number,
+          group = c(id$nhs_number,
                     id$date_of_birth))
-  ## S2: HOS + DOB ###########################################################
-  if(all(sapply(c('hospital_number','date_of_birth'),
-                function(x) exists(x,where=id)))){
-    x[,c('id',
-         'tmp.stage') := .(
-           data.table::fifelse(
-             tmp.valid.hos & tmp.valid.dob,
-             data.table::fifelse(
-               id==tmp.recid | tmp.idN==1,
-               id[1],
-               id),
-             id),
-           data.table::fifelse(
-             tmp.valid.hos & tmp.valid.dob,
-             paste0(tmp.stage,'s2'),
-             tmp.stage)
-         ),
-      by = c(
-        id$hospital_number,
-        id$date_of_birth
-      )
-    ][
-      ,`:=` (tmp.idN = .N,
-             tmp.GRP = .GRP),
-      by = 'id'
-    ]
 
-  }
+  ## S2: HOS + DOB ###########################################################
+
+  stage(stage = 2,
+        required = c('hospital_number',
+                     'date_of_birth'),
+        validation = c('tmp.valid.hos',
+                       'tmp.valid.dob'),
+        group = c(id$hospital_number,
+                  id$date_of_birth))
+
 
   ## S3: NHS + HOS ###########################################################
-  if(all(sapply(c('nhs_number','hospital_number'),
-                function(x) exists(x,where=id)))){
 
-    x[,c('id',
-         'tmp.stage') := .(
-           data.table::fifelse(
-             tmp.valid.nhs & tmp.valid.hos,
-             data.table::fifelse(
-               id==tmp.recid | (id==tmp.recid & tmp.idN!=1),
-               id[1],
-               id),
-             id),
-           data.table::fifelse(
-             tmp.valid.nhs & tmp.valid.hos,
-             paste0(tmp.stage,'s3'),
-             tmp.stage)
-         ),
-      by = c(
-        id$nhs_number,
-        id$hospital_number
-      )
-    ][
-      ,`:=` (tmp.idN = .N,
-             tmp.GRP = .GRP),
-      by = 'id'
-    ]
+  stage(stage = 3,
+        required = c('nhs_number',
+                     'hospital_number'),
+        validation = c('tmp.valid.hos',
+                       'tmp.valid.nhs'),
+        group = c(id$hospital_number,
+                  id$nhs_number))
 
-  }
 
   ## S4: NHS + NAME ##########################################################
-  if(all(sapply(c('surname','nhs_number'),
-                function(x) exists(x,where=id)))){
 
-    x[,c('id',
-         'tmp.stage') := .(
-           data.table::fifelse(
-             tmp.valid.n2 & tmp.valid.nhs,
-             data.table::fifelse(
-               id==tmp.recid | tmp.idN==1,
-               id[1],
-               id),
-             id),
-           data.table::fifelse(
-             tmp.valid.n2 & tmp.valid.nhs,
-             paste0(tmp.stage,'s4'),
-             tmp.stage)
-         ),
-      by = c(
-        id$date_of_birth,
-        namecols
-      )
-    ][
-      ,`:=` (tmp.idN = .N,
-             tmp.GRP = .GRP),
-      by = 'id'
-    ]
+  stage(stage = 4,
+        required = c('nhs_number',
+                     'surname'),
+        validation = c('tmp.valid.nhs',
+                       'tmp.valid.n2'),
+        group = c(id$nhs_number,
+                  id$surname))
 
-  }
   ## S5: HOS + NAME ##########################################################
-  if(all(sapply(c('surname','hospital_number'),
-                function(x) exists(x,where=id)))){
-
-    x[,c('id',
-         'tmp.stage') := .(
-           data.table::fifelse(
-             tmp.valid.n2 & tmp.valid.hos,
-             data.table::fifelse(
-               id==tmp.recid | tmp.idN==1,
-               id[1],
-               id),
-             id),
-           data.table::fifelse(
-             tmp.valid.n2 & tmp.valid.hos,
-             paste0(tmp.stage,'s5'),
-             tmp.stage)
-         ),
-      by = c(
-        id$date_of_birth,
-        namecols
-      )
-    ][
-      ,`:=` (tmp.idN = .N,
-             tmp.GRP = .GRP),
-      by = 'id'
-    ]
-
-  }
+  stage(stage = 5,
+        required = c('hospital_number',
+                     'surname'),
+        validation = c('tmp.valid.hos',
+                       'tmp.valid.n2'),
+        group = c(id$hospital_number,
+                  id$surname))
 
   ## S6: DOB + NAME ##########################################################
-  if(all(sapply(c('surname','date_of_birth'),
-                function(x) exists(x,where=id)))){
+  stage(stage = 6,
+        required = c('surname',
+                     'date_of_birth'),
+        validation = c('!tmp.valid.nhs',
+                       'tmp.valid.n2',
+                       'tmp.valid.dob'),
+        group = c(id$date_of_birth,
+                  namecols))
 
-    x[,c('id',
-         'tmp.stage') := .(
-           data.table::fifelse(
-             tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
-             data.table::fifelse(
-               id==tmp.recid | tmp.idN==1,
-               id[1],
-               id),
-             id),
-           data.table::fifelse(
-             tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
-             paste0(tmp.stage,'s6'),
-             tmp.stage)
-         ),
-      by = c(
-        id$date_of_birth,
-        namecols
-      )
-    ][
-      ,`:=` (tmp.idN = .N,
-             tmp.GRP = .GRP),
-      by = 'id'
-    ]
-
-  }
   ## S7: SEX + FULL NAME ##########################################################
-  if(all(sapply(c('forename','surname','sex_mfu'),
-                function(x) exists(x,where=id)))){
+  stage(stage = 7,
+        required = c('surname',
+                     'forename',
+                     'sex_mfu'),
+        validation = c('tmp.valid.n1',
+                       'tmp.valid.n2',
+                       'tmp.valid.sex'),
+        group = c(id$sex_mfu,
+                  namecols))
 
-    x[,c('id',
-         'tmp.stage') := .(
-           data.table::fifelse(
-             tmp.valid.n1 & tmp.valid.n2 & tmp.valid.sex,
-             data.table::fifelse(
-               id==tmp.recid | tmp.idN==1,
-               id[1],
-               id),
-             id),
-           data.table::fifelse(
-             tmp.valid.n1 & tmp.valid.n2 & tmp.valid.sex,
-             paste0(tmp.stage,'s7'),
-             tmp.stage)
-         ),
-      by = c(
-        id$sex_mfu,
-        namecols
-      )
-    ][
-      ,`:=` (tmp.idN = .N,
-             tmp.GRP = .GRP),
-      by = 'id'
-    ]
-
-  }
 
   ## S8: SEX + DOB + FUZZY NAME ##############################################
-  if(all(sapply(c('surname','date_of_birth','sex_mfu'),
-                function(x) exists(x,where=id)))){
-
-    x[,c('id',
-         'tmp.stage') := .(
-           data.table::fifelse(
-             tmp.valid.sex & tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
-             data.table::fifelse(
-               id==tmp.recid | tmp.idN==1,
-               id[1],
-               id),
-             id),
-           data.table::fifelse(
-             tmp.valid.sex & tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
-             paste0(tmp.stage,'s8'),
-             tmp.stage)
-         ),
-      by = c(
-        id$sex_mfu,
-        'tmp.fuzz.ym',
-        tmp.fuzz.n
-      )
-    ][
-      ,`:=` (tmp.idN = .N,
-             tmp.GRP = .GRP),
-      by = 'id'
-    ]
-
-  }
+  stage(stage = 8,
+        required = c('sex_mfu',
+                     'date_of_birth',
+                     'surname'),
+        validation = c('tmp.valid.sex',
+                       'tmp.valid.dob',
+                       'tmp.valid.n2',
+                       '!tmp.valid.nhs'),
+        group = c(id$sex_mfu,
+                  'tmp.fuzz.ym',
+                  tmp.fuzz.n))
 
   ## S9: DOB + FUZZY NAME ####################################################
-  if(all(sapply(c('surname','date_of_birth'),
-                function(x) exists(x,where=id)))){
-
-    x[,c('id',
-         'tmp.stage') := .(
-           data.table::fifelse(
-             tmp.valid.dob & tmp.valid.n2,
-             data.table::fifelse(
-               id==tmp.recid | tmp.idN==1,
-               id[1],
-               id),
-             id),
-           data.table::fifelse(
-             tmp.valid.dob & tmp.valid.n2,
-             paste0(tmp.stage,'s9'),
-             tmp.stage)
-         ),
-      by = c(
-        'tmp.fuzz.ym',
-        tmp.fuzz.n
-      )
-    ][
-      ,`:=` (tmp.idN = .N,
-             tmp.GRP = .GRP),
-      by = 'id'
-    ]
-
-  }
+  stage(stage = 9,
+        required = c('surname',
+                     'date_of_birth'),
+        validation = c('tmp.valid.dob',
+                       'tmp.valid.n2'),
+        group = c('tmp.fuzz.ym',
+                  tmp.fuzz.n))
 
   ## S10: NAME + PCD ####################################################
-  if(all(sapply(c('postcode','surname','forename'),
-                function(x) exists(x,where=id)))){
 
-    x[,c('id',
-         'tmp.stage') := .(
-           data.table::fifelse(
-             tmp.valid.n2,
-             data.table::fifelse(
-               id==tmp.recid | tmp.idN==1,
-               id[1],
-               id),
-             id),
-           data.table::fifelse(
-             tmp.valid.n2 & tmp.valid.pcd,
-             paste0(tmp.stage,'s10'),
-             tmp.stage)
-         ),
-      by = c(
-        namecols,
-        id$postcode
-      )
-    ][
-      ,`:=` (tmp.idN = .N,
-             tmp.GRP = .GRP),
-      by = 'id'
-    ]
+  stage(stage = 10,
+        required = c('postcode',
+                     'surname'),
+        validation = c('tmp.valid.pcd',
+                       'tmp.valid.n2'),
+        group = c(namecols,
+                  id$postcode))
 
-  }
 
   ## S11: NAME SWAP  ####################################################
   ## TODO not working
@@ -495,30 +335,15 @@ uk_patient_id2 <- function(data,
         n2 = id$surname)
       ]
 
-    x[,c('id',
-         'tmp.stage') := .(
-           data.table::fifelse(
-             tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
-             data.table::fifelse(
-               id==tmp.recid | tmp.idN==1,
-               id[1],
-               id),
-             id),
-           data.table::fifelse(
-             tmp.valid.dob & tmp.valid.n2 & !tmp.valid.nhs,
-             paste0(tmp.stage,'s11'),
-             tmp.stage)
-         ),
-      by = c(
-        id$surname,
-        id$forename,
-        id$date_of_birth
-      )
-    ][
-      ,`:=` (tmp.idN = .N,
-             tmp.GRP = .GRP),
-      by = 'id'
-    ]
+  stage(stage = 11,
+        required = c('surname',
+                     'forename'
+,                     'date_of_birth'),
+        validation = c('tmp.valid.dob',
+                       'tmp.valid.n2',
+                       '!tmp.valid.nhs'),
+        group = c(namecols,
+                  id$date_of_birth))
 
     x[tmp.swap == TRUE,
       `:=`(
