@@ -194,7 +194,10 @@ uk_patient_id2 <- function(data,
           eval(parse(text = valid)),
           data.table::fifelse(
             id==tmp.recid & tmp.idN==1,
-            id[1],
+            data.table::fifelse(
+              data.table::last(tmp.idN)>1,
+              data.table::last(id),
+              id[1]),
             id),
           id),
         tmp.stage = data.table::fifelse(
@@ -324,7 +327,7 @@ uk_patient_id2 <- function(data,
   if(all(sapply(c('surname','forename','date_of_birth'),
                 function(x) exists(x,where=id)))){
 
-    x[tmp.idN == 1 & !tmp.valid.nhs,
+    x[tmp.idN == 1,
       `:=`(
         n1 = tmp.store.n2,
         n2 = tmp.store.n1,
@@ -341,7 +344,7 @@ uk_patient_id2 <- function(data,
 ,                     'date_of_birth'),
         validation = c('tmp.valid.dob',
                        'tmp.valid.n2',
-                       '!tmp.valid.nhs'),
+                       'tmp.valid.n1'),
         group = c(namecols,
                   id$date_of_birth))
 
