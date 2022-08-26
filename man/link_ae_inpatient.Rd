@@ -5,12 +5,14 @@
 \title{Link A&E to Inpatient records}
 \usage{
 link_ae_inpatient(
-  ae = list(data, arrival_date = "arrival_date", departure_date = "departure_date",
-    nhs_number = "nhs_number", hospital_number = "local_patient_identifier", patient_dob
-    = "patient_birth_date", org_code = "organisation_code_of_provider"),
-  inp = list(data, spell_id = "mega_spell_id", spell_start_date = "spell_start_date",
-    nhs_number = "nhs_number", hospital_number = "local_patient_identifier", patient_dob
-    = "date_birth", org_code = "organisation_code_code_of_provider"),
+  ae = list(data, record_id = "unique_record_id", nhs_number = "nhs_number",
+    hospital_number = "local_patient_identifier", patient_dob = "patient_birth_date",
+    org_code = "organisation_code_of_provider", arrival_date = "arrival_date",
+    departure_date = "departure_date"),
+  inp = list(data, record_id = "unique_record_id", nhs_number = "nhs_number",
+    hospital_number = "local_patient_identifier", patient_dob = "date_birth", org_code =
+    "organisation_code_code_of_provider", spell_id = "mega_spell_id", spell_start_date =
+    "spell_start_date"),
   .forceCopy = FALSE
 )
 }
@@ -18,6 +20,7 @@ link_ae_inpatient(
 \item{ae}{a list to provide data and columns for the A&E (ECDS) data; all arguments provided quoted unless specified
 \describe{
 \item{\code{data}}{the ECDS A&E dataset provided unquoted}
+\item{\code{record_id}}{a unique id within the dataset to be retained; optional}
 \item{\code{arrival_date}}{the ECDS arrival date}
 \item{\code{departure_date}}{the ECDS discharge date}
 \item{\code{nhs_number}}{the patient NHS number}
@@ -29,6 +32,7 @@ link_ae_inpatient(
 \item{inp}{a list to provide data and columns for the inpatient (SUS/HES) data
 \describe{
 \item{\code{data}}{the HES/SUS inpatient dataset provided unquoted}
+\item{\code{record_id}}{a unique id within the dataset to be retained; optional}
 \item{\code{spell_start_date}}{a string containing the inpatient (SUS/HES) admission date column name; all arguments provided quoted unless specified}
 \item{\code{spell_id}}{the HES/SUS spell id}
 \item{\code{nhs_number}}{the patient NHS number}
@@ -110,6 +114,9 @@ sample_ae <- data.table::data.table(
                      "2022-07-11","2022-06-20","2022-07-10",
                      "2022-07-20","2022-07-20","2022-07-19")
 )
+sample_ae$pcd <- paste0(sample(LETTERS,1),sample(1:14,1)," ",
+                        sample(LETTERS,1),sample(0:9,1),sample(LETTERS,1))
+sample_ae$id = seq_len(nrow(sample_ae))*7
 
 sample_inp <- data.table::data.table(
   nhs_number = c("335661151",
@@ -278,6 +285,10 @@ sample_inp <- data.table::data.table(
                      "2022-07-22","2022-07-28","2022-07-27",
                      "2022-07-10")
 )
+
+sample_inp$pcd <- paste0(sample(LETTERS,1),sample(1:14,1)," ",
+                         sample(LETTERS,1),sample(0:9,1),sample(LETTERS,1))
+sample_inp$id = seq_len(nrow(sample_inp))*3
 
 link_ae_inpatient(
   ae = list(
