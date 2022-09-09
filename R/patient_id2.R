@@ -1,3 +1,136 @@
+#' @title Patient ID record grouping
+#'
+#' @description
+#' `r lifecycle::badge('stable')`
+#'
+#'
+#' Groups patient records from multiple isolates with a single integer patientID
+#' by grouping patient identifiers.
+#'
+#' Grouping is based on the following stages:
+#' \enumerate{
+#' \item matching nhs number and date of birth
+#' \item Hospital number &  Date of Birth
+#' \item NHS number & Hospital Number
+#' \item NHS number & Name
+#' \item Hospital number & Name
+#' \item Sex & Date of Birth & Surname
+#' \item Sex & Date of Birth & Fuzzy Name
+#' \item Sex & Year and Month of Birth & Fuzzy Name
+#' \item Postcode & Name
+#' \item Name Swaps (when first and last name are the wrong way around)
+#' }
+#'
+#' Identifiers are copied over where they are missing or invalid to the grouped
+#' records.
+#'
+#' @import data.table
+#' @importFrom phonics soundex
+#' @importFrom stringr word
+#' @importFrom stringi stri_trans_general stri_trans_toupper
+#'
+#' @param data a data.frame or data.table containing the patient data
+#' @param id a named list to provide the column names with identifiers, quoted
+#'  \describe{
+#'    \item{`nhs_number`}{the patient NHS number}
+#'    \item{`hospital_number`}{the patient Hospital numbers also known as the local patient identifier}
+#'    \item{`date_of_birth`}{the patient date of birth}
+#'    \item{`sex_mfu`}{the patient sex or gender field as Male/Female/Unknown}
+#'    \item{`forename`}{the patient forename}
+#'    \item{`surname`}{the patient surname}
+#'    \item{`postcode`}{the patient postcode}
+#'   }
+#' @param .sortOrder optional; a column as a character to allow a sorting
+#'   order on the id generation
+#' @param .keepValidNHS optional, default FALSE; set TRUE if you wish to retain
+#'   the column with the NHS checksum result stored as a BOOLEAN
+#' @param .forceCopy optional, default FALSE; TRUE will force data.table to take a copy
+#'   instead of editing the data without reference
+#' @param .experimental optional, default FALSE; TRUE will enable the
+#'   experimental features for recoding NA values based on the mode
+#'
+#' @return A dataframe with one new variable:
+#' \describe{
+#'   \item{`id`}{a unique patient id}
+#'   \item{`valid_nhs`}{if retained using argument `.keepValidNHS=TRUE`, a
+#'     BOOLEAN containing the result of the NHS checksum validation}
+#' }
+#'
+#' @examples
+#' id_test <- data.frame(
+#' nhs_number = c(9434765919,
+#'                9434765919,9434765919,382940103,NA,382940103,
+#'                3367170666,3367170666,3367170666,3367170666,
+#'                9176325008,NA,NA,5703411017,5703411017,
+#'                3275446444,NA,NA,473372796,NA,473372796,NA,
+#'                1789154138,158691032,158691032,8354073580,NA,NA,NA,
+#'                NA,NA,9329053475,2063142777,2063142777,NA,
+#'                NA,NA,NA,NA,5555555555,5555555555),
+#' local_patient_identifier = c(NA,NA,NA,
+#'                              "I3348707",NA,"I3348707",NA,NA,NA,NA,
+#'                              "P1350948","P1350948","P1350948",NA,"Q4157514",
+#'                              "UNKNOWN",NA,"UNKNOWN",NA,"K2440769","K2440769",
+#'                              NA,"E1366499","K1494229","K1494229",
+#'                              "NO PATIENT ID","J5206297","J5206297",NA,NA,NA,
+#'                              "F2159102",NA,NA,"W1208900","G7439612","N4842033",
+#'                              "Q5566884","Q5566884","P2689566","P2689566"),
+#' patient_birth_date = as.Date(c("2021-03-03",
+#'                                NA,"2021-03-03","2003-08-24","2003-08-24",
+#'                                "2003-08-24","2001-06-21",NA,"2001-06-21",
+#'                                "2001-06-21","1991-10-08","1991-10-08","1991-10-08",
+#'                                NA,"1991-10-07","1985-10-16","1985-10-16",
+#'                                "1985-10-16","1984-11-14","1984-11-14",
+#'                                "1984-11-14","1984-11-14","1994-05-05","1983-01-04",
+#'                                "1983-01-04","2007-06-01","1975-09-04",
+#'                                "1975-09-04","2014-01-05","2014-01-05","2014-01-05",
+#'                                "2014-01-05",NA,NA,"2017-06-11","1986-08-28",
+#'                                "1986-08-26","2004-03-02","2004-03-02",
+#'                                "1979-01-17","1979-01-17")),
+#' sex = c("Male","Male",
+#'         "Male","Female",NA,NA,NA,"Female","Female",
+#'         "Female","Female","Female","Female",
+#'         "Female","Female","Male","Male","Male","Female",
+#'         "Female","Female","Female","Male","Male",
+#'         "Male","Female","Male","Male","Male","Male",
+#'         "Male","Male","Female","Female","Female",
+#'         "Female","Female","Male","Male","Male","Male"),
+#' forename = c("NICHOLAS",
+#'              "NICHOLAS","NICHOLAS","SARAH","VATHANAVARIN",NA,
+#'              "FUAADA","FUAADA","FUAADA","EL-SHAHIDI",
+#'              "CHANTEL","CHANTEL","CHANTEL",NA,"KENDRA",
+#'              "ALEXANDER","ALEXANDER","ALEX","ODESSA","ODESSA",
+#'              "ODESSA","ODESSA",NA,"KEVIN","KEVIN",NA,
+#'              "NAJEEB","NAJEEB","WILLIAM","WILL","WILLY",
+#'              "WILLIAM","EMMA","EMMA","ALMAASA","ALMAASA",
+#'              "ALMAASA",NA,NA,"JEFFERY","JEFFERY"),
+#' surname = c("MCCREARY",
+#'             "MCCREARY","MCCREARY","VATHANAVARIN","SARAH",
+#'             "VATHANAVARIN","EL-SHAHIDI","EL-SHAHIDI",
+#'             "EL-SHAHIDI","FUAADA","LENHART","LENHART","LENHART",
+#'             NA,"VIGIL","CARTER","CARTER","CARTER",
+#'             "RINHART","RINHART","RINHART","RINHART",NA,
+#'             "EL-ASMAR","EL-ASMAR",NA,"CAMPBELL","CAMPBELL",
+#'             "YAMAMOTO","YAMAMOTO","YAMAMOTO","YAMAMOTO",
+#'             "BRAVE","BRAVE","BROWN","BROWN","BROWN",NA,NA,
+#'             "LUCERO","LUCERO"),
+#' event_date = as.Date(sample(seq.Date(Sys.Date()-365,Sys.Date(),1),41,replace = TRUE)),
+#' stringsAsFactors = FALSE)
+#'
+#' uk_patient_id2(
+#'   data = id_test,
+#'   id = list(
+#'     nhs_number = 'nhs_number',
+#'     hospital_number = 'local_patient_identifier',
+#'     date_of_birth = 'patient_birth_date',
+#'     sex_mfu = 'sex',
+#'     forename = 'forename',
+#'     surname = 'surname'
+#'   ),
+#'   .sortOrder = 'event_date',
+#'   .forceCopy = TRUE
+#' )[]
+#'
+#' @export
 
 uk_patient_id2 <- function(data,
                            id = list(
