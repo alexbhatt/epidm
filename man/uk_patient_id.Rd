@@ -5,13 +5,10 @@
 \title{Patient ID record grouping}
 \usage{
 uk_patient_id(
-  x,
-  nhs_number,
-  hospital_number,
-  date_of_birth,
-  sex_mfu,
-  forename = "NONAME",
-  surname = "NONAME",
+  data,
+  id = list(nhs_number = "nhs_number", hospital_number = "patient_hospital_number",
+    date_of_birth = "date_of_birth", sex_mfu = "sex", forename = "forename", surname =
+    "surname", postcode = "postcode"),
   .sortOrder,
   .keepValidNHS = FALSE,
   .forceCopy = FALSE,
@@ -19,25 +16,18 @@ uk_patient_id(
 )
 }
 \arguments{
-\item{x}{a data.frame or data.table containing the cleaned line list}
+\item{data}{a data.frame or data.table containing the patient data}
 
-\item{nhs_number}{a column as a character containing the patient NHS numbers}
-
-\item{hospital_number}{a column as a character containing the patient
-Hospital numbers}
-
-\item{date_of_birth}{a column as a date variable containing the patient
-date of birth in date format}
-
-\item{sex_mfu}{column as a character containing the patient sex;
-NOTE only works if coded only as character versions of Male/Female/Unknown;
-does not currently work with additional options \verb{#future update}}
-
-\item{forename}{a column as a character containing the patient forename;
-leave as NONAME if unavailable}
-
-\item{surname}{a column as a character containing the patient surname;
-leave as NONAME if unavailable}
+\item{id}{a named list to provide the column names with identifiers, quoted
+\describe{
+\item{\code{nhs_number}}{the patient NHS number}
+\item{\code{hospital_number}}{the patient Hospital numbers also known as the local patient identifier}
+\item{\code{date_of_birth}}{the patient date of birth}
+\item{\code{sex_mfu}}{the patient sex or gender field as Male/Female/Unknown}
+\item{\code{forename}}{the patient forename}
+\item{\code{surname}}{the patient surname}
+\item{\code{postcode}}{the patient postcode}
+}}
 
 \item{.sortOrder}{optional; a column as a character to allow a sorting
 order on the id generation}
@@ -65,13 +55,18 @@ BOOLEAN containing the result of the NHS checksum validation}
 Groups patient records from multiple isolates with a single integer patientID
 by grouping patient identifiers.
 
-Grouping is based on five stages:
+Grouping is based on the following stages:
 \enumerate{
 \item matching nhs number and date of birth
 \item Hospital number &  Date of Birth
 \item NHS number & Hospital Number
-\item Date of Birth & Surname IF nhs unknown
+\item NHS number & Name
+\item Hospital number & Name
+\item Sex & Date of Birth & Surname
 \item Sex & Date of Birth & Fuzzy Name
+\item Sex & Year and Month of Birth & Fuzzy Name
+\item Postcode & Name
+\item Name Swaps (when first and last name are the wrong way around)
 }
 
 Identifiers are copied over where they are missing or invalid to the grouped
@@ -79,122 +74,76 @@ records.
 }
 \examples{
 id_test <- data.frame(
-  nhs_n = c(
-    9434765919,9434765919,9434765919,NA,NA,
-    3367170666,5185293519,5185293519,5185293519,8082318562,NA,NA,NA
-  ),
-  hosp_n = c(
-    '13','13','13','UNKNOWN','13','13','13','31','31','96','96',NA,'96'),
-  sex = c(rep('F',6),rep('Male',4), 'U', 'U', 'M'),
-  dateofbirth = as.Date(
-    c(
-      '1988-10-06','1988-10-06','1900-01-01','1988-10-06','1988-10-06',
-      '1988-10-06','1988-10-06','1988-10-06','1988-10-06','2020-01-28',
-      '2020-01-28','2020-01-28','2020-01-28'
-    )
-  ),
-  firstname = c(
-    'Danger','Danger','Denger','Danger','Danger','DANGER','Danger',
-    'Danger','Danger','Crazy','Crazy','Krazy','C'
-  ),
-  lastname = c(
-    'Mouse','Mause','Mouse','Moose','Moose','Mouse','MOUSe',
-    'Mouse','Mouse','Frog','FROG','Frug','Frog'
-  ),
-  testdate = sample(seq.Date(Sys.Date()-21,Sys.Date(),"day"),13,replace = TRUE)
-)
-id_test <- data.frame(
-  stringsAsFactors = FALSE,
-  nhs_number = c("9434765919",
-                 "9434765919","9434765919","382940103",
-                 "382940103","3367170666","3367170666","3367170666",
-                 "3367170666","9176325008",NA,NA,"9068667262",
-                 "2520311053","5703411017","3275446444",NA,NA,
-                 "0917395816","473372796",NA,"473372796",NA,
-                 "1789154138","3599923868","0158691032",
-                 "0158691032","8354073580",NA,NA,"2726167470",NA,NA,
-                 NA,"9329053475","2063142777","2063142777",
-                 "5119650317","5062866472",NA,"537235036",NA,
-                 "0967448493",NA,NA,NA,"5555555555",NA),
-  local_patient_identifier = c(NA,NA,NA,
-                               "I3348707","I3348707",NA,NA,NA,NA,"P1350948",
-                               "P1350948","P1350948",NA,NA,"Q4157514",NA,
-                               NA,NA,"D1101843",NA,"K2440769","K2440769",NA,
-                               "E1366499",NA,"K1494229","K1494229",
-                               "NO PATIENT ID","J5206297","J5206297","S1945338",NA,
-                               NA,NA,"F2159102",NA,NA,"UNKNOWN",NA,
-                               "W1208900","Z4975449","G7439612","T1266485",
-                               "N4842033","Q5566884","Q5566884","P2689566",NA),
-  patient_birth_date = c("2021-03-03",
-                         NA,"2021-03-03","2003-08-24","2003-08-24",
-                         "2001-06-21",NA,"2001-06-21","2001-06-21",
-                         "1991-10-08","1991-10-08","1991-10-08","1987-02-03",
-                         NA,"1991-10-07","1985-10-16","1985-10-16",
-                         "1985-10-16","1990-09-24","1984-11-14",
-                         "1984-11-14","1984-11-14","1984-11-14","1994-05-05",
-                         "1999-08-11","1983-01-04","1983-01-04",
-                         "2007-06-01","1975-09-04","1975-09-04","1993-07-13",
-                         "2014-01-05","2014-01-05","2014-01-05",
-                         "2014-01-05",NA,NA,"1976-06-25","1900-01-01",
-                         "2017-06-11","2007-05-03","1986-08-28",NA,"2016-02-04",
-                         "2004-03-02","2004-03-02","1979-01-17",
-                         "1974-06-14"),
-  sex = c("Male","Male",
-          "Male","Female",NA,NA,"Female","Female",
-          "Female","Female","Female","Female","Male",
-          "Female","Female","Male","Male","Male","Male",
-          "Female","Female","Female","Female","Male",
-          "Male","Male","Male","Female","Male","Male",
-          "Male","Male","Male","Male","Male","Female",
-          "Female","Male","Female","Female","Female",
-          "Female","Female","Female","Male","Male",
-          "Male","Male"),
-  forename = c("NICHOLAS",
-               "NICHOLAS","NICHOLAS","SARAH",NA,"FUAADA",
-               "FUAADA","FUAADA","EL-SHAHIDI","CHANTEL","CHANTEL",
-               "CHANTEL","JOSHUA",NA,"KENDRA","ALEXANDER",
-               "ALEXANDER","ALEX","KONDA","ODESSA","ODESSA",
-               "ODESSA","ODESSA",NA,"NICHOLAS","KEVIN",
-               "KEVIN",NA,"NAJEEB","NAJEEB","ANTHONY",
-               "WILLIAM","WILL","WILLY","WILLIAM","EMMA","EMMA",
-               "RANDY","BRIANNA","ALMAASA","SARAH","ALMAASA",
-               "CECILIA","ALMAASA",NA,NA,"JEFFERY",
-               "DEMETRIUS"),
-  surname = c("MCCREARY",
-              "MCCREARY","MCCREARY","VATHANAVARIN",
-              "VATHANAVARIN","EL-SHAHIDI","EL-SHAHIDI","EL-SHAHIDI",
-              "FUAADA","LENHART","LENHART","LENHART","MASON",
-              NA,"VIGIL","CARTER","CARTER","CARTER",
-              "AL-SADER","RINHART","RINHART","RINHART","RINHART",
-              NA,"HEU","EL-ASMAR","EL-ASMAR",NA,
-              "CAMPBELL","CAMPBELL","WILLIAMS","YAMAMOTO","YAMAMOTO",
-              "YAMAMOTO","YAMAMOTO","BRAVE","BRAVE",
-              "CHIN","GUERETTE","BROWN","LIGHTFOOT","BROWN",
-              "HUFF","BROWN",NA,NA,"LUCERO","HUYNH"),
-  event_date = c("2022-05-10",
-                 "2022-05-29","2022-08-03","2022-05-17",
-                 "2022-05-17","2022-05-07","2022-05-07","2022-05-07",
-                 "2022-05-07","2022-05-23","2022-05-23",
-                 "2022-05-23","2022-05-13","2022-06-04","2022-05-14",
-                 "2022-05-17","2022-06-05","2022-06-05",
-                 "2022-05-25","2022-05-24","2022-05-24","2022-05-24",
-                 "2022-05-24","2022-06-09","2022-06-18",
-                 "2022-06-11","2022-06-11","2022-06-22","2022-06-20",
-                 "2022-07-18","2022-06-09","2022-06-05",
-                 "2022-06-05","2022-06-05","2022-06-05","2022-06-26",
-                 "2022-06-11","2022-06-25","2022-06-10",
-                 "2022-06-12","2022-06-16","2022-07-10","2022-06-20",
-                 "2022-07-10","2022-07-20","2022-07-20",
-                 "2022-07-20","2022-07-19")
-)
+nhs_number = c(9434765919,
+               9434765919,9434765919,382940103,NA,382940103,
+               3367170666,3367170666,3367170666,3367170666,
+               9176325008,NA,NA,5703411017,5703411017,
+               3275446444,NA,NA,473372796,NA,473372796,NA,
+               1789154138,158691032,158691032,8354073580,NA,NA,NA,
+               NA,NA,9329053475,2063142777,2063142777,NA,
+               NA,NA,NA,NA,5555555555,5555555555),
+local_patient_identifier = c(NA,NA,NA,
+                             "I3348707",NA,"I3348707",NA,NA,NA,NA,
+                             "P1350948","P1350948","P1350948",NA,"Q4157514",
+                             "UNKNOWN",NA,"UNKNOWN",NA,"K2440769","K2440769",
+                             NA,"E1366499","K1494229","K1494229",
+                             "NO PATIENT ID","J5206297","J5206297",NA,NA,NA,
+                             "F2159102",NA,NA,"W1208900","G7439612","N4842033",
+                             "Q5566884","Q5566884","P2689566","P2689566"),
+patient_birth_date = as.Date(c("2021-03-03",
+                               NA,"2021-03-03","2003-08-24","2003-08-24",
+                               "2003-08-24","2001-06-21",NA,"2001-06-21",
+                               "2001-06-21","1991-10-08","1991-10-08","1991-10-08",
+                               NA,"1991-10-07","1985-10-16","1985-10-16",
+                               "1985-10-16","1984-11-14","1984-11-14",
+                               "1984-11-14","1984-11-14","1994-05-05","1983-01-04",
+                               "1983-01-04","2007-06-01","1975-09-04",
+                               "1975-09-04","2014-01-05","2014-01-05","2014-01-05",
+                               "2014-01-05",NA,NA,"2017-06-11","1986-08-28",
+                               "1986-08-26","2004-03-02","2004-03-02",
+                               "1979-01-17","1979-01-17")),
+sex = c("Male","Male",
+        "Male","Female",NA,NA,NA,"Female","Female",
+        "Female","Female","Female","Female",
+        "Female","Female","Male","Male","Male","Female",
+        "Female","Female","Female","Male","Male",
+        "Male","Female","Male","Male","Male","Male",
+        "Male","Male","Female","Female","Female",
+        "Female","Female","Male","Male","Male","Male"),
+forename = c("NICHOLAS",
+             "NICHOLAS","NICHOLAS","SARAH","VATHANAVARIN",NA,
+             "FUAADA","FUAADA","FUAADA","EL-SHAHIDI",
+             "CHANTEL","CHANTEL","CHANTEL",NA,"KENDRA",
+             "ALEXANDER","ALEXANDER","ALEX","ODESSA","ODESSA",
+             "ODESSA","ODESSA",NA,"KEVIN","KEVIN",NA,
+             "NAJEEB","NAJEEB","WILLIAM","WILL","WILLY",
+             "WILLIAM","EMMA","EMMA","ALMAASA","ALMAASA",
+             "ALMAASA",NA,NA,"JEFFERY","JEFFERY"),
+surname = c("MCCREARY",
+            "MCCREARY","MCCREARY","VATHANAVARIN","SARAH",
+            "VATHANAVARIN","EL-SHAHIDI","EL-SHAHIDI",
+            "EL-SHAHIDI","FUAADA","LENHART","LENHART","LENHART",
+            NA,"VIGIL","CARTER","CARTER","CARTER",
+            "RINHART","RINHART","RINHART","RINHART",NA,
+            "EL-ASMAR","EL-ASMAR",NA,"CAMPBELL","CAMPBELL",
+            "YAMAMOTO","YAMAMOTO","YAMAMOTO","YAMAMOTO",
+            "BRAVE","BRAVE","BROWN","BROWN","BROWN",NA,NA,
+            "LUCERO","LUCERO"),
+event_date = as.Date(sample(seq.Date(Sys.Date()-365,Sys.Date(),1),41,replace = TRUE)),
+stringsAsFactors = FALSE)
 
-uk_patient_id(x = id_test,
-              nhs_number = 'nhs_n',
-              hospital_number = 'hosp_n',
-              forename = 'firstname',
-              surname = 'lastname',
-              sex_mfu = 'sex',
-              date_of_birth = 'dateofbirth',
-              .sortOrder = 'testdate')[]
+uk_patient_id2(
+  data = id_test,
+  id = list(
+    nhs_number = 'nhs_number',
+    hospital_number = 'local_patient_identifier',
+    date_of_birth = 'patient_birth_date',
+    sex_mfu = 'sex',
+    forename = 'forename',
+    surname = 'surname'
+  ),
+  .sortOrder = 'event_date',
+  .forceCopy = TRUE
+)[]
 
 }
