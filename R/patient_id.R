@@ -132,7 +132,7 @@
 #'
 #' @export
 
-uk_patient_id2 <- function(data,
+uk_patient_id <- function(data,
                            id = list(
                              nhs_number = 'nhs_number',
                              hospital_number = 'patient_hospital_number',
