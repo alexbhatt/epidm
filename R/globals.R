@@ -56,11 +56,25 @@ utils::globalVariables(
     'data',
     'x',
     'y',
+    'n',
     'arr',
     'sid',
     'id.ae',
     'id.inp',
     'v1',
-    'v2'
+    'v2',
+    'var',
+    'n1',
+    'n2',
+    'tmp.recid',
+    'tmp.GRP',
+    'tmp.stage',
+    'dob',
+    'tmp.valid.n1',
+    'tmp.valid.n2',
+    'tmp.store.n1',
+    'tmp.store.n2',
+    'tmp.valid.pcd',
+    'pcd'
   )
 )
