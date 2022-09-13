@@ -164,7 +164,13 @@ lookup_recode <- function(src,
   if (type %in% c("ecds_destination_code",
                   "inpatient_admission_method",
                   "inpatient_discharge_destination")) {
-    return(as.character(x))
+
+    if(is.na(x)){
+      return(x)
+    } else {
+      return(as.character(x))
+    }
+
   }
 
   else {
