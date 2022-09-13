@@ -116,7 +116,7 @@
 #' event_date = as.Date(sample(seq.Date(Sys.Date()-365,Sys.Date(),1),41,replace = TRUE)),
 #' stringsAsFactors = FALSE)
 #'
-#' uk_patient_id2(
+#' uk_patient_id(
 #'   data = id_test,
 #'   id = list(
 #'     nhs_number = 'nhs_number',
