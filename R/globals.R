@@ -75,6 +75,8 @@ utils::globalVariables(
     'tmp.store.n1',
     'tmp.store.n2',
     'tmp.valid.pcd',
+    'tmp.swap',
+    'sex_mfu',
     'pcd'
   )
 )
