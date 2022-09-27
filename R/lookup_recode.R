@@ -13,7 +13,7 @@
 #' @param .import a list  in the order list(new,old) containing the
 #' values for another lookup table existing in the environment
 #'
-#' @importFrom purrr imap
+#' @importFrom purrr imap_chr
 #' @importFrom stats na.omit setNames
 #'
 #'
@@ -159,7 +159,8 @@ lookup_recode <- function(src,
   ## purrr::imap uses two arguments, the first is the mapped item
   ## the second is the index number of that item
   ## you do not need to specify the arguments if there are only 2
-  x <- purrr::imap(x,nullReplace)
+  ## use _chr to ensure that its reported back as a character vector and not a list
+  x <- purrr::imap_chr(x,nullReplace)
 
   return(x)
 
