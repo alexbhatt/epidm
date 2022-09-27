@@ -161,21 +161,6 @@ lookup_recode <- function(src,
   ## you do not need to specify the arguments if there are only 2
   x <- purrr::imap(x,nullReplace)
 
-  if (type %in% c("ecds_destination_code",
-                  "inpatient_admission_method",
-                  "inpatient_discharge_destination")) {
-
-    if(is.na(x)){
-      return(x)
-    } else {
-      return(as.character(x))
-    }
-
-  }
-
-  else {
-
-    return(x)
-  }
+  return(x)
 
 }
