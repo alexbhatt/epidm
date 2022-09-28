@@ -64,30 +64,33 @@ group_ecds_discharge_destination <-
   rbind(
     data.frame(
       code = c(
-        "306689006",
-        "306691003",
-        "306694006",
-        "306705005",
-        "50861005",
+        "306689006", # to home
+        "306691003", # to home
+        "306694006", # to nursing home
+        "306705005", # to policy
+        "50861005", # to legal custody
         "989501000000106", # discharged for follow up by GP
+        "1066111000000103", # referred for outpatient procedure
+        "301791000000104", # referred for fracture clinic
         NA
       ),
       destination_code = "Discharged"
     ),
     data.frame(
-      code = c("1066331000000109",
-               "1066341000000100",
-               "1066351000000102"),
+      code = c("1066331000000109", # ED short stay
+               "1066341000000100", # ambulance care
+               "1066351000000102" # hospital at home service
+               ),
       destination_code = "Ambulatory/Short stay"
     ),
     data.frame(
       code = c(
-        "306706006",
-        "1066361000000104",
-        "1066371000000106",
-        "1066381000000108",
-        "1066391000000105",
-        "1066401000000108"
+        "306706006", # admission to ward
+        "1066361000000104", # admission to HDU
+        "1066391000000105", # admission to ICU
+        "1066371000000106", # admission to coronary care
+        "1066381000000108", # special baby care unit
+        "1066401000000108"  # neonate ICU
       ),
       destination_code = "Admitted"
     ),
