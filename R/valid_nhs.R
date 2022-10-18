@@ -98,6 +98,6 @@ valid_nhs <- function(nhs_number){
   }
 
   ## to prevent NA errors when looking at a vector of NHS numbers
-  sapply(nhs_number,checksum_algorithm)
+  purrr::map_dbl(nhs_number,checksum_algorithm)
 
 }
