@@ -1,5 +1,5 @@
 #'
-#'  Respeciate unspecified samples
+#' @title Respeciate unspecified samples
 #'
 #' @description
 #' `r lifecycle::badge('stable')`
