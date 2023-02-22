@@ -171,7 +171,7 @@ uk_patient_id <- function(data,
   ## set id to column 1
   data.table::setcolorder(x,c('id','tmp.recid','tmp.idN','tmp.GRP','tmp.stage'))
 
-  ## VALIDIDTY MARKERS #########################################################
+  ## VALIDITY MARKERS ##########################################################
   ## NOTE: using exists(x,where=id) as the items X are within a list
   ## missing() does not recognise them as they are not primary arguments
 
