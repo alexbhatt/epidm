@@ -469,7 +469,7 @@ link_ae_inpatient <- function(
   }
 
   ## loop through identifiers and consolidate
-  ids <- as.vector(unlist(lapply(ae[c(5:length(ae))],`[[`,1)))
+  ids <- as.vector(unlist(lapply(ae[c(4:length(ae))],`[[`,1)))
   for(i in ids){
 
     link[,(i) := data.table::fifelse(is.na(v1),v2,v1),
@@ -480,31 +480,31 @@ link_ae_inpatient <- function(
     ]
   }
 
-  ## if the postcode is included
-  if(any(grepl("*pcd*|*postcode*",names(link),ignore.case = TRUE))){
-    if (any(grepl(".*postcode.*.ae$",
-                  names(link),
-                  ignore.case = TRUE))) {
-      pcdname <- grep(".*postcode.*....$", names(link), value = TRUE)
-
-    } else if (any(grepl(".*pcd.*.ae$",
-                         names(link),
-                         ignore.case = TRUE))) {
-      pcdname <- grep(".*pcd*....$", names(link), value = TRUE)
-
-    }
-
-    pcdvar <- gsub(".ae", "", pcdname[1])
-
-    link[,
-         var := data.table::fifelse(is.na(n2),
-                                    n1,
-                                    n2),
-         env = list(var = pcdvar,
-                    n1 = pcdname[1], ## A&E report
-                    n2 = pcdname[2]) ## Inpatient report
-         ]
-  }
+  # ## if the postcode is included
+  # if(any(grepl("*pcd*|*postcode*",names(link),ignore.case = TRUE))){
+  #   if (any(grepl(".*postcode.*.ae$",
+  #                 names(link),
+  #                 ignore.case = TRUE))) {
+  #     pcdname <- grep(".*postcode.*....$", names(link), value = TRUE)
+  #
+  #   } else if (any(grepl(".*pcd.*.ae$",
+  #                        names(link),
+  #                        ignore.case = TRUE))) {
+  #     pcdname <- grep(".*pcd*....$", names(link), value = TRUE)
+  #
+  #   }
+  #
+  #   pcdvar <- gsub(".ae", "", pcdname[1])
+  #
+  #   link[,
+  #        var := data.table::fifelse(is.na(n2),
+  #                                   n1,
+  #                                   n2),
+  #        env = list(var = pcdvar,
+  #                   n1 = pcdname[1], ## A&E report
+  #                   n2 = pcdname[2]) ## Inpatient report
+  #        ]
+  # }
 
   ## if you want to keep a uid column
   cols <- as.vector(unlist(lapply(ae[c(2:length(ae))],`[[`,1)))
@@ -535,7 +535,11 @@ link_ae_inpatient <- function(
   link[, (rmcols) := NULL]
 
   ## put ID cols at the beginning
-  data.table::setcolorder(link, cols)
+  data.table::setcolorder(x = link,
+                          neworder = cols)
+  data.table::setcolorder(x = link,
+                          neworder = c(ae$arrival_date,ae$departure_date),
+                          before = inp$spell_start_date)
 
   return(link)
 }
