@@ -2,9 +2,7 @@
 % Please edit documentation in R/hospital_in_out_dates.R
 \name{hospital_in_out_dates}
 \alias{hospital_in_out_dates}
-\title{Hospital IN/OUT dates
-\subsection{Hospital in/out dates}{
-}}
+\title{Hospital IN/OUT dates}
 \usage{
 hospital_in_out_dates(
   data,
@@ -36,8 +34,14 @@ hospital_in_out_dates(
 new date columns on the data.table for \code{hospital_in} and \code{hospital_out} and \code{hospital_event_rank}
 }
 \description{
-Hospital IN/OUT dates
-\subsection{Hospital in/out dates}{
+This function helps to determine when a patient has been in
+hospital across  spell aggregation.
+When retaining the final record the following criteria is used:
+\itemize{
+\item{"1"}{Current admissions take priority}
+\item{"2"}{When conflicting on the same day, inpatient admissions take priority over A&E emergency care data}
+\item{"3"}{Where a patient has a linked A&E admission to a hospital inpatient stay, the A&E admission date is used}
+\item{"4"}{Where a patient has a positive test between two hospital stays the most recent completed hospital stay prior to the test is retained except if the time between these events is greater than 14 days, then the first admission following the test is retained}
 }
 }
 \examples{
@@ -53,6 +57,7 @@ hospital = list(
   in_spell_end = 'spell_end_date',
   in_discharge = 'discharge_destination'
 )[]
+
 }
 \seealso{
 epidm::lookup_recode()

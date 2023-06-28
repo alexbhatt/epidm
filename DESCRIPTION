@@ -1,29 +1,29 @@
 Package: epidm
-Version: 1.0.4
 Title: UK Epidemiological Data Management
+Version: 1.0.4
 Authors@R:
-    person("Alex", "Bhattacharya",
-           , "alex.bhatt@gmail.com",
-           role = c("aut", "cre"),
+    person("Alex", "Bhattacharya", , "alex.bhatt@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-3000-2771"))
-Description: Contains utilities and functions for the cleaning, processing and
-    management of patient level public health data for surveillance
+Description: Contains utilities and functions for the cleaning, processing
+    and management of patient level public health data for surveillance
     and analysis held by the UK Health Security Agency, UKHSA.
-URL: https://github.com/alexbhatt/epidm, https://alexbhatt.github.io/epidm/
-BugReports: https://github.com/alexbhatt/epidm/issues
 License: GPL (>= 3)
+URL: https://github.com/alexbhatt/epidm,
+    https://alexbhatt.github.io/epidm/
+BugReports: https://github.com/alexbhatt/epidm/issues
 Depends:
     R (>= 3.1)
 Imports:
     data.table (>= 1.14.3),
-    DBI,
-    odbc,
-    phonics,
-    purrr,
-    readr,
+    DBI (>= 1.1.2),
+    lubridate,
+    odbc (>= 1.3.3),
+    phonics (>= 1.3.10),
+    purrr (>= 0.3.5),
+    readr (>= 2.1.2),
     stats,
-    stringi,
-    stringr,
+    stringi (>= 1.7.8),
+    stringr (>= 1.4.1),
     utils
 Encoding: UTF-8
 LazyData: true

@@ -1,16 +1,14 @@
-#' Hospital IN/OUT dates
-#' ## Hospital in/out dates ########################################################
-# When retaining the final record the following criteria is used:
-#  ALL RULES ARE WITHIN A SINGLE PATIENT
-#  1 Current admissions take priority
-#  2 When conflicting on the same day, SUS admissions take priority over ECDS
-#    emergency care data
-#  3 Where a patient has a linked A&E admission to a hospital inpatient stay,
-#    the A&E admission date is used
-#  4 Where a patient has a positive test between two hospital stays the most
-#    recent completed hospital stay prior to the test is retained except if
-#    the time between these events is greater than 14 days, then the first
-#    admission following the test is retained
+#' @title Hospital IN/OUT dates
+#'
+#' @description This function helps to determine when a patient has been in
+#' hospital across  spell aggregation.
+#' When retaining the final record the following criteria is used:
+#'  \itemize{
+#'    \item{"1"}{Current admissions take priority}
+#'    \item{"2"}{When conflicting on the same day, inpatient admissions take priority over A&E emergency care data}
+#'    \item{"3"}{Where a patient has a linked A&E admission to a hospital inpatient stay, the A&E admission date is used}
+#'    \item{"4"}{Where a patient has a positive test between two hospital stays the most recent completed hospital stay prior to the test is retained except if the time between these events is greater than 14 days, then the first admission following the test is retained}
+#'  }
 #'
 #' @param data the linked asset holding A&E and Inpatient data
 #' @param person_id the column containing the unique patient ID
@@ -30,6 +28,8 @@
 #' @seealso epidm::group_time()
 #' @seealso epidm::cip_spells()
 #'
+#' @importFrom lubridate `%within%` interval
+#'
 #' @return  new date columns on the data.table for `hospital_in` and `hospital_out` and `hospital_event_rank`
 #' @export
 #'
@@ -46,6 +46,7 @@
 #'   in_spell_end = 'spell_end_date',
 #'   in_discharge = 'discharge_destination'
 #' )[]
+#'
 
 hospital_in_out_dates <- function(data,
                                   person_id = 'id',
@@ -70,10 +71,14 @@ hospital_in_out_dates <- function(data,
              hospital$ae_depart,
              hospital$in_spell_start,
              hospital$in_spell_end)) {
-    link[,
-         date := as.Date(date),
-         env = list(date = i)
-         ]
+
+    # check if its a date class
+    if(inherits(i,"Date")){
+      link[,
+           date := as.Date(date),
+           env = list(date = i)
+      ]
+    }
 
   }
 
@@ -84,10 +89,8 @@ hospital_in_out_dates <- function(data,
     is.na(ae_in)  & !is.na(in_in), "SUS",
     default = NA
   ),
-  env = list(ae_in = hospital$ae_arrive,
-             ae_out = hospital$ae_depart,
-             in_in = hospital$in_spell_start,
-             in_out = hospital$in_spell_end)
+  env = list(ae_in = hospital$ae_arrive
+             in_in = hospital$in_spell_start)
   ]
 
 
