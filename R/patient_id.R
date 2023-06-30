@@ -142,10 +142,11 @@ uk_patient_id <- function(data,
                              surname = 'surname',
                              postcode = 'postcode'
                            ),
-                           .sortOrder,
-                           .keepValidNHS = FALSE,
-                           .forceCopy = FALSE,
-                           .experimental = FALSE) {
+                          .useStages = c(1:11),
+                          .sortOrder,
+                          .keepValidNHS = FALSE,
+                          .forceCopy = FALSE,
+                          .experimental = FALSE) {
 
   ## convert data.frame to data.table or take a copy
   if(.forceCopy) {
@@ -314,39 +315,45 @@ uk_patient_id <- function(data,
                     validation,
                     group){
 
-    if(all(sapply(required,
-                  function(x) exists(x,where=id)))){
+    # capture .useStages from primary function call
+    if(stage %in% .useStages){
 
-    valid <- paste(validation,collapse=" & ")
+      if(all(sapply(required,
+                    function(x) exists(x,where=id)))){
 
-    ## use eval(parse(text=valid)) to allow the submission of a text
-    #   string to be evaluated as code
+      valid <- paste(validation,collapse=" & ")
 
-      x[,`:=` (
-        id = data.table::fifelse(
-          eval(parse(text = valid)),
-          data.table::fifelse(
-            id==tmp.recid & tmp.idN==1,
+      ## use eval(parse(text=valid)) to allow the submission of a text
+      #   string to be evaluated as code
+
+        x[,`:=` (
+          id = data.table::fifelse(
+            eval(parse(text = valid)),
             data.table::fifelse(
-              data.table::last(tmp.idN)>1,
-              data.table::last(id),
-              id[1]),
+              id==tmp.recid & tmp.idN==1,
+              data.table::fifelse(
+                data.table::last(tmp.idN)>1,
+                data.table::last(id),
+                id[1]),
+              id),
             id),
-          id),
-        tmp.stage = data.table::fifelse(
-          eval(parse(text = valid)),
-          paste0(tmp.stage,paste0('s',stage)),
-          tmp.stage)
-      ),
-      by = group
-      ][
-        ,`:=` (tmp.idN = .N,
-               tmp.GRP = .GRP),
-        by = 'id'
-      ]
+          tmp.stage = data.table::fifelse(
+            eval(parse(text = valid)),
+            paste0(tmp.stage,paste0('s',stage)),
+            tmp.stage)
+        ),
+        by = group
+        ][
+          ,`:=` (tmp.idN = .N,
+                 tmp.GRP = .GRP),
+          by = 'id'
+        ]
 
-    return(x)
+      return(x)
+      }
+
     }
+
   }
 
   ## S1: NHS + DOB ###########################################################

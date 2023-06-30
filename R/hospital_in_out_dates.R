@@ -31,7 +31,6 @@
 #' @importFrom lubridate `%within%` interval
 #'
 #' @return  new date columns on the data.table for `hospital_in` and `hospital_out` and `hospital_event_rank`
-#' @export
 #'
 #' @examples
 #' hospital_in_out_dates(link,
@@ -89,7 +88,7 @@ hospital_in_out_dates <- function(data,
     is.na(ae_in)  & !is.na(in_in), "SUS",
     default = NA
   ),
-  env = list(ae_in = hospital$ae_arrive
+  env = list(ae_in = hospital$ae_arrive,
              in_in = hospital$in_spell_start)
   ]
 
@@ -198,16 +197,19 @@ hospital_in_out_dates <- function(data,
   ]
 
   ## order and mark valid entries
-  data.table::setorderv(link,
-                        new_unique_identifier,
-                        -valid_hospital_link,
-                        abs_admit,
-                        abs_discharge,
-                        -pos_in_hospital,
-                        -pos14_order,
-                        -hospital_in,
-                        -hospital_out,
-                        ev_date
+  data.table::setorderv(
+    link,
+    cols = c(
+      new_unique_identifier,
+      -valid_hospital_link,
+      abs_admit,
+      abs_discharge,
+      -pos_in_hospital,
+      -pos14_order,
+      -hospital_in,
+      -hospital_out,
+      ev_date
+    )
   )
 
   link <- unique(link,
