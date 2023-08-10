@@ -33,7 +33,11 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Suggests: 
     dplyr,
+    nhsnumbergenerator (>= 0.0.0.90001),
+    rbenchmark,
     RSQLite,
     testthat (>= 3.0.0),
     vroom
 Config/testthat/edition: 3
+Remotes: 
+    https://github.com/Owen-Pullen/nhsnumbergenerator.git
