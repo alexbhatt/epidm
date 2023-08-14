@@ -6,7 +6,7 @@
 #' @param backup_name name of file this is a string name that the file name will be not including file path
 #' or including file extension e.g. backup_name = "example_file" is for "blah/example_file.parquet"
 #' @param remove_old removes chunked parquet files written by callback function
-#' @returns a single parquet file
+#' @returns invisibly character vector of parquet files that were merged and a single parquet file (saved/written)
 #' @description
 #' Combine parquet files into larger parquet files - useful for when writing parquet files in chunks
 #' then later combining chunks into single file
@@ -35,4 +35,5 @@ combine_parquet_files <- function(path, pattern, backup_name, remove_old = FALSE
   if (remove_old) {
     file.remove(sources)
   }
+  return(invisible(sources))
 }
