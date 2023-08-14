@@ -50,7 +50,7 @@
 #'   pattern = "temp_chunk_parquet_file",
 #'   file_remove = TRUE,
 #'   chunk_size = 1,
-#'   delim = "|"
+#'   delim = " "
 #' )
 #'
 #' DBI::dbReadTable(con, "example")
