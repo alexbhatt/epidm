@@ -68,7 +68,7 @@ default 50,000}
 use " " as a delimiter}
 }
 \value{
-SQL table filled with values from txt file and if write_parquet = TRUE
+TRUE invisibly and a SQL table filled with values from txt file and if write_parquet = TRUE
 a parquet file backup of the .txt file
 }
 \description{

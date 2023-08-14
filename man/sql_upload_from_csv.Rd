@@ -63,7 +63,7 @@ write_parquet = TRUE}
 default 50,000}
 }
 \value{
-SQL table filled with values from csv file and if write_parquet = TRUE
+TRUE invisibly and a SQL table filled with values from csv file and if write_parquet = TRUE
 a parquet file backup of the .csv file
 }
 \description{
