@@ -35,7 +35,7 @@
 #' t <- tempdir(check = TRUE)
 #' t1 <- paste0(t, "\\")
 #' # TRUNCATE TABLE does not exist in SQLite so cannot be shown in examples
-#' sql_upload_from_csv(readr::readr_example("mtcars.csv"),
+#' sql_upload_csv_chunked(readr::readr_example("mtcars.csv"),
 #'                     col_list = NULL,
 #'                     con = con,
 #'                     schema = NULL,
@@ -79,7 +79,7 @@
 #' @export
 #' @seealso [arrow::write_parquet()] [arrow::read_parquet()] [DBI::dbWriteTable()] [readr::read_csv_chunked()]
 #' [options()]
-sql_upload_from_csv <- function(input_filename,
+sql_upload_csv_chunked <- function(input_filename,
                                 col_list = NULL,
                                 con,
                                 schema = "dbo",

@@ -4,7 +4,7 @@ testthat::test_that("parquet-backup-csv", {
     t1 <- paste0(t, "\\")
     arrow::write_parquet(test_df, paste0(t1, "test_csv.parquet"))
     con <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-    sql_upload_from_csv(readr::readr_example("mtcars.csv"),
+    test_ouput <- sql_upload_csv_chunked(readr::readr_example("mtcars.csv"),
                         con = con,
                         schema = NULL,
                         table_name = "test",
@@ -19,4 +19,5 @@ testthat::test_that("parquet-backup-csv", {
                            arrow::read_parquet(paste0(t1, "test_csv.parquet"))
                            )
     unlink(t, recursive = T, force = T)
+    expect_true(test_ouput)
 })

@@ -38,7 +38,7 @@
 #' t <- tempdir(check = TRUE)
 #' t1 <- paste0(t, "\\")
 #'
-#' sql_upload_from_txt(readr::readr_example("whitespace-sample.txt"),
+#' sql_upload_txt_chunked(readr::readr_example("whitespace-sample.txt"),
 #'                                    col_list = NULL,
 #'                                    con = con,
 #'                                    schema = NULL,
@@ -77,7 +77,7 @@
 #' than txt
 #' @export
 #'
-sql_upload_from_txt <- function(input_filename,
+sql_upload_txt_chunked <- function(input_filename,
                                 col_list = NULL,
                                 con,
                                 schema = "dbo",
