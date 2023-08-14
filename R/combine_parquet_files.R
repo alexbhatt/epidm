@@ -28,6 +28,7 @@
 #'
 combine_parquet_files <- function(path, pattern, backup_name, remove_old = FALSE) {
   sources <- list.files(path = path, pattern = pattern, full.names = TRUE)
+  if (length(sources) <= 1) {stop("Cannot combine a single or 0 parquet files, check path and directory")}
   sources <- sources[order(file.info(sources)$ctime, grep("[0-9]", sources))]
   arrow::write_parquet(arrow::open_dataset(sources, format = "parquet"),
                        sink = paste0(path, backup_name, ".parquet")
