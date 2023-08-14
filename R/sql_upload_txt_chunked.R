@@ -39,19 +39,19 @@
 #' t1 <- paste0(t, "\\")
 #'
 #' sql_upload_txt_chunked(readr::readr_example("whitespace-sample.txt"),
-#'                                    col_list = NULL,
-#'                                    con = con,
-#'                                    schema = NULL,
-#'                                    table_name = "example",
-#'                                    truncate_table = FALSE,
-#'                                    write_parquet = TRUE,
-#'                                    backup_filepath = t1,
-#'                                    backup_name = "test_txt",
-#'                                    pattern = "temp_chunk_parquet_file",
-#'                                    file_remove = TRUE,
-#'                                    chunk_size = 1,
-#'                                    delim = "|"
-#'                                    )
+#'   col_list = NULL,
+#'   con = con,
+#'   schema = NULL,
+#'   table_name = "example",
+#'   truncate_table = FALSE,
+#'   write_parquet = TRUE,
+#'   backup_filepath = t1,
+#'   backup_name = "test_txt",
+#'   pattern = "temp_chunk_parquet_file",
+#'   file_remove = TRUE,
+#'   chunk_size = 1,
+#'   delim = "|"
+#' )
 #'
 #' DBI::dbReadTable(con, "example")
 #' arrow::read_parquet(paste0(t1, "test_txt.parquet"))
@@ -76,20 +76,32 @@
 #' and [arrow::write_parquet()] this is recommended because parquet is a more efficient file format
 #' than txt
 #' @export
+#' @seealso [sql_upload_csv_chunked()] [combine_parquet_files()] [callback()]
+#' [arrow::write_parquet()] [arrow::read_parquet()] [DBI::dbWriteTable()]
+#' [readr::read_csv_chunked()] [options()]
 #'
 sql_upload_txt_chunked <- function(input_filename,
-                                col_list = NULL,
-                                con,
-                                schema = "dbo",
-                                table_name,
-                                truncate_table = FALSE,
-                                write_parquet = FALSE,
-                                backup_filepath = NULL,
-                                backup_name = NULL,
-                                pattern = NULL,
-                                file_remove = FALSE,
-                                chunk_size = 50000,
-                                delim = "|") {
+                                   col_list = NULL,
+                                   con,
+                                   schema = "dbo",
+                                   table_name,
+                                   truncate_table = FALSE,
+                                   write_parquet = FALSE,
+                                   backup_filepath = NULL,
+                                   backup_name = NULL,
+                                   pattern = NULL,
+                                   file_remove = FALSE,
+                                   chunk_size = 50000,
+                                   delim = "|") {
+  if (write_parquet) {
+    if ((write_parquet == TRUE & stringi::stri_length(pattern) < 10)) {
+    warning("arguement pattern is less than 10 characters this may lead to
+    unintended files being combined and may cause errors or corruption of data.
+    Suggest use of a pattern string of longer than 15 character with a unique name",
+      immediate. = TRUE
+    )
+    }
+  }
   # Set options for callback function: Schema, staging table name and backup file path
   options(
     "con" = con,

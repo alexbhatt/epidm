@@ -95,23 +95,28 @@ t <- tempdir(check = TRUE)
 t1 <- paste0(t, "\\\\")
 
 sql_upload_txt_chunked(readr::readr_example("whitespace-sample.txt"),
-                                   col_list = NULL,
-                                   con = con,
-                                   schema = NULL,
-                                   table_name = "example",
-                                   truncate_table = FALSE,
-                                   write_parquet = TRUE,
-                                   backup_filepath = t1,
-                                   backup_name = "test_txt",
-                                   pattern = "temp_chunk_parquet_file",
-                                   file_remove = TRUE,
-                                   chunk_size = 1,
-                                   delim = "|"
-                                   )
+  col_list = NULL,
+  con = con,
+  schema = NULL,
+  table_name = "example",
+  truncate_table = FALSE,
+  write_parquet = TRUE,
+  backup_filepath = t1,
+  backup_name = "test_txt",
+  pattern = "temp_chunk_parquet_file",
+  file_remove = TRUE,
+  chunk_size = 1,
+  delim = "|"
+)
 
 DBI::dbReadTable(con, "example")
 arrow::read_parquet(paste0(t1, "test_txt.parquet"))
 DBI::dbDisconnect(con)
+}
+\seealso{
+\code{\link[=sql_upload_csv_chunked]{sql_upload_csv_chunked()}} \code{\link[=combine_parquet_files]{combine_parquet_files()}} \code{\link[=callback]{callback()}}
+\code{\link[arrow:write_parquet]{arrow::write_parquet()}} \code{\link[arrow:read_parquet]{arrow::read_parquet()}} \code{\link[DBI:dbWriteTable]{DBI::dbWriteTable()}}
+\code{\link[readr:read_delim_chunked]{readr::read_csv_chunked()}} \code{\link[=options]{options()}}
 }
 \author{
 Owen Pullen

@@ -36,21 +36,21 @@
 #' t1 <- paste0(t, "\\")
 #' # TRUNCATE TABLE does not exist in SQLite so cannot be shown in examples
 #' sql_upload_csv_chunked(readr::readr_example("mtcars.csv"),
-#'                     col_list = NULL,
-#'                     con = con,
-#'                     schema = NULL,
-#'                     table_name = "example",
-#'                     truncate_table = FALSE,
-#'                     write_parquet = TRUE,
-#'                     backup_filepath = t1,
-#'                     backup_name = "test_txt",
-#'                     pattern = "temp_chunk_parquet_file",
-#'                     file_remove = TRUE,
-#'                     chunk_size = 10
-#'                     )
+#'   col_list = NULL,
+#'   con = con,
+#'   schema = NULL,
+#'   table_name = "example",
+#'   truncate_table = FALSE,
+#'   write_parquet = TRUE,
+#'   backup_filepath = t1,
+#'   backup_name = "test_txt",
+#'   pattern = "temp_chunk_parquet_file",
+#'   file_remove = TRUE,
+#'   chunk_size = 10
+#' )
 #'
-#' res = DBI::dbReadTable(con, "example")
-#' res = dplyr::as_tibble(res) # Otherwise prints all 32 rows as df
+#' res <- DBI::dbReadTable(con, "example")
+#' res <- dplyr::as_tibble(res) # Otherwise prints all 32 rows as df
 #' res
 #' arrow::read_parquet(paste0(t1, "test_txt.parquet"))
 #' DBI::dbDisconnect(con)
@@ -77,20 +77,30 @@
 #' than csv
 #' }
 #' @export
-#' @seealso [arrow::write_parquet()] [arrow::read_parquet()] [DBI::dbWriteTable()] [readr::read_csv_chunked()]
-#' [options()]
+#' @seealso [sql_upload_csv_chunked()] [combine_parquet_files()] [callback()]
+#' [arrow::write_parquet()] [arrow::read_parquet()] [DBI::dbWriteTable()]
+#' [readr::read_csv_chunked()] [options()]
 sql_upload_csv_chunked <- function(input_filename,
-                                col_list = NULL,
-                                con,
-                                schema = "dbo",
-                                table_name,
-                                truncate_table = FALSE,
-                                write_parquet = FALSE,
-                                backup_filepath = NULL,
-                                backup_name = NULL,
-                                pattern = NULL,
-                                file_remove = FALSE,
-                                chunk_size = 50000) {
+                                   col_list = NULL,
+                                   con,
+                                   schema = "dbo",
+                                   table_name,
+                                   truncate_table = FALSE,
+                                   write_parquet = FALSE,
+                                   backup_filepath = NULL,
+                                   backup_name = NULL,
+                                   pattern = NULL,
+                                   file_remove = FALSE,
+                                   chunk_size = 50000) {
+  if (write_parquet) {
+    if ((write_parquet == TRUE & stringi::stri_length(pattern) < 10)) {
+      warning("arguement pattern is less than 10 characters this may lead to
+    unintended files being combined and may cause errors or corruption of data.
+    Suggest use of a pattern string of longer than 15 character with a unique name",
+              immediate. = TRUE
+      )
+    }
+  }
   # Set options for callback function: Schema, staging table name and backup file path
   options(
     "con" = con,
@@ -122,5 +132,5 @@ sql_upload_csv_chunked <- function(input_filename,
       remove_old = file_remove
     )
   }
- return(invisible(TRUE))
+  return(invisible(TRUE))
 }
