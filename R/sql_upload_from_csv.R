@@ -55,7 +55,7 @@
 #' arrow::read_parquet(paste0(t1, "test_txt.parquet"))
 #' DBI::dbDisconnect(con)
 #'
-#' @returns SQL table filled with values from csv file and if write_parquet = TRUE
+#' @returns TRUE invisibly and a SQL table filled with values from csv file and if write_parquet = TRUE
 #' a parquet file backup of the .csv file
 #' @description \itemize{
 #' \item Function to read .csv files in chunks, upload to a destination SQL table, defined by
@@ -122,4 +122,5 @@ sql_upload_from_csv <- function(input_filename,
       remove_old = file_remove
     )
   }
+ return(invisible(TRUE))
 }
