@@ -4,29 +4,59 @@
 \alias{valid_nhs}
 \title{NHS Number Validity Check}
 \usage{
-valid_nhs(nhs_number)
+valid_nhs(nhs_number, return_nhsno = FALSE)
 }
 \arguments{
-\item{nhs_number}{a vector}
+\item{nhs_number}{an NHS number as a character string, interger or vector.}
+
+\item{return_nhsno}{boolean \link{TRUE}/\link{FALSE} TRUE returns the NHS number as entered if valid and NA if invalid
+FALSE returns a 0/1}
 }
 \value{
-a vector, 1 if NHS number is valid, 0 if not valid
+A vector, 1 if NHS number is valid, 0 if not valid as an integer, also if\cr
+return_nhsno = TRUE returns NHS number if valid and NA_character
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 
-Check if NHS numbers are valid based on the checksum algorithm
+Check if NHS numbers are valid based on the checksum algorithm\cr
 
-This uses the first 9 digits, multiplied by 10 down to 2 eg digit 1x10, d2x9
+This uses the first 9 digits, multiplied by 10 down to 2 eg digit 1x10, d2x9\cr
 
-The sum of the products of the first 9 digits are divided by 11
+The sum of the products of the first 9 digits are divided by 11\cr
 
-The remainder is checked against the 10th digit
+The remainder is checked against the 10th digit\cr
 
-Where the remainder is 11, it is replaced with 0
+Where the remainder is 11, it is replaced with 0\cr
+
+There is also an option to replace the output with valid NHS numbers or NA if invalid
 }
+\section{More info}{
+NHS Number validation function calls checksum_nhs_number() which validates NHS numbers using the NHS checksum validation algorithm\cr
+Also calls seq_nhs_number() which looks for 10 character single number sequences using regex e.g. 9999999999\cr
+Calls range_nhs_number() checks NHS number is within the valid range for England, Wales, Scotland and Northern Ireland\cr
+Calls remove_non_numeric_char() removes all non numeric characters from a string field
+If you want to use the NHS checksum algorithm but do not want to do any other validation use checksum_nhs_number()\cr
+\cr
+Examples are not real NHS numbers please do not use real
+NHS numbers, in tests, code or documentation
+}
+
 \examples{
-test <- floor(runif(1000,1000000000,9999999999))
-valid_nhs(test)
-valid_nhs(9434765919)
+valid_nhs("1234567890")
+test_vect <- nhsnumbergenerator::generate_nhs_number(100)
+valid_nhs(test_vect)
+valid_nhs(NA)
+
+valid_nhs("1234567890")
+test_vect <- nhsnumbergenerator::generate_nhs_number(100)
+valid_nhs(test_vect)
+valid_nhs(NA)
+
+}
+\seealso{
+\code{\link[=range_nhs_number]{range_nhs_number()}} \code{\link[=seq_nhs_number]{seq_nhs_number()}} \code{\link[=checksum_nhs_number]{checksum_nhs_number()}} \code{\link[=remove_non_numeric_char]{remove_non_numeric_char()}}
+}
+\author{
+Owen Pullen
 }
