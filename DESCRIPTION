@@ -19,6 +19,7 @@ Imports:
     data.table,
     DBI,
     glue,
+    lifecycle,
     odbc,
     phonics,
     purrr,
