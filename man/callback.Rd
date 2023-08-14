@@ -12,9 +12,10 @@ callback(chunk, pos)
 \item{pos}{position of chunk loaded by readr::read_delim_chunked}
 }
 \value{
-Writes a table in a SQL database and saves out a copy of chunk in parquet
+TRUE invisibly also writes a table in a SQL database and saves out a copy of chunk in parquet
 }
 \description{
+Not usually called do not run unless re-developing
 A function to be run by readr inside of sql_upload_from_txt() or
 sql_upload_from_csv() (referred to collectively) this function writes the chunk of the file
 read by readr to a SQL table specified in sql_upload_from_txt()
