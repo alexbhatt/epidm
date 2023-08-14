@@ -18,7 +18,7 @@ or including file extension e.g. backup_name = "example_file" is for "blah/examp
 \item{remove_old}{removes chunked parquet files written by callback function}
 }
 \value{
-a single parquet file
+invisibly character vector of parquet files that were merged and a single parquet file (saved/written)
 }
 \description{
 Combine parquet files into larger parquet files - useful for when writing parquet files in chunks
