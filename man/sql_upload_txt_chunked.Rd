@@ -72,22 +72,28 @@ TRUE invisibly and a SQL table filled with values from txt file and if write_par
 a parquet file backup of the .txt file
 }
 \description{
-Function to read .txt files in chunks, upload to a destination SQL table, defined by
-a DBI connection object. Can also write parquet backups of the .txt file which are a
-more efficient way to store data than the .txt files. These are written in chunks by
-the callback function used by \code{\link[readr:read_delim_chunked]{readr::read_delim_chunked()}} these can be combined and removed
-if the file_remove argument is set to TRUE
-
-This function uses \code{\link[readr:read_delim_chunked]{readr::read_delim_chunked()}} \link[readr:callback]{readr::SideEffectChunkCallback}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\itemize{ \item Function to read .txt files in chunks, upload to a destination SQL table, defined by
+a DBI connection object.
+\item Can also write parquet backups of the .txt file which are a
+more efficient way to store data than the .txt files.
+\item SQL and Parquet Writes are completed in chunks by the epidm callback
+function used by \code{\link[readr:read_delim_chunked]{readr::read_delim_chunked()}}
+\item Chunked parquet files can be combined and removed
+if the file_remove argument is set to TRUE, but this will delete all files
+the pattern argument string in their name
+\item This function uses \code{\link[readr:read_delim_chunked]{readr::read_delim_chunked()}} and \link[readr:callback]{readr::SideEffectChunkCallback}
 to read a txt file in chunks without retaining the whole file in local memory to conserve RAM.
-\code{\link[=dbWriteTable]{dbWriteTable()}} with option append = TRUE is used to write each chunk to a destination
+\item \code{\link[=dbWriteTable]{dbWriteTable()}} with option append = TRUE is used to write each chunk to a destination
 SQL table. For R based SQL inserts, it is recommended that you use a staging table
 as R and SQL data types do not always align.
-Parquet backup or file conversion functionality
-This function has optional arguments to allow for the writing of chunked parquet backups
+\item Parquet backup/file conversion functionality this function has optional
+arguments to allow for the writing of chunked parquet backups
 using \code{\link[arrow:write_parquet]{arrow::write_parquet()}} these are then combined using \code{\link[arrow:open_dataset]{arrow::open_dataset()}}
-and \code{\link[arrow:write_parquet]{arrow::write_parquet()}} this is recommended because parquet is a more efficient file format
-than txt
+and \code{\link[arrow:write_parquet]{arrow::write_parquet()}} to combine the files without loading them into local memory
+only the arrow parquet meta data is loaded into memory.This is recommended
+because parquet is a more efficient file format than txt for archiving
+}
 }
 \examples{
 con <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")

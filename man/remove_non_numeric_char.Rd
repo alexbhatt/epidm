@@ -13,6 +13,7 @@ remove_non_numeric_char(str)
 character string
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 Wrapper around the \verb{[^0-9]} regex to remove all non-numeric characters from a string
 \itemize{
 \item This is particularly useful for cleaning out numeric ID fields.

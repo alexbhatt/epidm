@@ -27,6 +27,7 @@ use on alphanumeric ID variables only}
 character string
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Wrapper around regex to remove all non alpha-numeric characters
 \itemize{
 \item remove_punct = TRUE regex is \verb{[^[:alnum:]]} will remove all non A-z and 0-9 characters

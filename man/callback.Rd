@@ -15,14 +15,19 @@ callback(chunk, pos)
 TRUE invisibly also writes a table in a SQL database and saves out a copy of chunk in parquet
 }
 \description{
-Not usually called do not run unless re-developing
-A function to be run by readr inside of sql_upload_txt_chunked() or
-sql_upload_csv_chunked() (referred to collectively) this function writes the chunk of the file
-read by readr to a SQL table specified in sql_upload_txt_chunked()
-and produces a parquet file backup of each chunk read by readr, combined by combine_parquet_backup
-called in sql_upload_parquet_backup_from_txt. Parquet writing can disabled by
-specifying write_parquet = FALSE in sql_upload_txt_chunked
-#' Upload txt file to staging table and create parquet backup
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+\itemize {\item Not usually called do not run unless re-developing
+\item A function to be run inside of \code{\link[=sql_upload_txt_chunked]{sql_upload_txt_chunked()}} or
+\code{\link[=sql_upload_txt_chunked]{sql_upload_txt_chunked()}}
+\item This function writes the chunk of the file
+read by readr to a SQL table specified in \code{\link[=sql_upload_txt_chunked]{sql_upload_txt_chunked()}}
+and produces a parquet file backup of each chunk read
+\item Called in \code{\link[=sql_upload_txt_chunked]{sql_upload_txt_chunked()}} and \code{\link[=sql_upload_csv_chunked]{sql_upload_csv_chunked()}}
+\item Parquet writing can disabled by specifying write_parquet = FALSE
+in above functions
+\item Upload txt/ csv file chunk file to staging table and create parquet file of the chunk
+}
 }
 \note{
 getOption() provides additional params set by sql_upload_txt_chunked/csv

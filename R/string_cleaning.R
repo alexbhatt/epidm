@@ -10,6 +10,7 @@
 #' @returns character string
 #' @export
 #' @description
+#' `r lifecycle::badge('experimental')`
 #' Wrapper around regex to remove all non alpha-numeric characters
 #' \itemize{
 #' \item remove_punct = TRUE regex is `[^[:alnum:]]` will remove all non A-z and 0-9 characters
@@ -44,6 +45,7 @@ clean_alpha_numeric <- function(str, remove_punct = FALSE, remove_all = FALSE, a
 #' @export
 #' @returns character string
 #' @description
+#' `r lifecycle::badge('experimental')`
 #' Wrapper around a regex to remove all non letter characters, will remove all numbers from strings
 #' \itemize{
 #' \item remove_punct = FALSE `[^A-Za-z !&',-.:;?]|[0-9]` will remove all punctuation that<br>
@@ -74,6 +76,7 @@ clean_alpha <- function(str,
 #' @export
 #' @returns character string
 #' @description
+#' `r lifecycle::badge('stable')`
 #' Wrapper around the `[^0-9]` regex to remove all non-numeric characters from a string
 #' \itemize{
 #' \item This is particularly useful for cleaning out numeric ID fields.
@@ -95,6 +98,7 @@ remove_non_numeric_char <- function(str) {
 #' @export
 #' @returns character string
 #' @description
+#' `r lifecycle::badge('experimental')`
 #' \itemize{
 #' \item Wrapper around `[[:space:]]` regex to remove all white space characters including space tab and new line characters
 #' }

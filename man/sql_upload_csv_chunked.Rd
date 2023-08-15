@@ -67,6 +67,7 @@ TRUE invisibly and a SQL table filled with values from csv file and if write_par
 a parquet file backup of the .csv file
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 \itemize{
 \item Function to read .csv files in chunks, upload to a destination SQL table, defined by
 a DBI connection object. Can also write parquet backups of the .csv file which are a

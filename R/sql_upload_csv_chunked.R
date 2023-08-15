@@ -57,7 +57,9 @@
 #'
 #' @returns TRUE invisibly and a SQL table filled with values from csv file and if write_parquet = TRUE
 #' a parquet file backup of the .csv file
-#' @description \itemize{
+#' @description
+#' `r lifecycle::badge('experimental')`
+#' \itemize{
 #' \item Function to read .csv files in chunks, upload to a destination SQL table, defined by
 #' a DBI connection object. Can also write parquet backups of the .csv file which are a
 #' more efficient way to store data than the .csv files. These are written in chunks by

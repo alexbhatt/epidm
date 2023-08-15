@@ -13,6 +13,7 @@ remove_whitespace(str)
 character string
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 \itemize{
 \item Wrapper around \verb{[[:space:]]} regex to remove all white space characters including space tab and new line characters
 }

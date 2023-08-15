@@ -21,6 +21,8 @@ or including file extension e.g. backup_name = "example_file" is for "blah/examp
 invisibly character vector of parquet files that were merged and a single parquet file (saved/written)
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 Combine parquet files into larger parquet files - useful for when writing parquet files in chunks
 then later combining chunks into single file
 The ordering may fail with a linux OS

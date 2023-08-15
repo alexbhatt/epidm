@@ -20,6 +20,7 @@ clean_alpha(str, remove_punct = FALSE, remove_all = FALSE)
 character string
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Wrapper around a regex to remove all non letter characters, will remove all numbers from strings
 \itemize{
 \item remove_punct = FALSE \verb{[^A-Za-z !&',-.:;?]|[0-9]} will remove all punctuation that\if{html}{\out{<br>}}
