@@ -1,8 +1,8 @@
-#' @title callback function for readr read_delim_chunked in sql_upload_txt_chunked()
+#' @title callback function for readr read_delim_chunked in [sql_upload_txt_chunked()]
 #' @author Owen Pullen
-#' @param chunk chunk of txt file loaded by readr::read_delim_chunked
-#' @param pos position of chunk loaded by readr::read_delim_chunked
-#' @note getOption() provides additional params set by sql_upload_txt_chunked/csv
+#' @param chunk chunk of txt file loaded by [readr::read_delim_chunked()]
+#' @param pos position of chunk loaded by [readr::read_delim_chunked()]
+#' @note [getOption()] provides additional params set by sql_upload_txt_chunked/csv
 #' @examples
 #' f <- function(x,pos) print(pos)
 #' readr::read_csv_chunked(readr::readr_example("mtcars.csv"),
@@ -12,8 +12,8 @@
 #' @returns TRUE invisibly also writes a table in a SQL database and saves out a copy of chunk in parquet
 #' @description
 #' `r lifecycle::badge('experimental')`
-#'
-#' \itemize {\item Not usually called do not run unless re-developing
+#' \itemize{
+#' \item Not usually called do not run unless re-developing
 #' \item A function to be run inside of [sql_upload_txt_chunked()] or
 #' [sql_upload_txt_chunked()]
 #' \item This function writes the chunk of the file

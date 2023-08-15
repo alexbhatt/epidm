@@ -2,22 +2,22 @@
 % Please edit documentation in R/callback.R
 \name{callback}
 \alias{callback}
-\title{callback function for readr read_delim_chunked in sql_upload_txt_chunked()}
+\title{callback function for readr read_delim_chunked in \code{\link[=sql_upload_txt_chunked]{sql_upload_txt_chunked()}}}
 \usage{
 callback(chunk, pos)
 }
 \arguments{
-\item{chunk}{chunk of txt file loaded by readr::read_delim_chunked}
+\item{chunk}{chunk of txt file loaded by \code{\link[readr:read_delim_chunked]{readr::read_delim_chunked()}}}
 
-\item{pos}{position of chunk loaded by readr::read_delim_chunked}
+\item{pos}{position of chunk loaded by \code{\link[readr:read_delim_chunked]{readr::read_delim_chunked()}}}
 }
 \value{
 TRUE invisibly also writes a table in a SQL database and saves out a copy of chunk in parquet
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-\itemize {\item Not usually called do not run unless re-developing
+\itemize{
+\item Not usually called do not run unless re-developing
 \item A function to be run inside of \code{\link[=sql_upload_txt_chunked]{sql_upload_txt_chunked()}} or
 \code{\link[=sql_upload_txt_chunked]{sql_upload_txt_chunked()}}
 \item This function writes the chunk of the file
@@ -30,7 +30,7 @@ in above functions
 }
 }
 \note{
-getOption() provides additional params set by sql_upload_txt_chunked/csv
+\code{\link[=getOption]{getOption()}} provides additional params set by sql_upload_txt_chunked/csv
 }
 \examples{
 f <- function(x,pos) print(pos)
