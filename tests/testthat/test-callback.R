@@ -4,7 +4,8 @@ test_that("Callback Test", {
   con <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   t <- tempdir(check = TRUE)
   t1 <- paste0(t, "\\")
-  options(
+  # Set options - usually set in SQL upload fns
+  t_op <- options(
     "con" = con,
     "schema" = NULL,
     "table_name" = "test",
@@ -14,7 +15,8 @@ test_that("Callback Test", {
     "write_parquet" = TRUE
   )
 
-  expect_true(epidm::callback(x,1))
+  res <- epidm:::callback(x,1)
+  testthat::expect_true(res)
   colnames(x) <- gsub("[^[:alnum:]]", "_", colnames(x))
   expect_equal(dplyr::as_tibble(DBI::dbReadTable(con, "test")), dplyr::as_tibble(x))
   DBI::dbDisconnect(con)
@@ -26,4 +28,6 @@ test_that("Callback Test", {
                                           ".parquet")
   ),
   x)
+  # Restore options
+  on.exit(t_op)
 })
