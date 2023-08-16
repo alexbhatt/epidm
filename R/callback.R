@@ -24,7 +24,7 @@
 #' in above functions
 #' \item Upload txt/ csv file chunk file to staging table and create parquet file of the chunk
 #' }
-#' @export
+#' @keywords internal
 #'
 callback <- function(chunk, pos) {
   # Remove spaces from colnames
