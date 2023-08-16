@@ -7,18 +7,6 @@ testthat::test_that("Test valid NHS", {
   # test output
   expect_equal(
     dplyr::mutate(nhs_numbers, test = valid_nhs(test, TRUE)), nhs_numbers)
-  # Speed tests - if don't pass due to low machine RAM (acceptable) otherwise re-engineer
-  expect_lt(
-    as.numeric(dplyr::select(rbenchmark::benchmark(dplyr::mutate(nhs_numbers,test = valid_nhs(test)),
-                                                   replications = 25), elapsed)),
-    as.numeric(0.1)
-  )
-
-  expect_lt(
-    as.numeric(dplyr::select(rbenchmark::benchmark(
-      dplyr::mutate(nhs_numbers,test = valid_nhs(test, TRUE)), replications = 25), elapsed)),
-    as.numeric(0.1)
-    )
   # invalid values
   expect_equal(valid_nhs(NA_character_, TRUE), NA_character_)
   expect_equal(valid_nhs(NA_character_, FALSE), 0)
