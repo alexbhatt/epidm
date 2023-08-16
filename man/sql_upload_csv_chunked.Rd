@@ -88,6 +88,11 @@ parquet is a more efficient file format
 than csv
 }
 }
+\details{
+Some internal parameters are fed to internal callback function. This function
+should not need to be used by end users but this is a note for developers
+see epidm:::callback()
+}
 \examples{
 con <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 t <- tempdir(check = TRUE)

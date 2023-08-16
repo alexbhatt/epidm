@@ -78,10 +78,16 @@
 #' parquet is a more efficient file format
 #' than csv
 #' }
+#' @details
+#' Some internal parameters are fed to internal callback function. This function
+#' should not need to be used by end users but this is a note for developers
+#' see epidm:::callback()
+#'
 #' @export
 #' @seealso [sql_upload_csv_chunked()] [combine_parquet_files()] [callback()]
 #' [arrow::write_parquet()] [arrow::read_parquet()] [DBI::dbWriteTable()]
 #' [readr::read_csv_chunked()] [options()]
+#'
 sql_upload_csv_chunked <- function(input_filename,
                                    col_list = NULL,
                                    con,
@@ -94,17 +100,35 @@ sql_upload_csv_chunked <- function(input_filename,
                                    pattern = NULL,
                                    file_remove = FALSE,
                                    chunk_size = 50000) {
+  # Error handling
   if (write_parquet) {
-    if ((write_parquet == TRUE & stringi::stri_length(pattern) < 10)) {
-      warning("arguement pattern is less than 10 characters this may lead to
-    unintended files being combined and may cause errors or corruption of data.
-    Suggest use of a pattern string of longer than 15 character with a unique name",
-              immediate. = TRUE
-      )
-    }
+    assertthat::assert_that(
+      assertthat::not_empty(pattern),
+      msg = "argument pattern is NULL and write_parquet is TRUE: add argument pattern"
+    )
+    assertthat::assert_that(
+      assertthat::not_empty(backup_name),
+      msg = "argument backup_name is NULL and write_parquet is TRUE: add argument backup_name"
+    )
+    assertthat::assert_that(
+      !is.null(backup_filepath),
+      msg = "argument backup_filepath is NULL and write_parquet is TRUE: add argument backup_filepath"
+    )
+    assertthat::assert_that(
+      stringi::stri_length(pattern) >= 10,
+      msg = "arguement pattern is less than 10 characters may lead to unintended files being combined
+      or removed and may cause errors or corruption of data. Suggest use of a pattern of longer than
+      15 characters with a unique name"
+    )
+    assertthat::assert_that(
+      !(stringi::stri_detect_fixed(str = backup_name, pattern = ".parquet") |
+        stringi::stri_detect_fixed(str = backup_name, pattern = ".pqt")),
+      msg = "parquet file extension added to backup name, .parquet extension
+      is automatically added in combine_parquet_files()"
+    )
   }
   # Set options for callback function: Schema, staging table name and backup file path
-  options(
+  op <- options(
     "con" = con,
     "schema" = schema,
     "table_name" = table_name,
@@ -134,5 +158,6 @@ sql_upload_csv_chunked <- function(input_filename,
       remove_old = file_remove
     )
   }
+  on.exit(options(op))
   return(invisible(TRUE))
 }
