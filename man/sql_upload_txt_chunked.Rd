@@ -96,6 +96,8 @@ using \code{\link[arrow:write_parquet]{arrow::write_parquet()}} these are then c
 and \code{\link[arrow:write_parquet]{arrow::write_parquet()}} to combine the files without loading them into local memory
 only the arrow parquet meta data is loaded into memory.This is recommended
 because parquet is a more efficient file format than txt for archiving
+\item argument date_stamp will create a column in the data.frame called date_stamp, if
+you are using a pre-created SQL table ensure this column exists if argument is not NULL
 }
 }
 \details{

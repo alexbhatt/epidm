@@ -89,6 +89,8 @@ parquet backups using \code{\link[arrow:write_parquet]{arrow::write_parquet()}} 
 \code{\link[arrow:open_dataset]{arrow::open_dataset()}} and \code{\link[arrow:write_parquet]{arrow::write_parquet()}} this is recommended because
 parquet is a more efficient file format
 than csv
+\item argument date_stamp will create a column in the data.frame called date_stamp, if
+you are using a pre-created SQL table ensure this column exists if argument is not NULL
 }
 }
 \details{
