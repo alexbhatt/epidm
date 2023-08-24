@@ -11,6 +11,7 @@ sql_upload_txt_chunked(
   schema = "dbo",
   table_name,
   truncate_table = FALSE,
+  date_stamp = NULL,
   write_parquet = FALSE,
   backup_filepath = NULL,
   backup_name = NULL,
@@ -41,6 +42,8 @@ inserts to fail}
 by \code{\link[=dbWriteTable]{dbWriteTable()}} in \link{callback} function}
 
 \item{truncate_table}{\link{TRUE}/ \link{FALSE}, TRUE will truncate the SQL table name supplied, default FALSE}
+
+\item{date_stamp}{a data to add into a column to show load date}
 
 \item{write_parquet}{\link{TRUE}/ \link{FALSE} only, \link{TRUE} will write parquet files in chunks and combine them
 without loading into local memory, default FALSE, FALSE will just preform SQL upload in callback}

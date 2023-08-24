@@ -11,6 +11,7 @@ sql_upload_csv_chunked(
   schema = "dbo",
   table_name,
   truncate_table = FALSE,
+  date_stamp = NULL,
   write_parquet = FALSE,
   backup_filepath = NULL,
   backup_name = NULL,
@@ -39,6 +40,8 @@ inserts to fail}
 by \code{\link[DBI:dbWriteTable]{DBI::dbWriteTable()}} in callback function}
 
 \item{truncate_table}{boolean \link{TRUE}/ \link{FALSE}, \link{TRUE} will truncate the SQL table name supplied, default FALSE}
+
+\item{date_stamp}{date stamp to stamp date file was loaded, suggest \code{\link[=Sys.Date]{Sys.Date()}}}
 
 \item{write_parquet}{TRUE/ FALSE only, TRUE will write parquet files in chunks and combine them
 without loading into local memory, default FALSE, FALSE will just preform SQL upload in callback}

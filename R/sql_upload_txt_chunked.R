@@ -15,6 +15,7 @@
 #' @param table_name SQL destination table name, if does not exist will be created
 #' by [dbWriteTable()] in [epidm::callback] function
 #' @param truncate_table [TRUE]/ [FALSE], TRUE will truncate the SQL table name supplied, default FALSE
+#' @param date_stamp a data to add into a column to show load date
 #' @param write_parquet [TRUE]/ [FALSE] only, [TRUE] will write parquet files in chunks and combine them
 #' without loading into local memory, default FALSE, FALSE will just preform SQL upload in callback
 #' @param backup_filepath file path to folder or location where you want parquet backups to be written
@@ -97,6 +98,7 @@ sql_upload_txt_chunked <- function(input_filename,
                                    schema = "dbo",
                                    table_name,
                                    truncate_table = FALSE,
+                                   date_stamp = NULL,
                                    write_parquet = FALSE,
                                    backup_filepath = NULL,
                                    backup_name = NULL,
@@ -136,6 +138,7 @@ sql_upload_txt_chunked <- function(input_filename,
     "con" = con,
     "schema" = schema,
     "table_name" = table_name,
+    "date_stamp" = date_stamp,
     "backup_filepath" = backup_filepath,
     "pattern" = pattern,
     "backup_name" = backup_name,

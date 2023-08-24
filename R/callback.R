@@ -29,6 +29,8 @@
 callback <- function(chunk, pos) {
   # Remove spaces from colnames
   colnames(chunk) <- gsub("[^[:alnum:]]", "_", colnames(chunk))
+  date_stamp <- getOption("date_stamp")
+  if (!is.null(date_stamp)) {chunk <- cbind(chunk, ons_date_stamp = as.character(date_stamp))}
   # write to SQL staging table
   DBI::dbWriteTable(
     con = getOption("con"),
