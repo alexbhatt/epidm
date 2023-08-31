@@ -12,7 +12,8 @@ test_that("Callback Test", {
     "backup_filepath" = t1,
     "pattern" = "test_backup_string",
     "backup_name" = "backup_test",
-    "write_parquet" = TRUE
+    "write_parquet" = TRUE,
+    "tidy_names" = TRUE
   )
 
   res <- epidm:::callback(x,1)

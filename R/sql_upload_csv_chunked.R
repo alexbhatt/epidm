@@ -31,6 +31,10 @@
 #' write_parquet = TRUE
 #' @param chunk_size chunk size for [readr] to read .csv file and for callback to send to SQL,
 #'  default 50,000
+#' @param skip Number of rows to skip, default 0
+#' @param tidy_names tidy column names, removes and non-alpha_numeric character and replaces with "_",
+#' e.g. example-colname will become example_colname\cr
+#'  This arguement is default FALSE
 #' @examples
 #' con <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 #' t <- tempdir(check = TRUE)
@@ -103,7 +107,10 @@ sql_upload_csv_chunked <- function(input_filename,
                                    backup_name = NULL,
                                    pattern = NULL,
                                    file_remove = FALSE,
-                                   chunk_size = 50000) {
+                                   chunk_size = 50000,
+                                   skip = 0,
+                                   tidy_names = FALSE
+                                   ) {
   # Error handling
   if (write_parquet) {
     assertthat::assert_that(
@@ -140,10 +147,11 @@ sql_upload_csv_chunked <- function(input_filename,
     "backup_filepath" = backup_filepath,
     "pattern" = pattern,
     "backup_name" = backup_name,
-    "write_parquet" = write_parquet
+    "write_parquet" = write_parquet,
+    "tidy_names" = tidy_names
   )
   # Truncates staging table
-  if (truncate_table) {
+  if ((truncate_table & DBI::dbExistsTable(con, DBI::Id(schema = schema, table = table_name)))) {
     DBI::dbExecute(con, glue::glue("TRUNCATE TABLE {schema}.{table_name}"))
   }
 
@@ -153,7 +161,8 @@ sql_upload_csv_chunked <- function(input_filename,
     chunk_size = chunk_size, # Can decide on optimum chunk size
     col_types = col_list,
     na = c("", "NA", "-", " ", "\t"), # values to convert to NA
-    trim_ws = TRUE
+    trim_ws = TRUE,
+    skip = skip
   )
   if (write_parquet) {
     combine_parquet_files(

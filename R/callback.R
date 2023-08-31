@@ -28,7 +28,9 @@
 #'
 callback <- function(chunk, pos) {
   # Remove spaces from colnames
+  if(getOption("tidy_names")) {
   colnames(chunk) <- gsub("[^[:alnum:]]", "_", colnames(chunk))
+  }
   date_stamp <- getOption("date_stamp")
   if (!is.null(date_stamp)) {chunk <- cbind(chunk, date_stamp = as.character(date_stamp))}
   # write to SQL staging table

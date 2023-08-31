@@ -18,7 +18,9 @@ sql_upload_txt_chunked(
   pattern = NULL,
   file_remove = FALSE,
   chunk_size = 50000,
-  delim = "|"
+  delim = "|",
+  skip = 0,
+  tidy_names = FALSE
 )
 }
 \arguments{
@@ -69,6 +71,12 @@ default 50,000}
 
 \item{delim}{delimiter separating columns in the .txt file, default "|", some .txt files
 use " " as a delimiter}
+
+\item{skip}{Number of rows to skip, default 0}
+
+\item{tidy_names}{tidy column names, removes and non-alpha_numeric character and replaces with "_",
+e.g. example-colname will become example_colname\cr
+This arguement is default FALSE}
 }
 \value{
 TRUE invisibly and a SQL table filled with values from txt file and if write_parquet = TRUE

@@ -17,7 +17,9 @@ sql_upload_csv_chunked(
   backup_name = NULL,
   pattern = NULL,
   file_remove = FALSE,
-  chunk_size = 50000
+  chunk_size = 50000,
+  skip = 0,
+  tidy_names = FALSE
 )
 }
 \arguments{
@@ -64,6 +66,12 @@ write_parquet = TRUE}
 
 \item{chunk_size}{chunk size for \link{readr} to read .csv file and for callback to send to SQL,
 default 50,000}
+
+\item{skip}{Number of rows to skip, default 0}
+
+\item{tidy_names}{tidy column names, removes and non-alpha_numeric character and replaces with "_",
+e.g. example-colname will become example_colname\cr
+This arguement is default FALSE}
 }
 \value{
 TRUE invisibly and a SQL table filled with values from csv file and if write_parquet = TRUE
