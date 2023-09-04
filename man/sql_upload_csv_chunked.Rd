@@ -19,7 +19,8 @@ sql_upload_csv_chunked(
   file_remove = FALSE,
   chunk_size = 50000,
   skip = 0,
-  tidy_names = FALSE
+  tidy_names = FALSE,
+  callback = epidm::callback
 )
 }
 \arguments{
@@ -72,6 +73,9 @@ default 50,000}
 \item{tidy_names}{tidy column names, removes and non-alpha_numeric character and replaces with "_",
 e.g. example-colname will become example_colname\cr
 This arguement is default FALSE}
+
+\item{callback}{a callback function, usually default, can be changed according to developer needs\cr
+not usually altered}
 }
 \value{
 TRUE invisibly and a SQL table filled with values from csv file and if write_parquet = TRUE

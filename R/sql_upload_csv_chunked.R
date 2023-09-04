@@ -35,6 +35,8 @@
 #' @param tidy_names tidy column names, removes and non-alpha_numeric character and replaces with "_",
 #' e.g. example-colname will become example_colname\cr
 #'  This arguement is default FALSE
+#' @param callback a callback function, usually default, can be changed according to developer needs\cr
+#' not usually altered
 #' @examples
 #' con <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 #' t <- tempdir(check = TRUE)
@@ -109,7 +111,8 @@ sql_upload_csv_chunked <- function(input_filename,
                                    file_remove = FALSE,
                                    chunk_size = 50000,
                                    skip = 0,
-                                   tidy_names = FALSE
+                                   tidy_names = FALSE,
+                                   callback = epidm::callback
                                    ) {
   # Error handling
   if (write_parquet) {

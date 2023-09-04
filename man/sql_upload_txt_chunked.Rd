@@ -20,7 +20,8 @@ sql_upload_txt_chunked(
   chunk_size = 50000,
   delim = "|",
   skip = 0,
-  tidy_names = FALSE
+  tidy_names = FALSE,
+  callback = epidm::callback
 )
 }
 \arguments{
@@ -77,6 +78,9 @@ use " " as a delimiter}
 \item{tidy_names}{tidy column names, removes and non-alpha_numeric character and replaces with "_",
 e.g. example-colname will become example_colname\cr
 This arguement is default FALSE}
+
+\item{callback}{a callback function, usually default, can be changed according to developer needs\cr
+not usually altered}
 }
 \value{
 TRUE invisibly and a SQL table filled with values from txt file and if write_parquet = TRUE
