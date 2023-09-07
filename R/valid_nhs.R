@@ -81,16 +81,24 @@ range_nhs_number <- function(value) {
 #' @seealso [range_nhs_number()] [seq_nhs_number()] [valid_nhs()] [remove_non_numeric_char()]
 #'
 checksum_nhs_number <- function(value) {
-  value[stringi::stri_length(value) != 10] <- NA_character_
-  digit_vector <- as.double(strsplit(substr(as.character(value), 1, 9), "")[[1]])
-  check_digit <- (11 - sum(digit_vector * c(10, 9, 8, 7, 6, 5, 4, 3, 2)) %% 11)
-  if (is.na(check_digit)) {
-    return(NA_character_)
-  }
-  if (check_digit == 10) {
-    return(NA_character_)
-  }
-  return(value)
+  value[stringi::stri_length(value) != 10 | stringi::stri_detect_regex(value,"[^0-9]")] <- NA_character_
+  ## what is the remainder
+  Modulus <- c(
+    (as.integer(substr(value, 1, 1)) * 10) +
+      (as.integer(substr(value, 2, 2)) * 9) +
+      (as.integer(substr(value, 3, 3)) * 8) +
+      (as.integer(substr(value, 4, 4)) * 7) +
+      (as.integer(substr(value, 5, 5)) * 6) +
+      (as.integer(substr(value, 6, 6)) * 5) +
+      (as.integer(substr(value, 7, 7)) * 4) +
+      (as.integer(substr(value, 8, 8)) * 3) +
+      (as.integer(substr(value, 9, 9)) * 2)
+  )
+  n10 <- as.integer(substr(value, 10, 10))
+  Modulus <- 11 - (Modulus %% 11)
+  ReturnValue <- ifelse((Modulus == n10 | (Modulus == 11 & n10 == 0)),
+    value, NA_character_)
+  return(as.character(ReturnValue))
 }
 
 #' @title NHS Number Validity Check
