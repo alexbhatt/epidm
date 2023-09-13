@@ -20,7 +20,7 @@ NHS numbers, in tests, code or documentation
 }
 \examples{
 checksum_nhs_number("1234567890")
-example = data.frame(example_1 = nhsnumbergenerator::generate_nhs_number(100))
+example = data.frame(example_1 = epidm:::gen_test_nhs(100))
 dplyr::mutate(example, checksum_nhs_number(example_1))
 }
 \seealso{

@@ -44,12 +44,12 @@ NHS numbers, in tests, code or documentation
 
 \examples{
 valid_nhs("1234567890")
-test_vect <- nhsnumbergenerator::generate_nhs_number(100)
+test_vect <- epidm:::gen_test_nhs(100)
 valid_nhs(test_vect)
 valid_nhs(NA)
 
 valid_nhs("1234567890")
-test_vect <- nhsnumbergenerator::generate_nhs_number(100)
+test_vect <- epidm:::gen_test_nhs(100)
 valid_nhs(test_vect)
 valid_nhs(NA)
 

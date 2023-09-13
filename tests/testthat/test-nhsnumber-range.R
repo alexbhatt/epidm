@@ -1,5 +1,5 @@
 test_that("Test range NHS number", {
-  nhsnumber <- nhsnumbergenerator::generate_nhs_number(n = 1)
+  nhsnumber <- epidm:::gen_test_nhs(n = 1)
   expect_equal(range_nhs_number(nhsnumber), as.double(nhsnumber))
   expect_equal(range_nhs_number(stringr::str_flatten(as.character(replicate(10,9)))),
                NA_integer_)
@@ -7,7 +7,7 @@ test_that("Test range NHS number", {
                NA_integer_)
   test_2 <- data.frame(NA)
   colnames(test_2)[1] <- "test"
-  nhs_numbers <- data.frame(nhsnumbergenerator::generate_nhs_number(n = 10))
+  nhs_numbers <- data.frame(epidm:::gen_test_nhs(n = 10))
   colnames(nhs_numbers)[1] <- "test"
   nhs_numbers <- dplyr::union(nhs_numbers,test_2)
   expect_equal(dplyr::mutate(nhs_numbers,

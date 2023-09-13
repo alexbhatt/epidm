@@ -1,6 +1,6 @@
 testthat::test_that("Test valid NHS", {
   t <- rep(c("test", NA), 10)
-  nhs_numbers <- nhsnumbergenerator::generate_nhs_number(n = 100)
+  nhs_numbers <- epidm:::gen_test_nhs(n = 100)
   expect_equal(valid_nhs(c(nhs_numbers,t), TRUE), c(nhs_numbers, rep(NA_character_,20)))
   expect_equal(valid_nhs(c(nhs_numbers,t), FALSE), c(rep(1, 100), rep(0, 20)))
   nhs_numbers <- data.frame(test = nhs_numbers)

@@ -1,6 +1,6 @@
 test_that("Test NHS Number checksum", {
-  nhsnumber <- nhsnumbergenerator::generate_nhs_number(n=1)
-  nhsnumber_100 <- nhsnumbergenerator::generate_nhs_number(n=100)
+  nhsnumber <- epidm:::gen_test_nhs(n=1)
+  nhsnumber_100 <- epidm:::gen_test_nhs(n=100)
   nhsnumber_2 <- c(nhsnumber_100, rep(c("test", "test123", NA), 5))
   expect_equal(checksum_nhs_number(nhsnumber), nhsnumber)
   expect_equal(checksum_nhs_number(nhsnumber_2), c(nhsnumber_100, rep(NA_character_, 15)))

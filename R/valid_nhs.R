@@ -76,7 +76,7 @@ range_nhs_number <- function(value) {
 #'  NHS numbers, in tests, code or documentation
 #' @examples
 #' checksum_nhs_number("1234567890")
-#' example = data.frame(example_1 = nhsnumbergenerator::generate_nhs_number(100))
+#' example = data.frame(example_1 = epidm:::gen_test_nhs(100))
 #' dplyr::mutate(example, checksum_nhs_number(example_1))
 #' @seealso [range_nhs_number()] [seq_nhs_number()] [valid_nhs()] [remove_non_numeric_char()]
 #'
@@ -109,7 +109,7 @@ checksum_nhs_number <- function(value) {
 #' @author Owen Pullen
 #' @examples
 #' valid_nhs("1234567890")
-#' test_vect <- nhsnumbergenerator::generate_nhs_number(100)
+#' test_vect <- epidm:::gen_test_nhs(100)
 #' valid_nhs(test_vect)
 #' valid_nhs(NA)
 #'
@@ -140,7 +140,7 @@ checksum_nhs_number <- function(value) {
 #'
 #' @examples
 #' valid_nhs("1234567890")
-#' test_vect <- nhsnumbergenerator::generate_nhs_number(100)
+#' test_vect <- epidm:::gen_test_nhs(100)
 #' valid_nhs(test_vect)
 #' valid_nhs(NA)
 #'
