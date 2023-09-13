@@ -42,4 +42,4 @@ Suggests:
     vroom
 Config/testthat/edition: 3
 Remotes: 
-    https://github.com/Owen-Pullen/nhsnumbergenerator.git
+    https://github.com/samellisq/nhsnumbergenerator.git
