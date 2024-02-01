@@ -178,6 +178,11 @@ uk_patient_id <- function(data,
 
   ## valid NHS numbers via checksum formula
   if(exists('nhs_number',where=id)){
+
+    #Remove all letters from NHS number
+    x[, nhs := gsub("\\D+" , "" , nhs),
+     env = list(nhs = id$nhs_number)]
+
     x[,tmp.valid.nhs := lapply(.SD,
                                function(x) epidm::valid_nhs(x) == 1),
       .SDcols = id$nhs_number]
@@ -248,14 +253,6 @@ uk_patient_id <- function(data,
 
       namecols <- c(id$surname,id$forename)
 
-      ## look for name swaps, when the first and last have been swapped
-      ## common in asian names
-      x[,tmp.store.n1 := n,
-        env = list(n = id$forename)]
-
-      x[,tmp.store.n2 := n,
-        env = list(n = id$surname)]
-
     } else {
       namecols <- c(id$surname)
     }
@@ -295,11 +292,16 @@ uk_patient_id <- function(data,
     }
   }
 
-  if(exists('sex_mfu',where=id)){
-    x[,
-      tmp.valid.pcd := !is.na(pcd),
-      env = list(pcd = id$postcode)
-    ]
+  if(exists('postcode',where=id)){
+
+  ##Removal of spaces from postcode
+  x[, pcd := gsub(" ", "", pcd), 
+     env = list(pcd = id$postcode)]
+  
+  x[,
+    tmp.valid.pcd := !is.na(pcd),
+    env = list(pcd = id$postcode)
+  ]
 
   }
 
@@ -463,40 +465,62 @@ uk_patient_id <- function(data,
 
 
   ## S11: NAME SWAP  ####################################################
-  ## TODO not working
+ 
+ if(max(.useStages) %in% 11){
+  
   if(all(sapply(c('surname','forename','date_of_birth'),
                 function(x) exists(x,where=id)))){
 
+    #Switch forename and surname 
     x[tmp.idN == 1,
-      `:=`(
-        n1 = tmp.store.n2,
-        n2 = tmp.store.n1,
-        tmp.swap = TRUE
-      ),
+      ':=' (tmp.store.forename = n2,
+            tmp.store.surname = n1, 
+            tmp.swap = TRUE), 
       env = list(
         n1 = id$forename,
         n2 = id$surname)
       ]
 
-  stage(stage = 11,
-        required = c('surname',
-                     'forename'
-,                     'date_of_birth'),
-        validation = c('tmp.valid.dob',
-                       'tmp.valid.n2',
-                       'tmp.valid.n1'),
-        group = c(namecols,
-                  id$date_of_birth))
+  cols_swap <- c("tmp.store.forename", "tmp.store.surname", "patient_dpii_date_of_birth", "tmp.valid.n2", "tmp.valid.dob", "tmp.idN")
+  
+  #Extract columns where surname and forename have been switched
+  dt_swap <- x[tmp.valid.n2 == TRUE & tmp.valid.dob == TRUE & tmp.idN == 1, ..cols_swap]
+  
+  #Create a match column
+  dt_swap <-  dt_swap[, tmp.match := TRUE]
+ 
+  #Merge  data tables back together - to match on where forename and surname have been switched 
+  dt_merged <- merge(x, dt_swap, 
+          by.x = c("patient_dpii_forename", "patient_dpii_surname", "patient_dpii_date_of_birth"),
+          by.y = c("tmp.store.forename", "tmp.store.surname", "patient_dpii_date_of_birth"), 
+          all = FALSE,
+          all.x = TRUE, 
+          all.y = FALSE)
 
-    x[tmp.swap == TRUE,
-      `:=`(
-        n1 = tmp.store.n1,
-        n2 = tmp.store.n2
-      ),
-      env = list(
-        n1 = id$forename,
-        n2 = id$surname)
-    ]
+    group = c(id$date_of_birth)
+    stage = 11
+
+    dt_merged[, tmp.idN :=  data.table::fifelse(
+              tmp.match == TRUE,
+                .N,
+                0, 
+              na = 0),
+              by = group
+              ] [,  `:=` (
+                  id = data.table::fifelse(
+                    tmp.idN > 1,
+                          data.table::last(id),
+                          id), 
+                  tmp.stage = data.table::fifelse(
+                    tmp.idN > 1, 
+                    paste0(tmp.stage, paste0('s', stage)), 
+                    tmp.stage)
+                  ), 
+                        by = group]
+
+
+    x <- dt_merged
+                }
 
   }
 
