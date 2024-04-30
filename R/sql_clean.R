@@ -14,7 +14,7 @@
 #' @examples
 #' testSQL <- c(
 #' "/********* INTRO HEADER COMMENTS",
-#' "*********/",
+#' "**********/",
 #' "  SELECT ",
 #' "  [VAR 1]  -- with comments",
 #' ",[VAR 2]",",[VAR 3]",
