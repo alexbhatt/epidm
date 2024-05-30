@@ -1,5 +1,9 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# epidm 1.0.5
+
+*add fuzzy match functionality to patient_id 
+
 # epidm 1.0.4
 
 * fixed missing ';' character in SQL connection string
