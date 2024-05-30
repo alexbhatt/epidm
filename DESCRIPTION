@@ -3,6 +3,7 @@ Title: UK Epidemiological Data Management
 Version: 1.0.5
 Authors@R:
     person("Alex", "Bhattacharya", , "alex.bhatt@gmail.com", role = c("aut", "cre"),
+    "Alice", "Graham", , "graham.alice@gmail.com", role = c("aut"), 
            comment = c(ORCID = "0000-0003-3000-2771"))
 Description: Contains utilities and functions for the cleaning, processing
     and management of patient level public health data for surveillance
