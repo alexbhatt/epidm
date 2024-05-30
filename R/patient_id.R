@@ -48,6 +48,21 @@
 #'   instead of editing the data without reference
 #' @param .experimental optional, default FALSE; TRUE will enable the
 #'   experimental features for recoding NA values based on the mode
+#' @param .useStages optional, default 1:11; set to 1 if you wish patient ID to
+#' be assigned cases with the same DOB and NHS number, set to 2 if you wish patient
+#' ID to be assigned to cases with the same hospital number (HOS) and DOB, set to
+#' 3 if you wish patient ID to be assigned cases with the same NHS and HOS number,
+#' set to 4 if you wish patient ID to be assigned cases with the same NHS number
+#' and surname, set to 5 if you wish patient ID to be assigned cases with the same
+#' hospital number and surname, set to 6 if you wish patient ID to be assigned
+#' cases with the same DOB and surname, set to 7 if you wish patient ID to be
+#' assigned cases with the same sex and full name, set to 8 if you wish patient
+#' ID to be assigned cases with the same sex, DOB and fuzzy name, set to 9 if you
+#' wish patient ID to be assigned cases with the same DOB and fuzzy name, set to
+#' 10 if you wish patient ID to be assigned cases with the same name and postcode,
+#' set to 11 if you wish patient ID to be assigned cases with the same first name
+#' or second name in changing order and date of birth.
+#'
 #'
 #' @return A dataframe with one new variable:
 #' \describe{
@@ -145,8 +160,7 @@ uk_patient_id <- function(data,
                           .useStages = c(1:11),
                           .sortOrder,
                           .keepValidNHS = FALSE,
-                          .forceCopy = FALSE,
-                          .experimental = FALSE) {
+                          .forceCopy = FALSE) {
 
   ## convert data.frame to data.table or take a copy
   if(.forceCopy) {
@@ -295,9 +309,9 @@ uk_patient_id <- function(data,
   if(exists('postcode',where=id)){
 
   ##Removal of spaces from postcode
-  x[, pcd := gsub(" ", "", pcd), 
+  x[, pcd := gsub(" ", "", pcd),
      env = list(pcd = id$postcode)]
-  
+
   x[,
     tmp.valid.pcd := !is.na(pcd),
     env = list(pcd = id$postcode)
@@ -465,36 +479,36 @@ uk_patient_id <- function(data,
 
 
   ## S11: NAME SWAP  ####################################################
- 
+
  if(max(.useStages) %in% 11){
-  
+
   if(all(sapply(c('surname','forename','date_of_birth'),
                 function(x) exists(x,where=id)))){
 
-    #Switch forename and surname 
+    #Switch forename and surname
     x[tmp.idN == 1,
       ':=' (tmp.store.forename = n2,
-            tmp.store.surname = n1, 
-            tmp.swap = TRUE), 
+            tmp.store.surname = n1,
+            tmp.swap = TRUE),
       env = list(
         n1 = id$forename,
         n2 = id$surname)
       ]
 
   cols_swap <- c("tmp.store.forename", "tmp.store.surname", "patient_dpii_date_of_birth", "tmp.valid.n2", "tmp.valid.dob", "tmp.idN")
-  
+
   #Extract columns where surname and forename have been switched
   dt_swap <- x[tmp.valid.n2 == TRUE & tmp.valid.dob == TRUE & tmp.idN == 1, ..cols_swap]
-  
+
   #Create a match column
   dt_swap <-  dt_swap[, tmp.match := TRUE]
- 
-  #Merge  data tables back together - to match on where forename and surname have been switched 
-  dt_merged <- merge(x, dt_swap, 
+
+  #Merge  data tables back together - to match on where forename and surname have been switched
+  dt_merged <- merge(x, dt_swap,
           by.x = c("patient_dpii_forename", "patient_dpii_surname", "patient_dpii_date_of_birth"),
-          by.y = c("tmp.store.forename", "tmp.store.surname", "patient_dpii_date_of_birth"), 
+          by.y = c("tmp.store.forename", "tmp.store.surname", "patient_dpii_date_of_birth"),
           all = FALSE,
-          all.x = TRUE, 
+          all.x = TRUE,
           all.y = FALSE)
 
     group = c(id$date_of_birth)
@@ -503,81 +517,25 @@ uk_patient_id <- function(data,
     dt_merged[, tmp.idN :=  data.table::fifelse(
               tmp.match == TRUE,
                 .N,
-                0, 
+                0,
               na = 0),
               by = group
               ] [,  `:=` (
                   id = data.table::fifelse(
                     tmp.idN > 1,
                           data.table::last(id),
-                          id), 
+                          id),
                   tmp.stage = data.table::fifelse(
-                    tmp.idN > 1, 
-                    paste0(tmp.stage, paste0('s', stage)), 
+                    tmp.idN > 1,
+                    paste0(tmp.stage, paste0('s', stage)),
                     tmp.stage)
-                  ), 
+                  ),
                         by = group]
 
 
     x <- dt_merged
                 }
 
-  }
-
-  ## EXPERIMENTAL ##############################################################
-
-  if(.experimental){
-    ## capture legit IDs where NA or invalid
-
-    ## set types for the columns; and clear out the invalid results
-    ## we will bring the results together later
-
-    for (i in c(id$nhs_number,id$hospital_number,id$date_of_birth)) {
-      x[,
-        col := .(
-          data.table::fifelse(tmp.valid.hos,
-                              as.numeric(col),
-                              NA_integer_)
-        ),
-        env = list(col = i)
-      ]
-
-    }
-
-    copyid <- c(id$nhs_number,id$hospital_number,id$date_of_birth,id$sex_mfu)
-
-    ## capture the most common value aka. mode, but for numeric or characters
-    na_replace_mode <- function(x){
-
-      ## get the mode
-      len <- length(x)
-      uni <- unique(na.omit(x))
-      mode <- uni[which.max(table(match(x, uni)))]
-      vec <- rep(mode,len)
-
-      ## where the group only has 1 entry, and its NA
-      if(length(vec)==0){
-        return(NA)
-      } else {
-        res <- data.table::fcoalesce(x,vec)
-        return(res)
-      }
-    }
-
-    x[,
-      (copyid) := lapply(.SD,na_replace_mode),
-      by = 'id',
-      .SDcols = copyid
-    ]
-
-
-    x[,
-      c(sex_mfu) := .(
-        data.table::fifelse(is.na(get(id$sex_mfu)),
-                            "U",
-                            get(id$sex_mfu))
-      )
-    ]
   }
 
   ## order the final results
