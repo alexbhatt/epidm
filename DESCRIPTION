@@ -1,6 +1,6 @@
 Package: epidm
 Title: UK Epidemiological Data Management
-Version: 1.0.5
+Version: 1.0.4
 Authors@R:
     person("Alex", "Bhattacharya", , "alex.bhatt@gmail.com", role = c("aut", "cre"),
     "Alice", "Graham", , "graham.alice@gmail.com", role = c("aut"), 
