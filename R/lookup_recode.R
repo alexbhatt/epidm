@@ -13,7 +13,7 @@
 #' @param .import a list  in the order list(new,old) containing the
 #' values for another lookup table existing in the environment
 #'
-#' @importFrom purrr imap
+#' @importFrom purrr imap_chr
 #' @importFrom stats na.omit setNames
 #'
 #'
@@ -64,7 +64,12 @@
 
 
 lookup_recode <- function(src,
-                          type=c('species','specimen','manual'),
+                          type=c('species',
+                                 'specimen',
+                                 'inpatient_admission_method',
+                                 'inpatient_discharge_destination',
+                                 'ecds_destination_code',
+                                 'manual'),
                           .import = NULL) {
 
 
@@ -94,12 +99,43 @@ lookup_recode <- function(src,
       )
     )
 
+  } else if (type == "inpatient_admission_method") {
+
+    ## calls upon the internal lookup table stored in the epidm package
+    ## epidm:::group_inpatient_admission_method
+    lk <- as.list(
+      setNames(
+        group_inpatient_admission_method[[2]],
+        group_inpatient_admission_method[[1]]
+      )
+    )
+  } else if (type == "inpatient_discharge_destination") {
+
+    ## calls upon the internal lookup table stored in the epidm package
+    ## epidm:::group_inpatient_admission_method
+    lk <- as.list(
+      setNames(
+        group_inpatient_discharge_destination[[2]],
+        group_inpatient_discharge_destination[[1]]
+      )
+    )
+  } else if (type == "ecds_destination_code") {
+
+    ## calls upon the internal lookup table stored in the epidm package
+    ## epidm:::group_inpatient_admission_method
+    lk <- as.list(
+      setNames(
+        group_ecds_discharge_destination[[2]],
+        group_ecds_discharge_destination[[1]]
+      )
+    )
+
   } else if (type == 'manual') {
 
     lk <- as.list(
       stats::setNames(
-        .import[[1]],
-        .import[[2]]
+        .import[[1]], ## NEW replacement
+        .import[[2]]  ## OLD value
       )
     )
 
@@ -123,7 +159,8 @@ lookup_recode <- function(src,
   ## purrr::imap uses two arguments, the first is the mapped item
   ## the second is the index number of that item
   ## you do not need to specify the arguments if there are only 2
-  x <- purrr::imap(x,nullReplace)
+  ## use _chr to ensure that its reported back as a character vector and not a list
+  x <- purrr::imap_chr(x,nullReplace)
 
   return(x)
 

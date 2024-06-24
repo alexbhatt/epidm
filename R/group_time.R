@@ -8,6 +8,9 @@
 #' Group across multiple observations of
 #'  overlapping time intervals, with defined start and end dates,
 #'  or events within a static/fixed or rolling window of time.
+#'  These are commonly used with inpatient HES/SUS data to group spells with
+#'  defined start and end dates,  or to group positive specimen tests,
+#'  based on specimen dates together into infection episodes.
 #'
 #' @import data.table
 #'
