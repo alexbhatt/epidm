@@ -49,8 +49,13 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.0.5" id="epidm-105">epidm 1.0.5<a class="anchor" aria-label="anchor" href="#epidm-105"></a></h2>
-<p>*add fuzzy match functionality to patient_id</p>
-</div>
+<ul><li><p>Added ECDS destination_code lookups and use in lookup_recode to show where patients go after A&amp;E attendance.</p></li>
+<li><p>Added new lookups for inpatient admission_method and discharge_destination; can be called using epidm::lookup_recode.</p></li>
+<li><p>Change from sapply to purrr::map_dbl to ensure type consistency and prevent creation of list cols.</p></li>
+<li><p>Implemented new steps for record matching, including first/last name field swaps.</p></li>
+<li><p>Added new id_test sample data.</p></li>
+<li><p>add fuzzy match functionality to patient_id</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.0.4" id="epidm-104">epidm 1.0.4<small>2022-07-11</small><a class="anchor" aria-label="anchor" href="#epidm-104"></a></h2>
 <ul><li>fixed missing ‘;’ character in SQL connection string</li>
