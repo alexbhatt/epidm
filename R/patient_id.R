@@ -487,15 +487,17 @@ uk_patient_id <- function(data,
 
     #Switch forename and surname
     x[tmp.idN == 1,
-      ':=' (tmp.store.forename = n2,
-            tmp.store.surname = n1,
+      ':=' (tmp.store.forename = n1,
+            tmp.store.surname = n2,
+            tmp.store.forename.switch = n2,
+            tmp.store.surname.switch = n1,
             tmp.swap = TRUE),
       env = list(
         n1 = id$forename,
         n2 = id$surname)
       ]
 
-  cols_swap <- c("tmp.store.forename", "tmp.store.surname", "patient_dpii_date_of_birth", "tmp.valid.n2", "tmp.valid.dob", "tmp.idN")
+  cols_swap <- c("tmp.store.forename.switch", "tmp.store.surname.switch", "tmp.valid.dob", "tmp.idN")
 
   #Extract columns where surname and forename have been switched
   dt_swap <- x[tmp.valid.n2 == TRUE & tmp.valid.dob == TRUE & tmp.idN == 1, ..cols_swap]
@@ -505,8 +507,8 @@ uk_patient_id <- function(data,
 
   #Merge  data tables back together - to match on where forename and surname have been switched
   dt_merged <- merge(x, dt_swap,
-          by.x = c("patient_dpii_forename", "patient_dpii_surname", "patient_dpii_date_of_birth"),
-          by.y = c("tmp.store.forename", "tmp.store.surname", "patient_dpii_date_of_birth"),
+          by.x = c("tmp.store.forename", "tmp.store.surname", "tmp.valid.dob"),
+          by.y = c("tmp.store.forename.switch", "tmp.store.surname.switch", "tmp.valid.dob"),
           all = FALSE,
           all.x = TRUE,
           all.y = FALSE)
