@@ -104,6 +104,5 @@ usethis::use_data(
   group_inpatient_admission_method,
   group_inpatient_discharge_destination,
   group_ecds_discharge_destination,
-  overwrite = TRUE,
-  internal = TRUE
+  overwrite = TRUE
 )
