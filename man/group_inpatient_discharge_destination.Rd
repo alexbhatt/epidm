@@ -9,15 +9,8 @@
 \item{code}{the discharge_destination code}
 \item{discharge_destination}{the discharge_destination grouping as a human readable string}
 }
-
-\describe{
-\item{code}{the ECDS destination_code}
-\item{destination_code}{the destination grouping as a human readable string}
-}
 }
 \usage{
-group_inpatient_discharge_destination
-
 group_inpatient_discharge_destination
 }
 \description{
@@ -25,11 +18,5 @@ In order to group hospital inpatient discharge destination into human
 readable groups, a lookup table has been created. These work with
 Hospital Episode Statistics (HES) and Secondary Use Services (SUS)
 data with the discharge_destination fields.
-
-In order to group A&E discharge destination from SNOWMED into human
-readable groups, a lookup table has been created. These work with
-Emergency Care Dataset (ECDS)
-data with the destination_code field to show where a patient goes after
-discharge from A&E.
 }
 \keyword{datasets}

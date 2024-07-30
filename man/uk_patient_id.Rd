@@ -9,10 +9,10 @@ uk_patient_id(
   id = list(nhs_number = "nhs_number", hospital_number = "patient_hospital_number",
     date_of_birth = "date_of_birth", sex_mfu = "sex", forename = "forename", surname =
     "surname", postcode = "postcode"),
+  .useStages = c(1:11),
   .sortOrder,
   .keepValidNHS = FALSE,
-  .forceCopy = FALSE,
-  .experimental = FALSE
+  .forceCopy = FALSE
 )
 }
 \arguments{
@@ -29,6 +29,21 @@ uk_patient_id(
 \item{\code{postcode}}{the patient postcode}
 }}
 
+\item{.useStages}{optional, default 1:11; set to 1 if you wish patient ID to
+be assigned cases with the same DOB and NHS number, set to 2 if you wish patient
+ID to be assigned to cases with the same hospital number (HOS) and DOB, set to
+3 if you wish patient ID to be assigned cases with the same NHS and HOS number,
+set to 4 if you wish patient ID to be assigned cases with the same NHS number
+and surname, set to 5 if you wish patient ID to be assigned cases with the same
+hospital number and surname, set to 6 if you wish patient ID to be assigned
+cases with the same DOB and surname, set to 7 if you wish patient ID to be
+assigned cases with the same sex and full name, set to 8 if you wish patient
+ID to be assigned cases with the same sex, DOB and fuzzy name, set to 9 if you
+wish patient ID to be assigned cases with the same DOB and fuzzy name, set to
+10 if you wish patient ID to be assigned cases with the same name and postcode,
+set to 11 if you wish patient ID to be assigned cases with the same first name
+or second name in changing order and date of birth.}
+
 \item{.sortOrder}{optional; a column as a character to allow a sorting
 order on the id generation}
 
@@ -37,9 +52,6 @@ the column with the NHS checksum result stored as a BOOLEAN}
 
 \item{.forceCopy}{optional, default FALSE; TRUE will force data.table to take a copy
 instead of editing the data without reference}
-
-\item{.experimental}{optional, default FALSE; TRUE will enable the
-experimental features for recoding NA values based on the mode}
 }
 \value{
 A dataframe with one new variable:
