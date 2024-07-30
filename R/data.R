@@ -91,4 +91,4 @@
 #' \item{code}{the ECDS destination_code}
 #' \item{destination_code}{the destination grouping as a human readable string}
 #' }
-"group_inpatient_discharge_destination"
+"group_ecds_discharge_destination"
