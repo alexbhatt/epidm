@@ -3,7 +3,7 @@
 #' @description This function helps to determine when a patient has been in
 #' hospital across  spell aggregation.
 #' When retaining the final record the following criteria is used:
-#'  \itemize{
+#'  \describe{
 #'    \item{"1"}{Current admissions take priority}
 #'    \item{"2"}{When conflicting on the same day, inpatient admissions take priority over A&E emergency care data}
 #'    \item{"3"}{Where a patient has a linked A&E admission to a hospital inpatient stay, the A&E admission date is used}
