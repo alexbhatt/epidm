@@ -6,6 +6,7 @@ utils::globalVariables(
   c(
     '.',
     '..sel',
+    '..cols_swap',
     'arrival_date',
     'birth_date',
     'cip_indx',
