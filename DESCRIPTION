@@ -1,11 +1,12 @@
 Package: epidm
 Version: 1.0.4
 Title: UK Epidemiological Data Management
-Authors@R:
-    person("Alex", "Bhattacharya",
-           , "alex.bhatt@gmail.com",
-           role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0003-3000-2771"))
+Authors@R: 
+    c(
+        person("Alex", "Bhattacharya", email = "alex.bhatt@gmail.com", role = c("aut", "cre")),
+        person("Alice", "Graham", email = "graham.alice@gmail.com", role = c("aut"), comment = c(ORCID = "0000-0003-3000-2771")),
+        person("Harshana", "Liyanage", email = "harshanal@gmail.com", role = c("aut"), comment = c(ORCID = "0000-0001-9738-6349"))
+    )
 Description: Contains utilities and functions for the cleaning, processing and
     management of patient level public health data for surveillance
     and analysis held by the UK Health Security Agency, UKHSA.
@@ -24,8 +25,9 @@ Imports:
     stats,
     stringi,
     stringr,
-    utils
+    utils,
+    lubridate
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.0
+RoxygenNote: 7.3.2
