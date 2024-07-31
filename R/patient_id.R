@@ -70,79 +70,19 @@
 #' }
 #'
 #' @examples
-#' id_test <- data.frame(
-#' nhs_number = c(9434765919,
-#'                9434765919,9434765919,382940103,NA,382940103,
-#'                3367170666,3367170666,3367170666,3367170666,
-#'                9176325008,NA,NA,5703411017,5703411017,
-#'                3275446444,NA,NA,473372796,NA,473372796,NA,
-#'                1789154138,158691032,158691032,8354073580,NA,NA,NA,
-#'                NA,NA,9329053475,2063142777,2063142777,NA,
-#'                NA,NA,NA,NA,5555555555,5555555555),
-#' local_patient_identifier = c(NA,NA,NA,
-#'                              "I3348707",NA,"I3348707",NA,NA,NA,NA,
-#'                              "P1350948","P1350948","P1350948",NA,"Q4157514",
-#'                              "UNKNOWN",NA,"UNKNOWN",NA,"K2440769","K2440769",
-#'                              NA,"E1366499","K1494229","K1494229",
-#'                              "NO PATIENT ID","J5206297","J5206297",NA,NA,NA,
-#'                              "F2159102",NA,NA,"W1208900","G7439612","N4842033",
-#'                              "Q5566884","Q5566884","P2689566","P2689566"),
-#' patient_birth_date = as.Date(c("2021-03-03",
-#'                                NA,"2021-03-03","2003-08-24","2003-08-24",
-#'                                "2003-08-24","2001-06-21",NA,"2001-06-21",
-#'                                "2001-06-21","1991-10-08","1991-10-08","1991-10-08",
-#'                                NA,"1991-10-07","1985-10-16","1985-10-16",
-#'                                "1985-10-16","1984-11-14","1984-11-14",
-#'                                "1984-11-14","1984-11-14","1994-05-05","1983-01-04",
-#'                                "1983-01-04","2007-06-01","1975-09-04",
-#'                                "1975-09-04","2014-01-05","2014-01-05","2014-01-05",
-#'                                "2014-01-05",NA,NA,"2017-06-11","1986-08-28",
-#'                                "1986-08-26","2004-03-02","2004-03-02",
-#'                                "1979-01-17","1979-01-17")),
-#' sex = c("Male","Male",
-#'         "Male","Female",NA,NA,NA,"Female","Female",
-#'         "Female","Female","Female","Female",
-#'         "Female","Female","Male","Male","Male","Female",
-#'         "Female","Female","Female","Male","Male",
-#'         "Male","Female","Male","Male","Male","Male",
-#'         "Male","Male","Female","Female","Female",
-#'         "Female","Female","Male","Male","Male","Male"),
-#' forename = c("NICHOLAS",
-#'              "NICHOLAS","NICHOLAS","SARAH","VATHANAVARIN",NA,
-#'              "FUAADA","FUAADA","FUAADA","EL-SHAHIDI",
-#'              "CHANTEL","CHANTEL","CHANTEL",NA,"KENDRA",
-#'              "ALEXANDER","ALEXANDER","ALEX","ODESSA","ODESSA",
-#'              "ODESSA","ODESSA",NA,"KEVIN","KEVIN",NA,
-#'              "NAJEEB","NAJEEB","WILLIAM","WILL","WILLY",
-#'              "WILLIAM","EMMA","EMMA","ALMAASA","ALMAASA",
-#'              "ALMAASA",NA,NA,"JEFFERY","JEFFERY"),
-#' surname = c("MCCREARY",
-#'             "MCCREARY","MCCREARY","VATHANAVARIN","SARAH",
-#'             "VATHANAVARIN","EL-SHAHIDI","EL-SHAHIDI",
-#'             "EL-SHAHIDI","FUAADA","LENHART","LENHART","LENHART",
-#'             NA,"VIGIL","CARTER","CARTER","CARTER",
-#'             "RINHART","RINHART","RINHART","RINHART",NA,
-#'             "EL-ASMAR","EL-ASMAR",NA,"CAMPBELL","CAMPBELL",
-#'             "YAMAMOTO","YAMAMOTO","YAMAMOTO","YAMAMOTO",
-#'             "BRAVE","BRAVE","BROWN","BROWN","BROWN",NA,NA,
-#'             "LUCERO","LUCERO"),
-#' event_date = as.Date(sample(seq.Date(Sys.Date()-365,Sys.Date(),1),41,replace = TRUE)),
-#' stringsAsFactors = FALSE)
-#'
 #' uk_patient_id(
-#'   data = id_test,
-#'   id = list(
-#'     nhs_number = 'nhs_number',
-#'     hospital_number = 'local_patient_identifier',
-#'     date_of_birth = 'patient_birth_date',
-#'     sex_mfu = 'sex',
-#'     forename = 'forename',
-#'     surname = 'surname'
-#'   ),
-#'   .sortOrder = 'event_date',
-#'   .forceCopy = TRUE
+#'  data = head(epidm::lab_data,1000),
+#'  id = list(
+#'    nhs_number = 'nhs_number',
+#'    hospital_number = 'local_patient_identifier',
+#'    date_of_birth = 'patient_birth_date',
+#'    sex_mfu = 'sex',
+#'    forename = 'forename',
+#'    surname = 'surname'
+#'  ),
+#'  .sortOrder = 'specimen_date',
+#'  .forceCopy = TRUE
 #' )[]
-#'
 #' @export
 
 uk_patient_id <- function(data,
