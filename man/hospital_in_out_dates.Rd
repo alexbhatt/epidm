@@ -37,7 +37,7 @@ new date columns on the data.table for \code{hospital_in} and \code{hospital_out
 This function helps to determine when a patient has been in
 hospital across  spell aggregation.
 When retaining the final record the following criteria is used:
-\itemize{
+\describe{
 \item{"1"}{Current admissions take priority}
 \item{"2"}{When conflicting on the same day, inpatient admissions take priority over A&E emergency care data}
 \item{"3"}{Where a patient has a linked A&E admission to a hospital inpatient stay, the A&E admission date is used}
@@ -45,6 +45,7 @@ When retaining the final record the following criteria is used:
 }
 }
 \examples{
+\dontrun{
 hospital_in_out_dates(link,
 person_id = 'id',
 hospital = list(
@@ -56,7 +57,8 @@ hospital = list(
   in_spell_start = 'spell_start_date',
   in_spell_end = 'spell_end_date',
   in_discharge = 'discharge_destination'
-)[]
+))[]
+}
 
 }
 \seealso{

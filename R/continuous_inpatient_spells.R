@@ -36,7 +36,6 @@
 #'   }
 #'
 #' @examples
-#'
 #' cip_test <- data.frame(
 #'   id = c('465','465','465','465','8418','8418','8418',
 #'          '8418','8418','8418','8418','8418','26443',
@@ -113,7 +112,6 @@
 #'   spell_end_date = 'spell_end',
 #'   discharge_destination = 'dis_dest'
 #' )[]
-#'
 #' @export
 #'
 

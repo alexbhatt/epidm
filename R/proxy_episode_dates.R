@@ -64,6 +64,7 @@
 #'   spell_end_date = 'spell_end',
 #'   discharge_destination = 'disdest'
 #' )[]
+#'
 
 proxy_episode_dates <- function(x,
                                 group_vars,

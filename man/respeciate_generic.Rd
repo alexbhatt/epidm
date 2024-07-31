@@ -42,6 +42,7 @@ from the same site within a recent time period.  This function captures
 species_col  from another sample within X-days of an unspeciated isolate.
 }
 \examples{
+
 df <- data.frame(
 ptid = c(round(runif(25,1,5))),
 spec = sample(c("KLEBSIELLA SP",

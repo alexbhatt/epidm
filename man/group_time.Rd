@@ -132,5 +132,4 @@ group_time(x = spell_test,
            indx_varname = 'spell_id',
            min_varname = 'spell_min_date',
            max_varname = 'spell_max_date')[]
-
 }

@@ -59,7 +59,6 @@ This follows the NHS Digital Provider Spells Methodology:
 http://content.digital.nhs.uk/media/11859/Provider-Spells-Methodology/pdf/Spells_Methodology.pdf
 }
 \examples{
-
 cip_test <- data.frame(
   id = c('465','465','465','465','8418','8418','8418',
          '8418','8418','8418','8418','8418','26443',
@@ -136,5 +135,4 @@ cip_spells(x=cip_test,
   spell_end_date = 'spell_end',
   discharge_destination = 'dis_dest'
 )[]
-
 }

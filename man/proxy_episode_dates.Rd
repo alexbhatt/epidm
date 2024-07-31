@@ -82,4 +82,5 @@ proxy_episode_dates(
   spell_end_date = 'spell_end',
   discharge_destination = 'disdest'
 )[]
+
 }

@@ -33,6 +33,7 @@
 #' @return  new date columns on the data.table for `hospital_in` and `hospital_out` and `hospital_event_rank`
 #'
 #' @examples
+#' \dontrun{
 #' hospital_in_out_dates(link,
 #' person_id = 'id',
 #' hospital = list(
@@ -44,7 +45,8 @@
 #'   in_spell_start = 'spell_start_date',
 #'   in_spell_end = 'spell_end_date',
 #'   in_discharge = 'discharge_destination'
-#' )[]
+#' ))[]
+#' }
 #'
 
 hospital_in_out_dates <- function(data,

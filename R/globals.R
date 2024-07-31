@@ -76,6 +76,8 @@ utils::globalVariables(
     'tmp.store.n2',
     'tmp.valid.pcd',
     'tmp.swap',
+    'tmp.match',
+    'nhs',
     'sex_mfu',
     'pcd',
     'ae_in',

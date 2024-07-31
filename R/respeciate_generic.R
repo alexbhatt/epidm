@@ -27,6 +27,7 @@
 #' @return a data.table with a recharacterised `species_col` column
 #'
 #' @examples
+#'
 #' df <- data.frame(
 #' ptid = c(round(runif(25,1,5))),
 #' spec = sample(c("KLEBSIELLA SP",

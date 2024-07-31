@@ -179,7 +179,6 @@
 #'                 field_strings=c('procedure_code','procedure_date'),
 #'                 patient_id_vars = c('id','spell_id'),
 #'                 type = 'opcs')
-#'
 #' @export
 
 inpatient_codes <- function(x,
