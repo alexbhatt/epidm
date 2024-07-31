@@ -1,7 +1,8 @@
-#' @title Synthetic Lab Data for EpiViz functions
+#' @title Synthetic Lab Data for epidm
 #'
 #' @description
-#' A dataset containing synthetic lab data for epidemiological visualisation purposes.
+#' A dataset containing synthetic lab data for testing epidemiological data
+#' transformation functions.
 #'
 #' @name lab_data
 #'
