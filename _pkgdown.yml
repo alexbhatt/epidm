@@ -1,7 +1,11 @@
 home:
   title: Epidmiological Data Management [epidm]
   description: Tools for handling, managing and transforming UK public health data for epidemiogical analysis
+  URL: https://alexbhatt.github.io/epidm, https://github.com/alexbhatt/epidm/
 template:
+  bootstrap: 5
+  bootswatch: flatly
+  light-switch: true
   opengraph:
     twitter:
       creator: "@alexbhatt"
@@ -32,3 +36,13 @@ reference:
   - genus_gram_stain
   - respeciate_organism
   - specimen_type_grouping
+  - group_ecds_discharge_destination
+  - group_inpatient_admission_method
+  - group_inpatient_discharge_destination
+  - hospital_in_out_dates
+- title: "Data"
+  desc: >
+    Synthetic dataset for testing package functionality
+- contents:
+  - lab_data
+
