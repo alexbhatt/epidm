@@ -2,7 +2,18 @@
 
 # epidm 1.0.5
 
-*add fuzzy match functionality to patient_id 
+* Added ECDS destination_code lookups and use in lookup_recode to show where patients go after A&E attendance.
+
+* Added new lookups for inpatient admission_method and discharge_destination; can be called using epidm::lookup_recode.
+
+* Change from sapply to purrr::map_dbl to ensure type consistency and prevent creation of list cols.
+
+* Implemented new steps for record matching, including first/last name field swaps.
+
+* Added new id_test sample data.
+
+* add fuzzy match functionality to patient_id
+
 
 # epidm 1.0.4
 
@@ -13,12 +24,12 @@
 
 * change trusted_connection=true to trusted_connection=yes to ensure cross-functionality with k8s and linux
 * SCarnall fix for the infinite while loop case
-*added pkgdown URL
+* added pkgdown URL
 
 
 # epidm 1.0.2
 
-*remove a href links from Description field
+* remove a href links from Description field
 
 
 # epidm 1.0.1
