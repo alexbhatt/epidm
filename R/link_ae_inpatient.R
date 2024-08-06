@@ -41,6 +41,7 @@
 #' @return a patient level linked hospital record
 #'
 #' @examples
+#' \dontrun{
 #' sample_ae <- data.table::data.table(
 #'   nhs_number = c("645114517",
 #'                  "645114517","645114517","382940103","321908341",
@@ -295,8 +296,7 @@
 #'     org_code = 'organisation_code'
 #'   )
 #' )[]
-#'
-#' @export
+#'}
 
 ### FUNCTION START #############################################################
 

@@ -56,6 +56,7 @@ To note that the inpatient records should already be aggregated into
 spells at the desired level (standard, CIP or Mega)
 }
 \examples{
+\dontrun{
 sample_ae <- data.table::data.table(
   nhs_number = c("645114517",
                  "645114517","645114517","382940103","321908341",
@@ -310,7 +311,7 @@ link_ae_inpatient(
     org_code = 'organisation_code'
   )
 )[]
-
+}
 }
 \seealso{
 group_time continuous_inpatient_spells
