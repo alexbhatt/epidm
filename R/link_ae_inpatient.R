@@ -40,6 +40,7 @@
 #'
 #' @return a patient level linked hospital record
 #'
+#' @keywords internal
 #' @examples
 #' \dontrun{
 #' sample_ae <- data.table::data.table(
