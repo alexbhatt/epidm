@@ -316,3 +316,4 @@ link_ae_inpatient(
 \seealso{
 group_time continuous_inpatient_spells
 }
+\keyword{internal}
