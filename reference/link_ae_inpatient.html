@@ -148,7 +148,8 @@ linking together</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">sample_ae</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="va">sample_ae</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  nhs_number <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"645114517"</span>,</span></span>
 <span class="r-in"><span>                 <span class="st">"645114517"</span>,<span class="st">"645114517"</span>,<span class="st">"382940103"</span>,<span class="st">"321908341"</span>,</span></span>
 <span class="r-in"><span>                 <span class="st">"321908341"</span>,<span class="st">"321908341"</span>,<span class="st">"599534707"</span>,</span></span>
@@ -402,46 +403,7 @@ linking together</p></dd>
 <span class="r-in"><span>    org_code <span class="op">=</span> <span class="st">'organisation_code'</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">[</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      nhs_number local_patient_identifier patient_birth_date organisation_code</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;char&gt;                   &lt;char&gt;             &lt;char&gt;            &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:  115641745                 J5206297         1975-09-04               V5T</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:  115641745                 J5206297         1975-09-04               V5T</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:  180554160                     &lt;NA&gt;         1985-10-16               T7N</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:  180554160                     &lt;NA&gt;         1985-10-16               T7N</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:  233168855                 D6300794         1976-06-25               L4Q</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 127:       &lt;NA&gt;                 V2246708         2017-08-20               J2W</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 128:       &lt;NA&gt;                 V2246708         2017-08-20               J2W</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 129:       &lt;NA&gt;                 V2246708         2017-08-20               J2W</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 130:       &lt;NA&gt;                 V2246708         2017-08-20               J2W</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 131:       &lt;NA&gt;                 V2246708         2017-08-20               J2W</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        source mega_spell_id arrival_date departure_date spell_start_date</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;char&gt;        &lt;char&gt;       &lt;char&gt;         &lt;char&gt;           &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1: ECDS:SUS       247.4.0   2022-06-20     2022-06-20       2022-06-20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2: ECDS:SUS       247.4.1   2022-07-18     2022-07-18       2022-07-18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3: ECDS:SUS        77.7.0   2022-05-17     2022-05-17       2022-05-17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4: ECDS:SUS        77.7.1   2022-06-05     2022-06-05       2022-06-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5: ECDS:SUS       299.2.0   2022-06-25     2022-06-25       2022-06-25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 127:      SUS        91.9.1         &lt;NA&gt;           &lt;NA&gt;       2022-06-12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 128:      SUS        91.9.5         &lt;NA&gt;           &lt;NA&gt;       2022-06-22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 129:      SUS        91.9.3         &lt;NA&gt;           &lt;NA&gt;       2022-06-28</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 130:      SUS        91.9.4         &lt;NA&gt;           &lt;NA&gt;       2022-06-29</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 131:      SUS        91.9.6         &lt;NA&gt;           &lt;NA&gt;       2022-07-09</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      spell_end_date    id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              &lt;char&gt; &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:     2022-06-21   140</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:     2022-07-20   147</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:     2022-05-30    84</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:     2022-06-10    91</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:     2022-07-01   182</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 127:     2022-06-12   165</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 128:     2022-06-23   177</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 129:     2022-06-28   171</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 130:     2022-06-29   174</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 131:     2022-07-11   180</span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
