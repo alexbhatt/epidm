@@ -3,7 +3,7 @@
 \docType{data}
 \name{lab_data}
 \alias{lab_data}
-\title{Synthetic Lab Data for EpiViz functions}
+\title{Synthetic Lab Data for epidm}
 \format{
 A data frame with the following columns:
 \describe{
@@ -25,7 +25,8 @@ A data frame with the following columns:
 data(lab_data)
 }
 \description{
-A dataset containing synthetic lab data for epidemiological visualisation purposes.
+A dataset containing synthetic lab data for testing epidemiological data
+transformation functions.
 }
 \examples{
 data(lab_data)
