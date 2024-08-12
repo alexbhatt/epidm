@@ -12,7 +12,9 @@
 
 * Added new id_test sample data.
 
-* add fuzzy match functionality to patient_id
+* Add fuzzy match functionality to patient_id
+
+* Add new package dataset "lab_data" for testing functions
 
 
 # epidm 1.0.4
@@ -41,4 +43,4 @@
 
 * Added a `NEWS.md` file to track changes to the package.
 
-This is the first release of the package for CRAN submission.
+* This is the first release of the package for CRAN submission.
