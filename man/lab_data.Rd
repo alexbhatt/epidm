@@ -19,6 +19,7 @@ A data frame with the following columns:
 \item{lab_code}{Laboratory codes (Factor with unique levels).}
 \item{local_authority_name}{Name of the local authority.}
 \item{local_authority_code}{Code of the local authority.}
+\item{postcode}{Postcode}
 }
 }
 \usage{
