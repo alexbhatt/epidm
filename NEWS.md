@@ -10,8 +10,6 @@
 
 * Implemented new steps for record matching, including first/last name field swaps.
 
-* Added new id_test sample data.
-
 * Add fuzzy match functionality to patient_id
 
 * Add new package dataset "lab_data" for testing functions

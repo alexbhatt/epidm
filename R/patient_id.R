@@ -71,7 +71,7 @@
 #'
 #' @examples
 #' uk_patient_id(
-#'  data = head(epidm::lab_data,1000),
+#'  data = head(epidm::lab_data),
 #'  id = list(
 #'    nhs_number = 'nhs_number',
 #'    hospital_number = 'local_patient_identifier',
@@ -79,6 +79,7 @@
 #'    sex_mfu = 'sex',
 #'    forename = 'forename',
 #'    surname = 'surname'
+#'    postcode = 'postcode'
 #'  ),
 #'  .sortOrder = 'specimen_date',
 #'  .forceCopy = TRUE
