@@ -185,56 +185,7 @@ BOOLEAN containing the result of the NHS checksum validation</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">uk_patient_id</span><span class="op">(</span></span></span>
-<span class="r-in"><span> data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">epidm</span><span class="fu">::</span><span class="va"><a href="lab_data.html">lab_data</a></span>,<span class="fl">1000</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span> id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>   nhs_number <span class="op">=</span> <span class="st">'nhs_number'</span>,</span></span>
-<span class="r-in"><span>   hospital_number <span class="op">=</span> <span class="st">'local_patient_identifier'</span>,</span></span>
-<span class="r-in"><span>   date_of_birth <span class="op">=</span> <span class="st">'patient_birth_date'</span>,</span></span>
-<span class="r-in"><span>   sex_mfu <span class="op">=</span> <span class="st">'sex'</span>,</span></span>
-<span class="r-in"><span>   forename <span class="op">=</span> <span class="st">'forename'</span>,</span></span>
-<span class="r-in"><span>   surname <span class="op">=</span> <span class="st">'surname'</span></span></span>
-<span class="r-in"><span> <span class="op">)</span>,</span></span>
-<span class="r-in"><span> .sortOrder <span class="op">=</span> <span class="st">'specimen_date'</span>,</span></span>
-<span class="r-in"><span> .forceCopy <span class="op">=</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span><span class="op">)</span><span class="op">[</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        id nhs_number local_patient_identifier patient_birth_date    sex</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;int&gt;     &lt;char&gt;                   &lt;char&gt;             &lt;char&gt; &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:     1       &lt;NA&gt;                                               &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:     2  325999719                  XB29898         04/04/1957      M</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:     3  705649596                   KR2535         24/06/1927      M</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:     3  705649596                   KR2535         24/06/1927      M</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:     3  705649596                   KR2535         24/06/1927      M</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:     5  576322970                  IG12067         05/10/1938      F</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:     7  115685428                  HS45202         14/06/1962      M</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:     7  115685428                  HS45202         14/06/1962      M</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:     7  115685428                  HS45202         14/06/1962      M</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:     7        111                  HS45202         14/06/1962      M</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        surname forename organism_species_name specimen_date specimen_type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;char&gt;   &lt;char&gt;                &lt;char&gt;        &lt;char&gt;        &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:                                                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2: EL-SHAHEED   ZAAHIR KLEBSIELLA PNEUMONIAE    08/07/2023         BLOOD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:     LINTON  KASHIEF STAPHYLOCOCCUS AUREUS    24/02/2023         BLOOD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:     LINTON  KASHIEF STAPHYLOCOCCUS AUREUS    24/02/2023         BLOOD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:     LINTON  KASHIEF STAPHYLOCOCCUS AUREUS    25/02/2023         BLOOD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:   WILLIAMS JAMILETH KLEBSIELLA PNEUMONIAE    24/05/2020         BLOOD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:       RODA    TYLER STAPHYLOCOCCUS AUREUS    26/08/2023         BLOOD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:       RODA    TYLER STAPHYLOCOCCUS AUREUS    26/08/2023         BLOOD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:       RODA    TYLER STAPHYLOCOCCUS AUREUS    27/08/2023         BLOOD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:       RODA    TILER STAPHYLOCOCCUS AUREUS    28/08/2023         BLOOD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     lab_code      local_authority_name local_authority_code postcode</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;char&gt;                    &lt;char&gt;               &lt;char&gt;   &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:                                                                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  JH70033                   Reading            E06000038  RG1 7QE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:   CU5997                  Plymouth            E06000026  PL7 1LU</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:   CU5997                  Plymouth            E06000026  PL7 1LU</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:   CU5997                  Plymouth            E06000026  PL7 1LU</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  BI20985                  Worthing            E07000229 BN14 9EP</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:   ES3851 Cheshire West and Chester            E06000050  CW6 9TX</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:   ES3851 Cheshire West and Chester            E06000050  CW6 9TX</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:   ES3851 Cheshire West and Chester            E06000050  CW6 9TX</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:   ES3851 Cheshire West and Chester            E06000050  CW6 9TX</span>
-</code></pre></div>
+
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
