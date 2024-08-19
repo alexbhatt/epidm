@@ -89,6 +89,9 @@ transformation functions.</p>
 <dt>local_authority_code</dt>
 <dd><p>Code of the local authority.</p></dd>
 
+<dt>postcode</dt>
+<dd><p>Postcode</p></dd>
+
 
 </dl></div>
 
@@ -97,26 +100,26 @@ transformation functions.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">lab_data</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">lab_data</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   nhs_number local_patient_identifier patient_birth_date    sex    surname</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  576322970                  IG12067         1938-10-05 Female   WILLIAMS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  325999719                  XB29898         1957-04-04   Male EL-SHAHEED</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  705649596                   KR2535         1927-06-24   Male     LINTON</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  115685428                  HS45202         1962-06-14   Male       RODA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  127656016                  CF95132         1953-07-20   Male    EL-AMEN</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  446577858                  WL71545         1948-06-02   Male       PHAM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  576322970                  IG12067         05/10/1938 Female   WILLIAMS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  325999719                  XB29898         04/04/1957   Male EL-SHAHEED</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  705649596                   KR2535         24/06/1927   Male     LINTON</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  115685428                  HS45202         14/06/1962   Male       RODA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  705649596                   KR2535         24/06/1927   Male     LINTON</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  115685428                  HS45202         14/06/1962   Male       RODA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   forename organism_species_name specimen_date specimen_type lab_code</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 JAMILETH KLEBSIELLA PNEUMONIAE    2020-05-24         BLOOD  BI20985</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   ZAAHIR KLEBSIELLA PNEUMONIAE    2023-07-08         BLOOD  JH70033</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  KASHIEF STAPHYLOCOCCUS AUREUS    2023-02-24         BLOOD   CU5997</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4    TYLER STAPHYLOCOCCUS AUREUS    2023-08-26         BLOOD   ES3851</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  CHARLIE STAPHYLOCOCCUS AUREUS    2022-04-07         BLOOD  YA29556</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  MALCOLM KLEBSIELLA PNEUMONIAE    2022-04-18  URINE/KIDNEY  YK19355</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        local_authority_name local_authority_code</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  Worthing            E07000229</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                   Reading            E06000038</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                  Plymouth            E06000026</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Cheshire West and Chester            E06000050</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5            Northumberland            E06000057</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                    Camden            E09000007</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 JAMILETH KLEBSIELLA PNEUMONIAE    24/05/2020         BLOOD  BI20985</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   ZAAHIR KLEBSIELLA PNEUMONIAE    08/07/2023         BLOOD  JH70033</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  KASHIEF STAPHYLOCOCCUS AUREUS    24/02/2023         BLOOD   CU5997</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    TYLER STAPHYLOCOCCUS AUREUS    26/08/2023         BLOOD   ES3851</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  KASHIEF STAPHYLOCOCCUS AUREUS    24/02/2023         BLOOD   CU5997</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6    TYLER STAPHYLOCOCCUS AUREUS    26/08/2023         BLOOD   ES3851</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        local_authority_name local_authority_code postcode</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  Worthing            E07000229 BN14 9EP</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                   Reading            E06000038  RG1 7QE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                  Plymouth            E06000026  PL7 1LU</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Cheshire West and Chester            E06000050  CW6 9TX</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                  Plymouth            E06000026  PL7 1LU</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 Cheshire West and Chester            E06000050  CW6 9TX</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
