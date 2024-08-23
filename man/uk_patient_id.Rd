@@ -93,7 +93,7 @@ uk_patient_id(
    date_of_birth = 'patient_birth_date',
    sex_mfu = 'sex',
    forename = 'forename',
-   surname = 'surname'
+   surname = 'surname',
    postcode = 'postcode'
  ),
  .sortOrder = 'specimen_date',
