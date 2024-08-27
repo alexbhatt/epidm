@@ -60,6 +60,8 @@
 #' 10 if you wish patient ID to be assigned cases with the same name and postcode,
 #' set to 11 if you wish patient ID to be assigned cases with the same first name
 #' or second name in changing order and date of birth.
+#' @param .keepStages optional, default FALSE; to generate a new column (stageMatch)
+#'   to retain the stage information for which the record matched the group.
 #'
 #'
 #' @return A dataframe with one new variable:
@@ -97,6 +99,7 @@ uk_patient_id <- function(data,
                              postcode = 'postcode'
                            ),
                           .useStages = c(1:11),
+                          .keepStages = FALSE,
                           .sortOrder,
                           .keepValidNHS = FALSE,
                           .forceCopy = FALSE) {
@@ -488,6 +491,10 @@ uk_patient_id <- function(data,
 
   if(.keepValidNHS){
     data.table::setnames(x,'tmp.valid.nhs','valid_nhs')
+  }
+
+  if(.keepStages){
+    data.table::setnames(x,'tmp.stage','stageMatch')
   }
 
   ## cleanup and remove temporary vars
