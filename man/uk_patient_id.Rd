@@ -56,14 +56,6 @@ order on the id generation}
 
 \item{.forceCopy}{optional, default FALSE; TRUE will force data.table to take a copy
 instead of editing the data without reference}
-
-\item{stage}{integer for flag}
-
-\item{required}{vector for which fields are necessary}
-
-\item{validation}{vector with validation columns}
-
-\item{group}{vector with grouping columns}
 }
 \value{
 A dataframe with one new variable:
@@ -72,8 +64,6 @@ A dataframe with one new variable:
 \item{\code{valid_nhs}}{if retained using argument \code{.keepValidNHS=TRUE}, a
 BOOLEAN containing the result of the NHS checksum validation}
 }
-
-the ingest data frame with updated id column
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
@@ -98,9 +88,6 @@ Grouping is based on the following stages:
 
 Identifiers are copied over where they are missing or invalid to the grouped
 records.
-
-an internal function to undertake the validation and dedupe steps
-within the uk_patient_id function for records with matching identifiers
 }
 \examples{
 id_test <-
@@ -173,5 +160,6 @@ uk_patient_id(
   .useStages = c(1:11),
   .keepStages = TRUE,
   .forceCopy = TRUE)[]
+
 
 }

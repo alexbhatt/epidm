@@ -144,6 +144,7 @@
 #'   .keepStages = TRUE,
 #'   .forceCopy = TRUE)[]
 #'
+#'
 #' @export
 
 uk_patient_id <- function(data,
@@ -341,14 +342,15 @@ uk_patient_id <- function(data,
   }
 
   ## RECORD MATCHING FUNCTION #################################################
-  #' @title stage deduplication
-  #' @description an internal function to undertake the validation and dedupe steps
-  #'    within the uk_patient_id function for records with matching identifiers
-  #' @param stage integer for flag
-  #' @param required vector for which fields are necessary
-  #' @param validation vector with validation columns
-  #' @param group vector with grouping columns
-  #' @return the ingest data frame with updated id column
+  #  stage deduplication
+  # an internal function to undertake the validation and dedupe steps
+  #    within the uk_patient_id function for records with matching identifiers
+  #
+  # stage integer for flag
+  # required vector for which fields are necessary
+  # validation vector with validation columns
+  # group vector with grouping columns
+  # the ingest data frame with updated id column
 
   stage <- function(stage = 1,
                     required,
