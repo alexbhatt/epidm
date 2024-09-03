@@ -88,9 +88,10 @@ Grouping is based on the following stages:
 \item NHS number & Hospital Number
 \item NHS number & Name
 \item Hospital number & Name
-\item Sex & Date of Birth & Surname
-\item Sex & Date of Birth & Fuzzy Name
+\item Date of Birth & Surname
+\item Sex & Full name
 \item Sex & Year and Month of Birth & Fuzzy Name
+\item Year and Month of Birth & Fuzzy Name
 \item Postcode & Name
 \item Name Swaps (when first and last name are the wrong way around)
 }
