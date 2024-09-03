@@ -10,8 +10,9 @@ uk_patient_id(
     date_of_birth = "date_of_birth", sex_mfu = "sex", forename = "forename", surname =
     "surname", postcode = "postcode"),
   .useStages = c(1:11),
-  .sortOrder,
+  .keepStages = FALSE,
   .keepValidNHS = FALSE,
+  .sortOrder,
   .forceCopy = FALSE
 )
 }
@@ -44,14 +45,25 @@ wish patient ID to be assigned cases with the same DOB and fuzzy name, set to
 set to 11 if you wish patient ID to be assigned cases with the same first name
 or second name in changing order and date of birth.}
 
-\item{.sortOrder}{optional; a column as a character to allow a sorting
-order on the id generation}
+\item{.keepStages}{optional, default FALSE; to generate a new column (stageMatch)
+to retain the stage information for which the record matched the group.}
 
 \item{.keepValidNHS}{optional, default FALSE; set TRUE if you wish to retain
 the column with the NHS checksum result stored as a BOOLEAN}
 
+\item{.sortOrder}{optional; a column as a character to allow a sorting
+order on the id generation}
+
 \item{.forceCopy}{optional, default FALSE; TRUE will force data.table to take a copy
 instead of editing the data without reference}
+
+\item{stage}{integer for flag}
+
+\item{required}{vector for which fields are necessary}
+
+\item{validation}{vector with validation columns}
+
+\item{group}{vector with grouping columns}
 }
 \value{
 A dataframe with one new variable:
@@ -60,6 +72,8 @@ A dataframe with one new variable:
 \item{\code{valid_nhs}}{if retained using argument \code{.keepValidNHS=TRUE}, a
 BOOLEAN containing the result of the NHS checksum validation}
 }
+
+the ingest data frame with updated id column
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
@@ -83,20 +97,80 @@ Grouping is based on the following stages:
 
 Identifiers are copied over where they are missing or invalid to the grouped
 records.
+
+an internal function to undertake the validation and dedupe steps
+within the uk_patient_id function for records with matching identifiers
 }
 \examples{
+id_test <-
+  data.frame(
+    stringsAsFactors = FALSE,
+    record_id = c(1L,2L,3L,4L,
+                  5L,6L,7L,8L,9L,10L,11L,12L,13L,14L,15L,
+                  16L,17L,18L,19L,20L,21L,22L,23L,24L),
+    nhs_number = c(9435754422,
+                   9435754422,NA,9435754422,5555555555,NA,
+                   9435773982,NA,9999999999,NA,9435773982,NA,
+                   9435802508,9435802508,NA,NA,9435802508,9435802508,NA,
+                   3333333333,NA,9999999999,9435817777,
+                   9435817777),
+    local_patient_identifier = c(NA,"IG12067",
+                                 NA,NA,"IG12067","IG12067","KR2535","KR2535",
+                                 "KR2535",NA,NA,NA,"UK8734","UK8734",NA,NA,
+                                 "UK8734","UK8734",NA,NA,"JH45204",
+                                 "HS45202","HS45202","JH45204"),
+    patient_birth_date = c("1993-07-16",
+                           "1993-07-16","1993-07-16","1993-07-16",
+                           "1993-07-16",NA,"1967-02-10",NA,"1967-02-10",NA,NA,
+                           "1967-02-10",NA,NA,"1952-10-22","1952-10-22",
+                           "1952-10-22",NA,"1947-09-14","1947-09-14",
+                           "1947-09-14","1947-09-14","1947-09-14",
+                           "1947-09-14"),
+    sex = c("Male","Male",
+            "Male","Male",NA,"Male","Female","Female",
+            "Female","Female","Female","Female","Male",
+            "Male","Male","Male","Male","Male","Male",
+            "Male","Male","Male",NA,"Male"),
+    forename = c(NA,"DENNIS",
+                 NA,NA,"DENNIS",NA,"ELLIE","ELLIE",NA,
+                 "ELLIE","ELLIE","ELLIE","IAN","IAN","MALCOLM",
+                 "IAN","IAN",NA,"GRANT","ALAN","ALAN","ALAN",
+                 "GRANT","ALAN"),
+    surname = c(NA,"NEDRY",
+                "NEDRY",NA,"NEDRY","NEDRY","SATTLER","SATTLER",
+                NA,"SATTLER","SATTLER","SATTLER","M",NA,
+                "IAN","MALCOLM","MALCOLM",NA,"ALAN","GRANT",
+                "GRANT","GRANT","ALAN","GRANT"),
+    postcode = c("HA4 0FF",
+                 "HA4 0FF","HA4 0FF",NA,"HA4 0FF","HA4 0FF",
+                 "L3 1DZ","L3 1DZ","L3 1DZ","L3 1DZ",NA,"L3 1DZ",
+                 "BN14 9EP",NA,"BN14 9EP",NA,NA,NA,"CW6 9TX",
+                 "CW6 9TX",NA,NA,NA,NA),
+    specimen_date = c("2024-08-14",
+                      "2023-02-03","2023-02-07","2023-02-04",
+                      "2023-02-09","2024-08-14","2021-03-28","2021-03-28",
+                      "2021-03-28","2021-03-28","2021-03-28",
+                      "2021-03-28","2024-07-06","2024-07-06","2024-07-06",
+                      "2023-10-31","2023-10-31","2023-10-31",
+                      "2022-01-23","2022-01-24","2022-01-25","2022-01-26",
+                      "2022-01-27","2022-01-28")
+  )
+
+
 uk_patient_id(
- data = head(epidm::lab_data),
- id = list(
-   nhs_number = 'nhs_number',
-   hospital_number = 'local_patient_identifier',
-   date_of_birth = 'patient_birth_date',
-   sex_mfu = 'sex',
-   forename = 'forename',
-   surname = 'surname',
-   postcode = 'postcode'
- ),
- .sortOrder = 'specimen_date',
- .forceCopy = TRUE
-)[]
+  data = id_test,
+  id = list(
+    nhs_number = 'nhs_number',
+    hospital_number = 'local_patient_identifier',
+    date_of_birth = 'patient_birth_date',
+    sex_mfu = 'sex',
+    forename = 'forename',
+    surname = 'surname',
+    postcode = 'postcode'
+  ),
+  .sortOrder = 'specimen_date',
+  .useStages = c(1:11),
+  .keepStages = TRUE,
+  .forceCopy = TRUE)[]
+
 }
