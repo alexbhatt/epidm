@@ -102,6 +102,10 @@ utils::globalVariables(
     'pos_in_hospital',
     'pos14_order',
     'hospital_event_rank',
-    'N'
+    'N',
+    'tmp.id',
+    'tmp.idMode',
+    'tmp.sN',
+    'tmp.valid.n.swap'
   )
 )
